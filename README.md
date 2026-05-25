@@ -54,6 +54,9 @@ cp vendor/ai-sdd-guide/integration/ci/sdd-check.yml .github/workflows/
 ```
 スキルとSDDフェーズの対応は `docs/02-roles.md` を参照。
 
+`.sdd/state.json`（Tier/フェーズの状態。hooks・CIが参照）は作業中に agent が作成・更新する。
+雛形は `templates/sdd-state.example.json`、値の定義は `templates/sdd-state.schema.json`。
+
 `CLAUDE.md` / `AGENTS.md` はプロジェクトルートに無いとagentが自動で読まないため、
 submodule（サブパス）には置かず、ルートの薄い入口から submodule 内の正本を参照させる。
 

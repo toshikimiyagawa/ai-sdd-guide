@@ -36,3 +36,16 @@
 
 「小さいから省く」判断は `.sdd/state.json` と PRラベルで宣言し、後から検証できる形にする。
 これにより hooks（ローカル）と CI（権威）が機械的に Tier を判定できる。
+
+## 状態ファイル `.sdd/state.json`
+現在の作業の Tier とフェーズを記録する。作業中に agent が作成・更新し、hooks と CI がこれを読んで逸脱を判定する。
+
+| フィールド | 必須 | 値 | 説明 |
+|---|---|---|---|
+| `tier` | ○ | 0 / 1 / 2 | タスクの規模 |
+| `phase` | ○ | brainstorm / spec / plan / tasks / implement / verify / done | 現在フェーズ。hookは implement/verify（またはTier 0）でのみソース編集を許可 |
+| `feature` | - | slug | `specs/<feature>/` に対応 |
+| `spec` | - | path | 有効な spec ディレクトリのパス |
+| `note` | - | text | Tier 0/1 免除の理由（監査用） |
+
+雛形: `templates/sdd-state.example.json` ／ 値の定義: `templates/sdd-state.schema.json`（JSON Schema）
