@@ -8,21 +8,25 @@
 - Record the Tier in `.sdd/state.json` and label the PR `sdd:tier-{0,1,2}`.
 
 ## Design phases (Claude only)
-1. Brainstorm — clarify intent with the human (superpowers). Output: agreed intent.
-2. Spec — write `specs/<feature>/spec.md`. Acceptance criteria as checkable statements. Get human approval.
-3. Plan — write `plan.md`: approach, affected files, tradeoffs, alternatives considered. (Tier 2)
-4. Tasks — write `tasks.md`: ordered concrete steps with file paths + the test proving each acceptance criterion. (Tier 2)
-5. Freeze — set `.sdd/state.json` `phase=implement`. This is the handoff gate to other agents.
+Drive these with superpowers skills (requires the superpowers plugin — Claude only).
+Capture each skill's output into the portable `specs/<feature>/` artifacts.
 
-Delegate exploration/drafting to subagents to protect context. See `subagents.md`.
+1. Brainstorm — skill `brainstorming`. Clarify intent with the human, explore alternatives. Output: an agreed design.
+2. Spec — write `specs/<feature>/spec.md` from the agreed design. Acceptance criteria as checkable statements. Get human approval.
+3. Plan & Tasks — skill `writing-plans` (bite-sized ordered steps). Capture into `plan.md` (approach, affected files, tradeoffs, alternatives) and `tasks.md` (concrete steps + the test proving each acceptance criterion). (Tier 2)
+4. Freeze — set `.sdd/state.json` `phase=implement`. This is the handoff gate to other agents.
+
+For exploration/parallelism use skills `dispatching-parallel-agents` / `subagent-driven-development`. See `subagents.md`.
 
 ## Implementation phase (any agent)
 - Read `specs/<feature>/`. Implement exactly the frozen tasks — no more, no less.
 - Map every acceptance criterion to a passing test.
+- When Claude implements: use skills `executing-plans` + `test-driven-development` (RED-GREEN-REFACTOR) + `systematic-debugging`. Other agents follow `tasks.md` directly.
 - If the spec is wrong, ambiguous, or insufficient: STOP and escalate. Do not redesign.
 
 ## Verify phase (Claude)
-- Run tests. Spawn the `sdd-reviewer` subagent to check conformance to the frozen spec.
+- Skill `verification-before-completion`. Run tests; spawn the `sdd-reviewer` subagent to check conformance to the frozen spec.
+- Optionally `requesting-code-review` / `finishing-a-development-branch`.
 - CI is authoritative: it independently re-checks spec presence + tests.
 
 ## Tier exemptions

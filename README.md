@@ -48,6 +48,12 @@ mkdir -p .github/workflows
 cp vendor/ai-sdd-guide/integration/ci/sdd-check.yml .github/workflows/
 ```
 
+設計フェーズで superpowers を使う場合は、Claude Code のプラグインとして別途導入する（submoduleとは別）：
+```
+/plugin install superpowers@claude-plugins-official
+```
+スキルとSDDフェーズの対応は `docs/02-roles.md` を参照。
+
 `CLAUDE.md` / `AGENTS.md` はプロジェクトルートに無いとagentが自動で読まないため、
 submodule（サブパス）には置かず、ルートの薄い入口から submodule 内の正本を参照させる。
 

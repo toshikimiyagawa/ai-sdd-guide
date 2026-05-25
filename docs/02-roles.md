@@ -23,6 +23,21 @@
 
 各subagentには会話の文脈が無いので、spec のパスと自己完結したブリーフを渡すこと。
 
-## superpowers
-設計フェーズ（brainstorm/plan）で活用する。Claude Code 専用のため、実装担当の他agentでは使わない。
-※ 具体的に使うスキルの対応付けは導入時に確定する（現状は概念レベルで参照）。
+## superpowers（Claude Code 専用プラグイン）
+設計フェーズで活用する。実装担当の他agentでは使えないため、成果物 `specs/<feature>/` に落とし込んで橋渡しする。
+
+SDDフェーズと superpowers スキルの対応：
+
+| SDDフェーズ | superpowers スキル | 成果物 |
+|---|---|---|
+| brainstorm | `brainstorming` | 合意した設計 |
+| spec | （brainstorm出力を整形） | `spec.md` |
+| plan & tasks | `writing-plans` | `plan.md` / `tasks.md` |
+| 実装(Claude時) | `executing-plans` + `test-driven-development` + `systematic-debugging` | コード+テスト |
+| 検証 | `verification-before-completion` + `requesting-code-review` | レビュー結果 |
+| subagent活用 | `dispatching-parallel-agents` / `subagent-driven-development` | - |
+
+導入は Claude Code のプラグインとして行う（submoduleとは別）：
+```
+/plugin install superpowers@claude-plugins-official
+```
