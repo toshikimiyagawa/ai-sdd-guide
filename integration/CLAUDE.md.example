@@ -1,0 +1,13 @@
+# Project Guidelines
+
+このプロジェクトはスペック駆動開発（SDD）ガイドラインに従う。
+ルールの正本は submodule 内にある。以下を必ず読むこと。
+
+@vendor/ai-sdd-guide/rules/core.md
+@vendor/ai-sdd-guide/rules/workflow.md
+@vendor/ai-sdd-guide/rules/conventions.md
+
+人間向けの解説: `vendor/ai-sdd-guide/docs/`
+雛形: `vendor/ai-sdd-guide/templates/`
+
+> submodule の配置パスを変えた場合は上記の参照パスも合わせて修正すること。

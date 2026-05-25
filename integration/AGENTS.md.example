@@ -1,0 +1,13 @@
+# Project Guidelines (AGENTS.md)
+
+このプロジェクトはスペック駆動開発（SDD）ガイドラインに従う。
+ルールの正本は submodule 内にある。作業前に以下を読むこと。
+
+- `vendor/ai-sdd-guide/rules/core.md` — 常時ルール
+- `vendor/ai-sdd-guide/rules/workflow.md` — フェーズ別の振る舞い・Tier判定
+- `vendor/ai-sdd-guide/rules/conventions.md` — コミット/レビュー/コード規約
+
+人間向け解説は `vendor/ai-sdd-guide/docs/`、雛形は `vendor/ai-sdd-guide/templates/` を参照。
+
+> AGENTS.md は標準の import 機構が無いため、上記はパス明記で誘導する。
+> submodule の配置パスを変えた場合は参照パスも合わせて修正すること。
