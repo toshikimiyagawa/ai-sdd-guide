@@ -1,13 +1,16 @@
 # Project Guidelines (AGENTS.md)
 
-このプロジェクトはスペック駆動開発（SDD）ガイドラインに従う。
-ルールの正本は submodule 内にある。作業前に以下を読むこと。
+This project uses Spec-Driven Development (SDD). As an implementation agent your job is to
+implement the **frozen spec** — not to design.
 
-- `vendor/ai-sdd-guide/rules/core.md` — 常時ルール
-- `vendor/ai-sdd-guide/rules/workflow.md` — フェーズ別の振る舞い・Tier判定
-- `vendor/ai-sdd-guide/rules/conventions.md` — コミット/レビュー/コード規約
+## Before coding
+1. Find the active spec under `specs/<feature>/` (`spec.md` / `plan.md` / `tasks.md`).
+2. Implement exactly the tasks in `tasks.md`. Every acceptance criterion in `spec.md` must map to a test.
 
-人間向け解説は `vendor/ai-sdd-guide/docs/`、雛形は `vendor/ai-sdd-guide/templates/` を参照。
+## Hard rules (CI enforces these)
+- Do NOT change behavior beyond the approved tasks.
+- Every acceptance criterion must have a passing test.
+- If the spec is wrong, ambiguous, or insufficient: STOP and leave a note for a human. Do not redesign.
+- Do not modify files under `specs/` to fit your implementation.
 
-> AGENTS.md は標準の import 機構が無いため、上記はパス明記で誘導する。
-> submodule の配置パスを変えた場合は参照パスも合わせて修正すること。
+詳細: `vendor/ai-sdd-guide/rules/` (英語) ／ `vendor/ai-sdd-guide/docs/` (日本語)

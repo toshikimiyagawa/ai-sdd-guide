@@ -1,13 +1,17 @@
-# Project Guidelines
+# Project Guidelines (Claude Code)
 
-このプロジェクトはスペック駆動開発（SDD）ガイドラインに従う。
-ルールの正本は submodule 内にある。以下を必ず読むこと。
+This project follows Spec-Driven Development (SDD). The canonical rules live in the submodule.
+Read these before any work:
 
 @vendor/ai-sdd-guide/rules/core.md
 @vendor/ai-sdd-guide/rules/workflow.md
+@vendor/ai-sdd-guide/rules/subagents.md
 @vendor/ai-sdd-guide/rules/conventions.md
 
-人間向けの解説: `vendor/ai-sdd-guide/docs/`
-雛形: `vendor/ai-sdd-guide/templates/`
+- 設計フェーズ (spec/plan/tasks/verify) は Claude のみ。superpowers と subagent を使う。
+- 実装は他agentでも可。`specs/<feature>/` を契約として厳守する。
+- 人間向け解説: `vendor/ai-sdd-guide/docs/`  ／ 雛形: `vendor/ai-sdd-guide/templates/`
+- Hooks: `integration/settings.json.example` を `.claude/settings.json` に取り込む。
+- Subagents: `integration/agents/` を `.claude/agents/` に取り込む。
 
-> submodule の配置パスを変えた場合は上記の参照パスも合わせて修正すること。
+(submodule の配置パスを変えたら上の参照も合わせて修正すること)
