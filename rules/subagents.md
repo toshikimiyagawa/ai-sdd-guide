@@ -1,0 +1,22 @@
+# Subagent Rules (Claude — design/verify only)
+
+Use subagents to protect the main context and to get independent judgment.
+Implementation by external agents does not use these.
+
+## Roles
+| Role | Purpose | Permissions |
+|---|---|---|
+| researcher | Explore the codebase / prior art; return findings | read-only, no edits |
+| planner | Draft `plan.md` / `tasks.md` from an approved spec | edits draft, human approves |
+| sdd-reviewer | Verify an implementation conforms to the frozen spec | read + run tests, no fixes |
+
+## When to spawn
+- Codebase exploration spanning more than ~3 lookups → researcher.
+- Tier 2 planning → planner (optional).
+- Every verify phase → sdd-reviewer (independent read of the diff vs spec).
+
+## Contract
+- Give each subagent the spec path + a self-contained brief; it has no conversation context.
+- Subagents must never freeze specs or disable checks.
+
+superpowers may provide additional design-phase subagent patterns; prefer them where they fit.

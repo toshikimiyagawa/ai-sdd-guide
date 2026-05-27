@@ -1,0 +1,16 @@
+# Tasks: <feature 名>
+
+> 他agentが設計コンテキスト無しで実装できるよう、各タスクは具体的に（ファイルパス・関数・テスト）書く。
+
+## 実装タスク（順序付き）
+- [ ] T1: `<file>` に <何を>。対応AC: AC1
+- [ ] T2: ...
+
+## テスト（受入条件との対応・必須）
+- [ ] AC1 → test: `<test file / name>`
+- [ ] AC2 → test: ...
+
+## 完了の定義 (Definition of Done)
+- [ ] 全AC対応テストが green
+- [ ] CI green
+- [ ] sdd-reviewer 合格
