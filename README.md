@@ -57,6 +57,25 @@ cp vendor/ai-sdd-guide/integration/ci/sdd-check.yml .github/workflows/
 `.sdd/state.json`（Tier/フェーズの状態。hooks・CIが参照）は作業中に agent が作成・更新する。
 雛形は `templates/sdd-state.example.json`、値の定義は `templates/sdd-state.schema.json`。
 
+### 初回導入時の注意
+
+SDD導入自体が hooks と CI の対象になる（鶏と卵問題）。初回コミット時は
+`.sdd/state.json` を Tier 0 で作成してから作業すること：
+```bash
+mkdir -p .sdd
+cat > .sdd/state.json << 'EOF'
+{
+  "feature": "integrate-ai-sdd-guide",
+  "tier": 0,
+  "phase": "implement",
+  "justification": "SDD infrastructure setup — no application logic changed"
+}
+EOF
+```
+
+また、CI テンプレート (`sdd-check.yml`) の exempt パターンはそのまま使えるが、
+プロジェクト固有のリンター設定（`.yamllint` 等）で既存コードとの整合を取る必要がある場合がある。
+
 `CLAUDE.md` / `AGENTS.md` はプロジェクトルートに無いとagentが自動で読まないため、
 submodule（サブパス）には置かず、ルートの薄い入口から submodule 内の正本を参照させる。
 
