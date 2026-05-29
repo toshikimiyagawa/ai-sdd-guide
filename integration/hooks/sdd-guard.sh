@@ -19,6 +19,16 @@ if [ -f "$state" ]; then
   phase="$(jq -r '.phase // empty' "$state" 2>/dev/null || true)"
 fi
 
+# Tier must be classified before any source edit.
+if [ -z "$tier" ]; then
+  {
+    echo "SDD: Tier が未分類です。ソース編集の前に Tier を決定してください。"
+    echo "  .sdd/state.json に tier (0, 1, 2) を設定してから再試行してください。"
+    echo "  参照: rules/workflow.md 'Step 0 — classify Tier'"
+  } >&2
+  exit 2
+fi
+
 # Tier 0 is exempt.
 [ "$tier" = "0" ] && exit 0
 # Allowed once the spec is frozen and we are implementing/verifying.
