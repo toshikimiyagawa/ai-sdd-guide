@@ -1,4 +1,4 @@
-# Catalog Rules (Claude — spec/verify phases)
+# Catalog Rules (spec/verify phases)
 
 ## When to apply
 
