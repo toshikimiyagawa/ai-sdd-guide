@@ -1,0 +1,16 @@
+## Orchestration (multi-agent SDD)
+
+This project uses multi-agent SDD. Before coding, read:
+
+1. `specs/<feature>/handoff.md` — your scope and completion criteria.
+2. `.sdd/tasks.json` — find your assigned task (status: "in_progress").
+3. `specs/<feature>/tasks.md` — the concrete steps to implement.
+
+### Hard rules
+
+- Implement ONLY what `handoff.md` and `tasks.md` specify.
+- Do NOT modify: `specs/`, `.sdd/state.json` (phase/tier/assigned_agent), `orchestration/`.
+- When done: set your task in `.sdd/tasks.json` to `status: "completed"`.
+- If blocked: set status to `"blocked"`, fill `blocked_reason`, stop and wait.
+
+詳細ルール: `vendor/ai-sdd-guide/orchestration/rules/orchestration.md`

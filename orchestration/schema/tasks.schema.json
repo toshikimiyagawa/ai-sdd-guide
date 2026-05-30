@@ -1,0 +1,38 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "SDD Tasks",
+  "description": "Full task state for all features in the project (.sdd/tasks.json). Kanban data source.",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "required": ["id", "phase", "assigned_agent", "status"],
+    "additionalProperties": false,
+    "properties": {
+      "id": {
+        "type": "string",
+        "pattern": "^[a-z0-9][a-z0-9-]*$",
+        "description": "Feature slug; matches specs/<id>/."
+      },
+      "phase": {
+        "type": "string",
+        "enum": ["brainstorm", "spec", "plan", "tasks", "implement", "verify", "done"]
+      },
+      "assigned_agent": {
+        "type": "string",
+        "enum": ["claude", "codex", "gemini"]
+      },
+      "status": {
+        "type": "string",
+        "enum": ["pending", "in_progress", "completed", "blocked"]
+      },
+      "handoff": {
+        "type": ["string", "null"],
+        "description": "Path to handoff.md, or null if not yet generated."
+      },
+      "blocked_reason": {
+        "type": ["string", "null"],
+        "description": "Human-readable reason when status is 'blocked'. Null otherwise."
+      }
+    }
+  }
+}
