@@ -27,7 +27,7 @@ bash vendor/ai-sdd-guide/orchestration/tools/kanban.sh
 
 - Use superpowers: brainstorming → writing-plans skills.
 - At end of tasks phase, generate `specs/<feature>/handoff.md` from `orchestration/templates/handoff.md.example`.
-- Update `.sdd/tasks.json`: add the feature entry with `status: "pending"`.
+- Update `.sdd/tasks.json`: add the feature entry with `id` (feature slug), `phase: "tasks"`, `status: "pending"`, and optionally `handoff: null`.
 - Display kanban and stop.
 
 ## Rules for implementation agents

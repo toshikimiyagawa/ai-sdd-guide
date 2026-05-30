@@ -5,7 +5,7 @@
   "type": "array",
   "items": {
     "type": "object",
-    "required": ["id", "phase", "assigned_agent", "status"],
+    "required": ["id", "phase", "status"],
     "additionalProperties": false,
     "properties": {
       "id": {
@@ -18,8 +18,9 @@
         "enum": ["brainstorm", "spec", "plan", "tasks", "implement", "verify", "done"]
       },
       "assigned_agent": {
-        "type": "string",
-        "enum": ["claude", "codex", "gemini"]
+        "type": ["string", "null"],
+        "enum": ["claude", "codex", "gemini", null],
+        "description": "Agent that worked on this feature. Optional — for tracking purposes only."
       },
       "status": {
         "type": "string",
