@@ -15,7 +15,7 @@
       },
       "phase": {
         "type": "string",
-        "enum": ["brainstorm", "spec", "plan", "implement", "verify", "done"]
+        "enum": ["brainstorm", "spec", "plan", "tasks", "implement", "verify", "done"]
       },
       "assigned_agent": {
         "type": "string",
