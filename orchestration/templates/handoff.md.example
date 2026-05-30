@@ -1,0 +1,25 @@
+# Handoff: <feature-id>
+
+## あなたのスコープ
+
+実装フェーズのみ。`spec.md` / `plan.md` / `verify` フェーズには触れない。
+仕様の変更・追加は実装を止めて人間にエスカレーションすること。
+
+## 完了条件
+
+- [ ] `specs/<feature>/tasks.md` の全タスクが完了している
+- [ ] `specs/<feature>/spec.md` の受入条件がすべてテストで検証されている
+- [ ] テストスイートがパスしている
+
+## 参照ファイル
+
+- spec:  `specs/<feature>/spec.md`
+- plan:  `specs/<feature>/plan.md`
+- tasks: `specs/<feature>/tasks.md`
+
+## 曖昧な点・仕様不備があれば
+
+1. 実装を止める
+2. `.sdd/tasks.json` の該当タスクの `status` を `"blocked"` にする
+3. `blocked_reason` に理由を記載する
+4. 人間にエスカレーションして再開を待つ

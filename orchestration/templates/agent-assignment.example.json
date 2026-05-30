@@ -1,0 +1,8 @@
+{
+  "default_implementer": "codex",
+  "rules": [
+    { "pattern": "feat/frontend-*", "agent": "gemini" },
+    { "pattern": "feat/api-*",      "agent": "codex"  },
+    { "pattern": "feat/infra-*",    "agent": "claude" }
+  ]
+}
