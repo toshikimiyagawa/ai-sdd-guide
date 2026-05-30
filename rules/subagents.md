@@ -1,4 +1,4 @@
-# Subagent Rules (Claude — design/verify only)
+# Subagent Rules (Claude Code)
 
 Use subagents to protect the main context and to get independent judgment.
 In "When to spawn" situations below, spawning a subagent is mandatory, not optional.
