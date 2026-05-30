@@ -24,7 +24,6 @@ fi
 # --- Protected: create if absent, diff if changed ---
 
 protected=(
-  "CLAUDE.md:$INTEGRATION/CLAUDE.md.example"
   "AGENTS.md:$INTEGRATION/AGENTS.md.example"
   ".claude/settings.json:$INTEGRATION/settings.json.example"
 )
@@ -45,5 +44,17 @@ for entry in "${protected[@]}"; do
     diff "$dest" "$src" || true
   fi
 done
+
+# --- CLAUDE.md: must be a symlink to AGENTS.md ---
+
+CLAUDE="$PROJECT/CLAUDE.md"
+if [[ -L "$CLAUDE" ]]; then
+  : # already a symlink — leave it
+elif [[ ! -e "$CLAUDE" ]]; then
+  ln -s AGENTS.md "$CLAUDE"
+  log "created CLAUDE.md → AGENTS.md symlink"
+else
+  log "WARNING: CLAUDE.md exists but is not a symlink — run: rm CLAUDE.md && ln -s AGENTS.md CLAUDE.md"
+fi
 
 log "done"
