@@ -31,14 +31,14 @@ AIエージェントと人間が同じルールで開発するための土台を
 
 ## マルチエージェント・オーケストレーション（オプション）
 
-Claude が設計し、Codex / Gemini が実装する分業フローを `orchestration/` モジュールで実現できる。
+superpowers がインストールされたエージェントであれば誰でも設計・実装・verify の全フェーズを担当できる。人間が「このタスクをこのエージェントで」と指示し、エージェントはフェーズ完了後に kanban を表示して停止する。
 
 | コンポーネント | パス | 役割 |
 |---|---|---|
-| エージェントルール | `orchestration/rules/orchestration.md` | スコープ・引き継ぎルール（全agent）|
-| スキーマ | `orchestration/schema/` | `agent-assignment.json` / `tasks.json` の定義 |
-| テンプレート | `orchestration/templates/` | `agent-assignment.json` / `handoff.md` の雛形 |
-| フック | `orchestration/integration/hooks/sdd-orchestration-guard.sh` | Claude がスコープ外を実装するのを防ぐ |
+| エージェントルール | `orchestration/rules/orchestration.md` | フェーズ割り当て・停止ルール（全agent）|
+| スキーマ | `orchestration/schema/tasks.schema.json` | `tasks.json` の定義 |
+| テンプレート | `orchestration/templates/handoff.md.example` | handoff.md の雛形 |
+| Reviewer プロンプト | `integration/prompts/sdd-reviewer-prompt.md` | エージェント非依存の verify 指示文 |
 | Kanban | `orchestration/tools/kanban.sh` | `.sdd/tasks.json` をKanban表示 |
 
 ### 有効化手順（取り込み側）
@@ -47,14 +47,9 @@ Claude が設計し、Codex / Gemini が実装する分業フローを `orchestr
 # 1. CLAUDE.md に1行追加
 echo "@vendor/ai-sdd-guide/orchestration/rules/orchestration.md" >> CLAUDE.md
 
-# 2. agent-assignment.json を配置・編集
-cp vendor/ai-sdd-guide/orchestration/templates/agent-assignment.example.json .sdd/agent-assignment.json
+# 2. AGENTS.md に追記（orchestration/integration/AGENTS-patch.md.example 参照）
 
-# 3. フックを .claude/settings.json に追記（orchestration/integration/settings-patch.json 参照）
-
-# 4. AGENTS.md に追記（orchestration/integration/AGENTS-patch.md.example 参照）
-
-# 5. CI に orchestration ジョブを追加（integration/ci/sdd-check.yml 参照）
+# 3. CI に orchestration ジョブを追加（integration/ci/sdd-check.yml 参照）
 ```
 
 ### Kanban 表示

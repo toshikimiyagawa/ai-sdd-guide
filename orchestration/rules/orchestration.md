@@ -2,40 +2,50 @@
 
 ## Scope assignment
 
-Phases and their assigned agents are fixed:
+All phases are open to any agent with superpowers installed. The human decides which agent handles which phase.
 
-| Phase | Allowed agents | Notes |
+| Phase | Requirement | Notes |
 |---|---|---|
-| brainstorm / spec / plan / tasks | claude only | superpowers required |
-| implement | see `.sdd/agent-assignment.json` | task-level routing |
-| verify / review | claude only | sdd-reviewer subagent |
+| brainstorm / spec / plan / tasks | superpowers required | Any agent (Claude, Codex, Gemini) |
+| implement | none | Any agent; human assigns explicitly |
+| verify | superpowers required | Use sdd-reviewer (see below) |
 
-Your assigned agent for the current task is in `.sdd/state.json` → `assigned_agent`.
-If the field is absent, the phase routing above applies.
+## Phase stopping rule
 
-## Rules for Claude (design agent)
+Every agent MUST stop after completing a phase and wait for explicit human instruction before starting the next phase. Never cross a phase boundary automatically.
 
-- Do not edit source files when `.sdd/state.json` has `phase=implement` and `assigned_agent` is not `claude`.
-- Before setting `phase=implement`, you MUST:
-  1. Generate `specs/<feature>/handoff.md` from `orchestration/templates/handoff.md.example`.
-  2. Set `assigned_agent` in `.sdd/state.json` (use `agent-assignment.json` to determine the value).
-  3. Update `.sdd/tasks.json`: set the feature's `status` to `in_progress` and `handoff` to the path.
-- After the implementer signals completion, set `.sdd/state.json` `phase=verify` and run `sdd-reviewer`.
+- Design complete (tasks.md created): generate handoff.md → update tasks.json → display kanban → stop. Do NOT start implementing.
+- Task implementation complete: commit → update tasks.json → display kanban → stop. Do NOT start verify.
+- Verify complete: report results → display kanban → stop.
 
-## Rules for implementation agents (Codex, Gemini, etc.)
+Display kanban by running:
+```bash
+bash vendor/ai-sdd-guide/orchestration/tools/kanban.sh
+```
+
+## Rules for design agents (brainstorm/spec/plan/tasks)
+
+- Use superpowers: brainstorming → writing-plans skills.
+- At end of tasks phase, generate `specs/<feature>/handoff.md` from `orchestration/templates/handoff.md.example`.
+- Update `.sdd/tasks.json`: add the feature entry with `id` (feature slug), `phase: "tasks"`, `status: "pending"`, and optionally `handoff: null`.
+- Display kanban and stop.
+
+## Rules for implementation agents
 
 - Read `specs/<feature>/handoff.md` before touching any code.
 - Implement exactly the tasks in `specs/<feature>/tasks.md`. No more, no less.
 - Do NOT modify files under `specs/`, `.sdd/state.json` (phase/tier), or `orchestration/`.
-- When complete, update `.sdd/tasks.json`: set your feature's `status` to `completed`.
+- When complete, update `.sdd/tasks.json`: set your feature's `status` to `"completed"`.
+- Display kanban and stop.
 - If the spec is wrong, ambiguous, or insufficient:
   1. Stop immediately.
-  2. Set `.sdd/tasks.json` status to `blocked` and fill `blocked_reason`.
-  3. Do not redesign — wait for a human to escalate to Claude.
+  2. Set `.sdd/tasks.json` status to `"blocked"` and fill `blocked_reason`.
+  3. Do not redesign — wait for a human to escalate.
 
-## Handoff checklist (Claude generates before implement phase)
+## Running sdd-reviewer (verify phase)
 
-- [ ] `specs/<feature>/handoff.md` created from template
-- [ ] `.sdd/state.json` `assigned_agent` set
-- [ ] `.sdd/tasks.json` entry for this feature exists with `status: "in_progress"`
-- [ ] `.sdd/state.json` `phase` set to `"implement"`
+**Claude Code:** Use the `sdd-reviewer` subagent (`.claude/agents/sdd-reviewer.md`).
+
+**Gemini CLI:** Pass the contents of `vendor/ai-sdd-guide/integration/prompts/sdd-reviewer-prompt.md` to `@generalist`.
+
+**Codex:** Pass the contents of `vendor/ai-sdd-guide/integration/prompts/sdd-reviewer-prompt.md` to `spawn_agent`.
