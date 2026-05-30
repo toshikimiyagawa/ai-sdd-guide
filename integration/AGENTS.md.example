@@ -11,10 +11,15 @@ Read the canonical rules before any work:
 Use superpowers skills (brainstorming → writing-plans) for spec/plan/tasks.
 Capture output into `specs/<feature>/`. Human approves before freezing.
 
-## Implementation phase (any agent)
+## Implementation phase (any agent, no superpowers needed)
 Implement exactly the frozen `specs/<feature>/tasks.md`. No more, no less.
 Every acceptance criterion must map to a passing test.
 If the spec is wrong or insufficient: STOP and escalate. Do not redesign.
+
+## Verify phase (superpowers required)
+Run the `sdd-reviewer` subagent/prompt against the diff to confirm the implementation
+matches the frozen spec. See `vendor/ai-sdd-guide/orchestration/rules/orchestration.md`
+for agent-specific instructions (Claude Code / Codex / Gemini CLI).
 
 ## Hard rules
 - Do not modify files under `specs/` to fit an implementation.
