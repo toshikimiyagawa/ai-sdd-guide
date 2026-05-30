@@ -2,8 +2,20 @@
 
 ## When to apply
 
-Only apply these rules when `.sdd/catalog.json` exists in the project root.
-If the file is absent, skip all catalog steps entirely — the project does not use catalogs.
+Always apply these rules. If `.sdd/catalog.json` is absent, initialize it first:
+
+1. Ask the human: "Which catalog types should this project track? Examples: screens (SCR), apis (API), tables (TBL), jobs (JOB), events (EVT). Add any custom types you need."
+2. Create `.sdd/catalog.json` with the chosen types, following this schema:
+   ```json
+   {
+     "types": [
+       { "id": "<type-id>", "label": "<表示名>", "id_prefix": "<PREFIX>" }
+     ]
+   }
+   ```
+   Reference schema: `vendor/ai-sdd-guide/catalog/schema/catalog.schema.json`
+3. Commit with message: `chore: initialize sdd catalog`
+4. Proceed with the normal catalog flow below.
 
 ## During spec phase — register as planned
 
