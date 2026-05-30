@@ -3,7 +3,7 @@
 Canonical, always-loaded rules. Terse + imperative. Rationale lives in `docs/` (Japanese).
 
 ## Scope
-- DESIGN phases (spec, plan, tasks, verify) — Claude Code only. Use superpowers + subagents + hooks.
+- DESIGN phases (spec, plan, tasks, verify) — superpowers required, any agent. Use superpowers + subagents + hooks.
 - IMPLEMENTATION phase — any agent. Follow `specs/<feature>/` as the contract. Do not deviate.
 
 ## Always

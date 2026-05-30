@@ -7,8 +7,8 @@
 - When unsure, pick the higher Tier.
 - Record the Tier in `.sdd/state.json` and label the PR `sdd:tier-{0,1,2}`.
 
-## Design phases (Claude only)
-Drive these with superpowers skills (requires the superpowers plugin — Claude only).
+## Design phases (superpowers required)
+Drive these with superpowers skills (requires the superpowers plugin).
 Capture each skill's output into the portable `specs/<feature>/` artifacts.
 
 1. Brainstorm — skill `brainstorming`. Clarify intent with the human, explore alternatives. Output: an agreed design.
@@ -25,10 +25,10 @@ For exploration/parallelism use skills `dispatching-parallel-agents` / `subagent
 - When Claude implements: use skills `executing-plans` + `test-driven-development` (RED-GREEN-REFACTOR) + `systematic-debugging`. Other agents follow `tasks.md` directly.
 - If the spec is wrong, ambiguous, or insufficient: STOP and escalate. Do not redesign.
 
-## Verify phase (Claude)
+## Verify phase (superpowers required)
 - Skill `verification-before-completion`. Run tests; spawn the `sdd-reviewer` subagent to check conformance to the frozen spec.
 - When sdd-reviewer or any code review returns feedback: skill `receiving-code-review`. Evaluate each item against the frozen spec before acting. If feedback conflicts with the frozen spec, STOP and escalate to the human — do not silently redesign. Scope-expanding suggestions become a new spec, not a quiet addition.
-- Create the PR. CI が設定されている場合は実行完了を待ち、全チェックが pass かつ mergeable であることを確認してから完了報告する。CI 結果を確認せずに完了を宣言してはならない。
+- Create the PR. If CI is configured, wait for completion and confirm all checks pass and the PR is mergeable before declaring completion. Never declare completion without verifying CI results.
 - Optionally `requesting-code-review` / `finishing-a-development-branch`.
 - CI is authoritative: it independently re-checks spec presence + tests.
 

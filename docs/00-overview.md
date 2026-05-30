@@ -10,10 +10,10 @@
 AIエージェントの暴走（スコープ膨張・的外れな実装）を防ぐ。
 
 ## 中心思想：設計と実装の分離
-- **設計（spec/plan/tasks/レビュー）= Claude のみ。** superpowers と subagent をフル活用して深く考える。
+- **設計（spec/plan/tasks/レビュー）= superpowers 必須（どのエージェントでも可）。** superpowers と subagent をフル活用して深く考える。
 - **実装 = どのエージェントでも可。** 設計成果物 `specs/<feature>/` を唯一の契約として渡す。
 
-この分離により、重い思考は Claude に集約しつつ、実装は Cursor / Copilot / Codex など
+この分離により、設計フェーズは superpowers が使えるエージェントが担当し、実装は Cursor / Copilot / Codex など
 好きなツールで分担できる。そのため設計成果物には「設計の文脈を知らないエージェントでも
 実装できる」品質が要求される。これは制約だが、仕様の曖昧さを早期に潰す良い圧力になる。
 

@@ -5,16 +5,17 @@
 - spec が現実と合わない時の意思決定。
 - Tier判定が妥当かのチェック。
 
-## Claude（設計担当）
+## 設計担当agent（superpowers必須）
 - brainstorm → spec → plan → tasks の作成。
 - subagent と superpowers を使った深い検討。
 - 実装後の検証（sdd-reviewer）。
+- Claude Code / Codex CLI / Gemini CLI いずれでも担当可。
 
 ## 他のagent（実装担当）
 - 凍結 spec を契約として実装。
 - 逸脱しない。曖昧なら止めてエスカレーション。
 
-## subagent ロール（Claude・設計/検証のみ）
+## subagent ロール
 | ロール | 役割 | 権限 |
 |---|---|---|
 | researcher | コードベース/先行事例の調査 | 読み取りのみ |
@@ -23,8 +24,8 @@
 
 各subagentには会話の文脈が無いので、spec のパスと自己完結したブリーフを渡すこと。
 
-## superpowers（Claude Code 専用プラグイン）
-設計フェーズで活用する。実装担当の他agentでは使えないため、成果物 `specs/<feature>/` に落とし込んで橋渡しする。
+## superpowers（Claude / Codex / Gemini 対応プラグイン）
+設計・検証フェーズで活用する。Claude Code・Codex CLI・Gemini CLI でインストールして使える。成果物 `specs/<feature>/` に設計内容を落とし込み、superpowers を持たないagentへ橋渡しする。
 
 SDDフェーズと superpowers スキルの対応：
 
