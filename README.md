@@ -63,6 +63,30 @@ cp vendor/ai-sdd-guide/orchestration/templates/agent-assignment.example.json .sd
 bash vendor/ai-sdd-guide/orchestration/tools/kanban.sh
 ```
 
+## 機能単位カタログ（オプション）
+
+画面一覧・API一覧・テーブル一覧などのシステム全体カタログを `catalog/` モジュールで管理できる。
+Claude が spec 作成時（planned）と verify 完了時（confirmed）に自動更新する。
+
+| コンポーネント | パス | 役割 |
+|---|---|---|
+| エージェントルール | `catalog/rules/catalog.md` | カタログ更新のタイミングと手順 |
+| スキーマ | `catalog/schema/catalog.schema.json` | `.sdd/catalog.json` の定義 |
+| テンプレート | `catalog/templates/` | 設定例・一覧・定義書の雛形 |
+
+### 有効化手順（取り込み側）
+
+```bash
+# 1. カタログ種類を宣言
+cp vendor/ai-sdd-guide/catalog/templates/catalog.json.example .sdd/catalog.json
+# → プロジェクトに合わせて types を編集
+
+# 2. CLAUDE.md に参照を追加
+echo "@vendor/ai-sdd-guide/catalog/rules/catalog.md" >> CLAUDE.md
+```
+
+有効化後は `spec.md` 作成時に Claude が `docs/design/` 配下にカタログと定義書を自動生成する。
+
 ## 導入手順（取り込み側プロジェクト）
 ```bash
 # 1. submodule として追加（配置パスは任意。例: vendor/ai-sdd-guide）

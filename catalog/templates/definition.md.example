@@ -1,0 +1,18 @@
+---
+id: <PREFIX>-001
+title: <名称>
+status: planned
+feature: <feature-slug>
+updated: YYYY-MM-DD
+---
+
+# <PREFIX>-001: <名称>
+
+## 概要
+
+（このエントリが表すものの1〜2行の説明）
+
+## 仕様
+
+（プロジェクトに合わせて自由に記述。
+例：画面なら画面項目一覧、APIならリクエスト/レスポンス定義、テーブルならカラム定義）

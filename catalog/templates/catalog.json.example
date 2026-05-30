@@ -1,0 +1,7 @@
+{
+  "types": [
+    { "id": "screens", "label": "画面一覧",    "id_prefix": "SCR" },
+    { "id": "apis",    "label": "API一覧",      "id_prefix": "API" },
+    { "id": "tables",  "label": "テーブル一覧", "id_prefix": "TBL" }
+  ]
+}
