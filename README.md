@@ -88,8 +88,8 @@ echo "@vendor/ai-sdd-guide/catalog/rules/catalog.md" >> CLAUDE.md
 git submodule add <this-repo-url> vendor/ai-sdd-guide
 
 # 2. ルートに薄い入口を配置（一度だけコピー）
-cp vendor/ai-sdd-guide/integration/CLAUDE.md.example ./CLAUDE.md
 cp vendor/ai-sdd-guide/integration/AGENTS.md.example ./AGENTS.md
+ln -s AGENTS.md CLAUDE.md        # CLAUDE.md は AGENTS.md のシンボリックリンクとして管理
 
 # 3. Claude hooks と subagent を取り込む（Claude 利用時）
 mkdir -p .claude
