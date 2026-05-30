@@ -25,9 +25,9 @@ AIエージェントと人間が同じルールで開発するための土台を
 | 2 | 中〜大機能・設計変更 | spec → plan → tasks → 実装 → 検証 |
 
 ## 守らせる仕組み（多層）
-1. **Claude hooks** — 設計フェーズの逸脱をローカルで弾く（速い注意喚起・バイパス可）
+1. **Claude hooks** — `sdd-guard.sh` が設計フェーズの逸脱をローカルで弾き、`skill-reminder.sh` が現在の Tier/phase に応じた superpowers skill を案内する（速い注意喚起・バイパス可）
 2. **CI** — 全agent共通の権威ある門番（spec有無・テスト）。バイパス不可
-3. **sdd-reviewer subagent** — 実装が凍結specに適合するか独立監査
+3. **sdd-reviewer subagent** — 実装が凍結specに適合するか独立監査。レビューフィードバックの吸収が scope creep になっていないか（`receiving-code-review` 規律の痕跡）も確認
 
 ## 導入手順（取り込み側プロジェクト）
 ```bash
