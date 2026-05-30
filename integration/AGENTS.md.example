@@ -6,6 +6,8 @@ Read the canonical rules before any work:
 - `vendor/ai-sdd-guide/rules/workflow.md`
 - `vendor/ai-sdd-guide/rules/subagents.md`
 - `vendor/ai-sdd-guide/rules/conventions.md`
+- `vendor/ai-sdd-guide/orchestration/rules/orchestration.md`
+- `vendor/ai-sdd-guide/catalog/rules/catalog.md`
 
 ## Design phases (superpowers required)
 Use superpowers skills (brainstorming → writing-plans) for spec/plan/tasks.
