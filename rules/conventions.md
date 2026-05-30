@@ -10,7 +10,7 @@
 ## Code review
 - Review for conformance to the frozen spec, not personal preference.
 - Out-of-spec changes are rejected, not negotiated in review.
-- PR のレビューは `sdd-reviewer` subagent に実施させる。人間のレビュー前に subagent が spec 適合を確認することで、レビュー負荷を下げる。
+- Run `sdd-reviewer` before human review. The subagent confirms spec conformance first, reducing reviewer load.
 
 ## Code style
 - Follow the host project's existing style. SDD does not override project conventions.
