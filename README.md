@@ -28,8 +28,9 @@ AIエージェントと人間が同じルールで開発するための土台を
 
 ## 守らせる仕組み（多層）
 1. **Claude hooks** — `sdd-guard.sh` が設計フェーズの逸脱をローカルで弾き、`skill-reminder.sh` が現在の Tier/phase に応じた superpowers skill を案内する（速い注意喚起・バイパス可）
-2. **CI** — 全agent共通の権威ある門番（spec有無・テスト）。バイパス不可
-3. **sdd-reviewer subagent** — 実装が凍結specに適合するか独立監査。レビューフィードバックの吸収が scope creep になっていないか（`receiving-code-review` 規律の痕跡）も確認
+2. **Codex hooks** — `codex-sdd-guard.sh` が検出可能な source edit をローカルで弾き、`codex-skill-reminder.sh` が Tier/phase に応じた SDD 注意を developer context に注入する（Codex hook の検出範囲内でのみ有効）
+3. **CI** — 全agent共通の権威ある門番（spec有無・テスト）。バイパス不可
+4. **sdd-reviewer subagent** — 実装が凍結specに適合するか独立監査。レビューフィードバックの吸収が scope creep になっていないか（`receiving-code-review` 規律の痕跡）も確認
 
 ## マルチエージェント・オーケストレーション
 
@@ -74,7 +75,12 @@ mkdir -p .claude
 cp vendor/ai-sdd-guide/integration/settings.json.example .claude/settings.json
 cp -r vendor/ai-sdd-guide/integration/agents .claude/agents
 
-# 4. CI を取り込む（テストコマンドはプロジェクトに合わせて差し替え）
+# 4. Codex hooks を取り込む（Codex 利用時）
+mkdir -p .codex
+cp vendor/ai-sdd-guide/integration/codex/config.toml.example .codex/config.toml
+# 初回または hook 変更後は Codex TUI の /hooks で review/trust する
+
+# 5. CI を取り込む（テストコマンドはプロジェクトに合わせて差し替え）
 mkdir -p .github/workflows
 cp vendor/ai-sdd-guide/integration/ci/sdd-check.yml .github/workflows/
 ```
@@ -106,6 +112,7 @@ EOF
 
 また、CI テンプレート (`sdd-check.yml`) の exempt パターンはそのまま使えるが、
 プロジェクト固有のリンター設定（`.yamllint` 等）で既存コードとの整合を取る必要がある場合がある。
+Codex の project-local hooks は trusted project でのみ読み込まれ、初回または hook 変更後に `/hooks` で trust が必要。
 
 `CLAUDE.md` / `AGENTS.md` はプロジェクトルートに無いとagentが自動で読まないため、
 submodule（サブパス）には置かず、ルートの薄い入口から submodule 内の正本を参照させる。
@@ -113,8 +120,9 @@ submodule（サブパス）には置かず、ルートの薄い入口から subm
 ## 更新の反映
 ```bash
 git submodule update --remote vendor/ai-sdd-guide
+vendor/ai-sdd-guide/integration/update.sh
 ```
 
-正本を更新すれば、各プロジェクトはこのコマンドで一括追従できる。破壊的変更はタグ (semver) で管理する。
+正本を更新すれば、各プロジェクトはこのコマンドで一括追従できる。`update.sh` は `.claude/agents/` と CI を上書きし、`AGENTS.md` / `.claude/settings.json` / `.codex/config.toml` は保護対象として作成または差分表示する。破壊的変更はタグ (semver) で管理する。
 
 詳細は `docs/`（人間向け）と `rules/`（agent向け正本）を参照。
