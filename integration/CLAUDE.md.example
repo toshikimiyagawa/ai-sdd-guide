@@ -8,7 +8,7 @@ Read these before any work:
 @vendor/ai-sdd-guide/rules/subagents.md
 @vendor/ai-sdd-guide/rules/conventions.md
 
-- Design phases (spec/plan/tasks/verify): Claude only. Use superpowers and subagents.
+- Design phases (spec/plan/tasks/verify): any agent with superpowers. Use superpowers skills and subagents.
 - Implementation: any agent. Treat `specs/<feature>/` as a contract — follow it exactly.
 - Human-facing docs: `vendor/ai-sdd-guide/docs/` / Templates: `vendor/ai-sdd-guide/templates/`
 - Hooks: copy `integration/settings.json.example` to `.claude/settings.json`.

@@ -1,16 +1,27 @@
 ## Orchestration (multi-agent SDD)
 
-This project uses multi-agent SDD. Before coding, read:
+This project uses multi-agent SDD. Any agent with superpowers can handle any phase.
+The human decides which agent works on which task.
 
-1. `specs/<feature>/handoff.md` — your scope and completion criteria.
-2. `.sdd/tasks.json` — find your assigned task (status: "in_progress").
-3. `specs/<feature>/tasks.md` — the concrete steps to implement.
+### If you are a design agent (brainstorm/spec/plan/tasks)
 
-### Hard rules
+1. Use superpowers brainstorming and writing-plans skills.
+2. At end of tasks phase, generate `specs/<feature>/handoff.md`.
+3. Update `.sdd/tasks.json` with `id`, `phase: "tasks"`, `status: "pending"`.
+4. Display kanban and stop — do NOT start implementing.
 
-- Implement ONLY what `handoff.md` and `tasks.md` specify.
-- Do NOT modify: `specs/`, `.sdd/state.json` (phase/tier/assigned_agent), `orchestration/`.
-- When done: set your task in `.sdd/tasks.json` to `status: "completed"`.
-- If blocked: set status to `"blocked"`, fill `blocked_reason`, stop and wait.
+### If you are an implementation agent
+
+1. Read `specs/<feature>/handoff.md` — this is your scope.
+2. Implement exactly the tasks in `specs/<feature>/tasks.md`. No more, no less.
+3. Do NOT modify: `specs/`, `.sdd/state.json` (phase/tier), `orchestration/`.
+4. When done: set your task in `.sdd/tasks.json` to `status: "completed"`.
+5. Display kanban and stop — do NOT start verify.
+6. If blocked: set status to `"blocked"`, fill `blocked_reason`, stop and wait.
+
+### If you are a verify agent
+
+Pass the contents of `vendor/ai-sdd-guide/integration/prompts/sdd-reviewer-prompt.md`
+to your subagent mechanism, then report results, display kanban, and stop.
 
 Full rules: `vendor/ai-sdd-guide/orchestration/rules/orchestration.md`
