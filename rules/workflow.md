@@ -13,6 +13,7 @@ Capture each skill's output into the portable `specs/<feature>/` artifacts.
 
 1. Brainstorm — skill `brainstorming`. Clarify intent with the human, explore alternatives. Output: an agreed design.
 2. Spec — write `specs/<feature>/spec.md` from the agreed design. Acceptance criteria as checkable statements. Get human approval.
+   - If `.sdd/catalog.json` exists: register new catalog entries as `planned` in `docs/design/` (see `catalog/rules/catalog.md`). Update to `confirmed` in the verify phase.
 3. Plan & Tasks — skill `writing-plans` (bite-sized ordered steps). Capture into `plan.md` (approach, affected files, tradeoffs, alternatives) and `tasks.md` (concrete steps + the test proving each acceptance criterion). (Tier 2)
 4. Freeze — set `.sdd/state.json` `phase=implement`. This is the handoff gate to other agents.
 
