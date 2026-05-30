@@ -26,6 +26,7 @@ For exploration/parallelism use skills `dispatching-parallel-agents` / `subagent
 
 ## Verify phase (Claude)
 - Skill `verification-before-completion`. Run tests; spawn the `sdd-reviewer` subagent to check conformance to the frozen spec.
+- When sdd-reviewer or any code review returns feedback: skill `receiving-code-review`. Evaluate each item against the frozen spec before acting. If feedback conflicts with the frozen spec, STOP and escalate to the human — do not silently redesign. Scope-expanding suggestions become a new spec, not a quiet addition.
 - Create the PR. CI が設定されている場合は実行完了を待ち、全チェックが pass かつ mergeable であることを確認してから完了報告する。CI 結果を確認せずに完了を宣言してはならない。
 - Optionally `requesting-code-review` / `finishing-a-development-branch`.
 - CI is authoritative: it independently re-checks spec presence + tests.
