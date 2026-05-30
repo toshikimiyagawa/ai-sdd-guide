@@ -28,11 +28,6 @@
     "note": {
       "type": "string",
       "description": "Optional. Justification for a Tier 0/1 exemption (audit trail)."
-    },
-    "assigned_agent": {
-      "type": "string",
-      "enum": ["claude", "codex", "gemini"],
-      "description": "Agent assigned to the current implement task. Read by sdd-orchestration-guard.sh to prevent Claude from editing source when another agent is assigned."
     }
   }
 }

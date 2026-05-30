@@ -1,16 +1,3 @@
 {
-  "_comment": "Merge this PreToolUse entry into your .claude/settings.json hooks.PreToolUse array.",
-  "hooks": {
-    "PreToolUse": [
-      {
-        "matcher": "Edit|Write|MultiEdit",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "vendor/ai-sdd-guide/orchestration/integration/hooks/sdd-orchestration-guard.sh"
-          }
-        ]
-      }
-    ]
-  }
+  "_comment": "No additional hooks required for orchestration in v2. This file is kept as a placeholder."
 }
