@@ -35,6 +35,7 @@ SDDフェーズと superpowers スキルの対応：
 | plan & tasks | `writing-plans` | `plan.md` / `tasks.md` |
 | 実装(Claude時) | `executing-plans` + `test-driven-development` + `systematic-debugging` | コード+テスト |
 | 検証 | `verification-before-completion` + `requesting-code-review` | レビュー結果 |
+| レビュー受領 | `receiving-code-review` | 修正コミット or spec逸脱時のエスカレーション |
 | subagent活用 | `dispatching-parallel-agents` / `subagent-driven-development` | - |
 
 導入は Claude Code のプラグインとして行う（submoduleとは別）：
