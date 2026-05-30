@@ -30,7 +30,8 @@ for agent-specific instructions (Claude Code / Codex / Gemini CLI).
 
 Human-facing docs: `vendor/ai-sdd-guide/docs/`
 Templates: `vendor/ai-sdd-guide/templates/`
-Hooks: `.claude/settings.json` (copy from `vendor/ai-sdd-guide/integration/settings.json.example`)
+Claude hooks: `.claude/settings.json` (copy from `vendor/ai-sdd-guide/integration/settings.json.example`)
+Codex hooks: `.codex/config.toml` (copy from `vendor/ai-sdd-guide/integration/codex/config.toml.example`)
 Subagents: `.claude/agents/` (copy from `vendor/ai-sdd-guide/integration/agents/`)
 
 ## CLAUDE.md

@@ -26,6 +26,7 @@ fi
 protected=(
   "AGENTS.md:$INTEGRATION/AGENTS.md.example"
   ".claude/settings.json:$INTEGRATION/settings.json.example"
+  ".codex/config.toml:$INTEGRATION/codex/config.toml.example"
 )
 
 for entry in "${protected[@]}"; do
