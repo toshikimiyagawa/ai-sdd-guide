@@ -10,7 +10,7 @@
 - [ ] AC1 → test: `<test file / name>`
 - [ ] AC2 → test: ...
 
-## 完了の定義 (Definition of Done)
+## 完了の定義
 - [ ] 全AC対応テストが green
 - [ ] CI green
 - [ ] sdd-reviewer 合格

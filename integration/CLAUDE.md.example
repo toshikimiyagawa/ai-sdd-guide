@@ -8,10 +8,10 @@ Read these before any work:
 @vendor/ai-sdd-guide/rules/subagents.md
 @vendor/ai-sdd-guide/rules/conventions.md
 
-- 設計フェーズ (spec/plan/tasks/verify) は Claude のみ。superpowers と subagent を使う。
-- 実装は他agentでも可。`specs/<feature>/` を契約として厳守する。
-- 人間向け解説: `vendor/ai-sdd-guide/docs/`  ／ 雛形: `vendor/ai-sdd-guide/templates/`
-- Hooks: `integration/settings.json.example` を `.claude/settings.json` に取り込む。
-- Subagents: `integration/agents/` を `.claude/agents/` に取り込む。
+- Design phases (spec/plan/tasks/verify): Claude only. Use superpowers and subagents.
+- Implementation: any agent. Treat `specs/<feature>/` as a contract — follow it exactly.
+- Human-facing docs: `vendor/ai-sdd-guide/docs/` / Templates: `vendor/ai-sdd-guide/templates/`
+- Hooks: copy `integration/settings.json.example` to `.claude/settings.json`.
+- Subagents: copy `integration/agents/` to `.claude/agents/`.
 
-(submodule の配置パスを変えたら上の参照も合わせて修正すること)
+(If you change the submodule path, update the references above to match.)

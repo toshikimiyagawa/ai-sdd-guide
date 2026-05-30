@@ -13,4 +13,4 @@ This project uses multi-agent SDD. Before coding, read:
 - When done: set your task in `.sdd/tasks.json` to `status: "completed"`.
 - If blocked: set status to `"blocked"`, fill `blocked_reason`, stop and wait.
 
-詳細ルール: `vendor/ai-sdd-guide/orchestration/rules/orchestration.md`
+Full rules: `vendor/ai-sdd-guide/orchestration/rules/orchestration.md`

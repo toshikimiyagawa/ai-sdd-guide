@@ -13,4 +13,4 @@ implement the **frozen spec** — not to design.
 - If the spec is wrong, ambiguous, or insufficient: STOP and leave a note for a human. Do not redesign.
 - Do not modify files under `specs/` to fit your implementation.
 
-詳細: `vendor/ai-sdd-guide/rules/` (英語) ／ `vendor/ai-sdd-guide/docs/` (日本語)
+Full rules: `vendor/ai-sdd-guide/rules/`

@@ -1,7 +1,7 @@
 # Subagent Rules (Claude — design/verify only)
 
 Use subagents to protect the main context and to get independent judgment.
-subagent を使うべき場面（下記 "When to spawn" 参照）では省略せず必ず使うこと。
+In "When to spawn" situations below, spawning a subagent is mandatory, not optional.
 Implementation by external agents does not use these.
 
 ## Roles
