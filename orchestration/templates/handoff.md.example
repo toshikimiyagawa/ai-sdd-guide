@@ -1,25 +1,25 @@
 # Handoff: <feature-id>
 
-## あなたのスコープ
+## Your scope
 
-実装フェーズのみ。`spec.md` / `plan.md` / `verify` フェーズには触れない。
-仕様の変更・追加は実装を止めて人間にエスカレーションすること。
+Implementation phase only. Do not touch `spec.md`, `plan.md`, or the verify phase.
+If the spec needs changes, stop and escalate to a human.
 
-## 完了条件
+## Done when
 
-- [ ] `specs/<feature>/tasks.md` の全タスクが完了している
-- [ ] `specs/<feature>/spec.md` の受入条件がすべてテストで検証されている
-- [ ] テストスイートがパスしている
+- [ ] All tasks in `specs/<feature>/tasks.md` are complete
+- [ ] Every acceptance criterion in `specs/<feature>/spec.md` has a passing test
+- [ ] Test suite passes
 
-## 参照ファイル
+## Reference files
 
 - spec:  `specs/<feature>/spec.md`
 - plan:  `specs/<feature>/plan.md`
 - tasks: `specs/<feature>/tasks.md`
 
-## 曖昧な点・仕様不備があれば
+## If the spec is ambiguous or insufficient
 
-1. 実装を止める
-2. `.sdd/tasks.json` の該当タスクの `status` を `"blocked"` にする
-3. `blocked_reason` に理由を記載する
-4. 人間にエスカレーションして再開を待つ
+1. Stop immediately.
+2. Set `.sdd/tasks.json` status to `"blocked"`.
+3. Fill in `blocked_reason`.
+4. Wait for a human to escalate to Claude before resuming.

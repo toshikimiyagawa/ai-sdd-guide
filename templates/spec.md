@@ -4,15 +4,15 @@
 - Status: draft | frozen
 - Feature slug: <feature>
 
-## 背景 / 意図 (Why)
+## 背景 / 意図
 何を達成したいか。解決する課題。
 
-## 受入条件 (Acceptance Criteria)
+## 受入条件
 チェック可能な文で書く。各項目は最終的にテストへ対応させる（必須）。
 - [ ] AC1: ...
 - [ ] AC2: ...
 
-## スコープ外 (Non-goals)
+## スコープ外
 やらないこと。
 
 ## 制約 / 前提
