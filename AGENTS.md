@@ -5,6 +5,8 @@ Read before any work:
 - `rules/workflow.md`
 - `rules/subagents.md`
 - `rules/conventions.md`
+- `orchestration/rules/orchestration.md`
+- `catalog/rules/catalog.md`
 
 ## superpowers save paths
 
