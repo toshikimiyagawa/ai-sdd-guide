@@ -1,0 +1,34 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Agent Assignment",
+  "description": "Per-repository routing rules: maps feature ID patterns to implementation agents (.sdd/agent-assignment.json).",
+  "type": "object",
+  "required": ["default_implementer"],
+  "additionalProperties": false,
+  "properties": {
+    "default_implementer": {
+      "type": "string",
+      "enum": ["claude", "codex", "gemini"],
+      "description": "Fallback agent for implement-phase tasks not matched by any rule."
+    },
+    "rules": {
+      "type": "array",
+      "description": "Ordered list of pattern→agent overrides. First match wins.",
+      "items": {
+        "type": "object",
+        "required": ["pattern", "agent"],
+        "additionalProperties": false,
+        "properties": {
+          "pattern": {
+            "type": "string",
+            "description": "Glob pattern matched against the feature ID (e.g. 'feat/frontend-*')."
+          },
+          "agent": {
+            "type": "string",
+            "enum": ["claude", "codex", "gemini"]
+          }
+        }
+      }
+    }
+  }
+}
