@@ -1,0 +1,7 @@
+# <label>
+
+<!-- catalog-type: <type-id> -->
+
+| ID | 名称 | ステータス | feature | 定義書 |
+|---|---|---|---|---|
+| <PREFIX>-001 | <名称> | planned | [<feature-slug>](../../specs/<feature-slug>/spec.md) | [→](<PREFIX>-001-<slug>.md) |
