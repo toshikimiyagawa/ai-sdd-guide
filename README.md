@@ -80,7 +80,7 @@ cp vendor/ai-sdd-guide/catalog/templates/catalog.json.example .sdd/catalog.json
 echo "@vendor/ai-sdd-guide/catalog/rules/catalog.md" >> CLAUDE.md
 ```
 
-有効化後は `spec.md` 作成時に Claude が `docs/design/` 配下にカタログと定義書を自動生成する。
+有効化後は `spec.md` 作成時に、superpowers が使えるエージェントが `docs/design/` 配下にカタログと定義書を自動生成する。
 
 ## 導入手順（取り込み側プロジェクト）
 ```bash
