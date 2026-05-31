@@ -19,6 +19,7 @@
 3. **plan** — `plan.md`。アプローチ・影響ファイル・トレードオフ・代替案。(Tier 2)
 4. **tasks** — `tasks.md`。順序付きの具体タスク＋各受入条件に対応するテスト。(Tier 2)
 5. **freeze** — `.sdd/state.json` を `phase=implement` に。ここが他agentへの引き渡しゲート。
+   **STOP：freeze と同一セッションで実装を開始してはいけない。人間から「実装して」と明示的に指示を受けてから実装フェーズに入ること。**
 
 ### 実装（任意のagent）
 - `specs/<feature>/` を読み、凍結された tasks を**そのまま**実装する（過不足なく）。
@@ -50,3 +51,15 @@
 | `note` | - | text | Tier 0/1 免除の理由（監査用） |
 
 雛形: `templates/sdd-state.example.json` ／ 値の定義: `templates/sdd-state.schema.json`（JSON Schema）
+
+## 並列作業
+
+複数の feature を同時に進める場合は、**feature ごとに git worktree を分ける**。
+各 worktree が独立した `.sdd/` ディレクトリを持つため、`state.json` の衝突が起きない。
+
+```bash
+# worktree 作成（using-git-worktrees スキルで自動化も可）
+git worktree add .worktrees/feature-b -b feat/feature-b
+```
+
+1つの worktree に複数の feature を混在させてはいけない。
