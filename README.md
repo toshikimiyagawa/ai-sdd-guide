@@ -79,6 +79,23 @@ superpowers が使えるエージェントが spec 作成時（planned）と ver
 | スキーマ | `catalog/schema/catalog.schema.json` | `.sdd/catalog.json` の定義 |
 | テンプレート | `catalog/templates/` | 設定例・一覧・定義書の雛形 |
 
+## Issue トラッカー連携
+
+GitHub / GitLab / Bitbucket / Azure DevOps のいずれでも、Issue 登録から SDD 完了まで同じ
+流れで回せる。**ステータスの正本は `.sdd/tasks.json`（SDD かんばん）に統一**し、プラット
+フォームのネイティブボードは任意のミラー扱い。
+
+| コンポーネント | パス | 役割 |
+|---|---|---|
+| エージェントルール | `rules/issue-intake.md` | Issue → SDD のインテークフロー（全agent）|
+| 解説 | `docs/04-issue-tracker.md` | プラットフォーム機能マッピングとフロー（日本語）|
+| セットアップ例 | `integration/issue-tracker/` | Tier ラベル作成スクリプト・各プラットフォーム手順 |
+
+```bash
+# GitHub: Tier ラベルを作成（冪等）
+bash vendor/ai-sdd-guide/integration/issue-tracker/labels.sh
+```
+
 ## 導入手順（取り込み側プロジェクト）
 ```bash
 # 1. submodule として追加（配置パスは任意。例: vendor/ai-sdd-guide）

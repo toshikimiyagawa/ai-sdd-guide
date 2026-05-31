@@ -5,6 +5,7 @@ Read before any work:
 - `rules/workflow.md`
 - `rules/subagents.md`
 - `rules/conventions.md`
+- `rules/issue-intake.md`
 - `orchestration/rules/orchestration.md`
 - `catalog/rules/catalog.md`
 
