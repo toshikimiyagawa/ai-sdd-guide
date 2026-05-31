@@ -15,6 +15,8 @@ Canonical, always-loaded rules. Terse + imperative. Rationale lives in `docs/` (
 
 ## Never
 - Never edit source code during spec/plan/tasks phases (only specs/docs).
+- Never begin implementation immediately after freezing a spec in the same turn. Wait for an explicit human instruction to start.
+- Never treat spec approval ("approved", "LGTM", etc.) as permission to start implementation — these confirm the spec only.
 - Never expand scope beyond the approved tasks. New ideas become a new spec.
 - Never disable or bypass SDD hooks or CI to make a change pass.
 - Never freeze a spec that has no acceptance criteria.

@@ -16,6 +16,9 @@ Capture each skill's output into the portable `specs/<feature>/` artifacts.
    - If `.sdd/catalog.json` exists: register new catalog entries as `planned` in `docs/design/` (see `catalog/rules/catalog.md`). Update to `confirmed` in the verify phase.
 3. Plan & Tasks — skill `writing-plans` (bite-sized ordered steps). Capture into `plan.md` (approach, affected files, tradeoffs, alternatives) and `tasks.md` (concrete steps + the test proving each acceptance criterion). (Tier 2)
 4. Freeze — set `.sdd/state.json` `phase=implement`. This is the handoff gate to other agents.
+   **STOP here. Do not begin implementation in the same conversation turn as freeze.**
+   Wait for the human to explicitly say to start implementation (e.g. "implement it", "go ahead", "進めて") before proceeding.
+   "approved" or similar confirms the spec only — it is not a signal to start coding.
 
 For exploration/parallelism use skills `dispatching-parallel-agents` / `subagent-driven-development`. See `subagents.md`.
 
