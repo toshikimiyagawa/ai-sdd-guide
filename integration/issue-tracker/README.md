@@ -7,6 +7,50 @@ the label, dependency-link, and PR-link mechanisms differ. See `rules/issue-inta
 **Status is always tracked in `.sdd/tasks.json` (the SDD kanban), not in platform boards.**
 Boards are optional mirrors only.
 
+## Branch protection (all platforms)
+
+Protect `main` so that **no one — including administrators — can push directly**.
+All changes must go through a pull request / merge request.
+
+### GitHub
+
+Settings → Branches → Add rule, pattern `main`:
+- ✅ Require a pull request before merging
+- ✅ Include administrators
+
+Or via CLI:
+```bash
+gh api repos/{owner}/{repo}/branches/main/protection -X PUT \
+  --input - <<'EOF'
+{
+  "required_status_checks": null,
+  "enforce_admins": true,
+  "required_pull_request_reviews": { "required_approving_review_count": 0 },
+  "restrictions": null
+}
+EOF
+```
+
+### GitLab
+
+Settings → Repository → Protected Branches → Protect `main`:
+- Allowed to push and merge: **No one** (force all changes through MRs)
+- Allowed to merge: Maintainers (or Developers)
+
+### Bitbucket
+
+Repository settings → Branch permissions → Add permission for `main`:
+- Write access: remove all users/groups (or set to **No one**)
+- Merge via pull request only
+
+### Azure DevOps
+
+Project Settings → Repositories → select repo → Policies → Branch policies → `main`:
+- ✅ Require a minimum number of reviewers (set to 0 for solo projects)
+- This alone blocks direct pushes and requires a PR
+
+---
+
 ## GitHub (baseline)
 
 Create the three Tier labels (idempotent):

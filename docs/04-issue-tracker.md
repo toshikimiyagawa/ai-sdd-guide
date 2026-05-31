@@ -28,6 +28,11 @@ Azure Work Items）は**任意の補助ミラー**にすぎない。使いたい
 プラットフォームごとに違うのは「ラベル」「依存関係リンク」「PR↔Issue リンク」の3つだけ。
 Tier ルールも SDD フェーズも、`.sdd/tasks.json` でのステータス管理も全プラットフォーム共通。
 
+## 前提：ブランチ保護の設定
+
+`main` への直接 push を禁止し、すべての変更を PR 経由にする。管理者も例外なし。
+設定手順はプラットフォームごとに `integration/issue-tracker/README.md` を参照。
+
 ## Issue 登録ルール
 
 **GitHub（基準）:**
