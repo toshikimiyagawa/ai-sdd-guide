@@ -16,6 +16,8 @@ Capture each skill's output into the portable `specs/<feature>/` artifacts.
    - If `.sdd/catalog.json` exists: register new catalog entries as `planned` in `docs/design/` (see `catalog/rules/catalog.md`). Update to `confirmed` in the verify phase.
 3. Plan & Tasks — skill `writing-plans` (bite-sized ordered steps). Capture into `plan.md` (approach, affected files, tradeoffs, alternatives) and `tasks.md` (concrete steps + the test proving each acceptance criterion). (Tier 2)
 4. Freeze — set `.sdd/state.json` `phase=implement`. This is the handoff gate to other agents.
+   STOP. Do not begin implementation in the same session as freeze.
+   Wait for an explicit instruction to implement before proceeding.
 
 For exploration/parallelism use skills `dispatching-parallel-agents` / `subagent-driven-development`. See `subagents.md`.
 
@@ -37,3 +39,11 @@ For exploration/parallelism use skills `dispatching-parallel-agents` / `subagent
 - Tier 1: lightweight spec required; plan/tasks skipped.
 - Tier 2: nothing skipped.
 - Exemptions must be declared in `.sdd/state.json` + PR label so hooks/CI can verify them.
+
+## Parallel features
+
+To work on multiple features simultaneously, use a separate git worktree per feature.
+Each worktree has its own `.sdd/` directory — state and phase tracking are automatically
+isolated. Use the `superpowers:using-git-worktrees` skill to create the worktree.
+
+Never share a single worktree across two features in progress at the same time.
