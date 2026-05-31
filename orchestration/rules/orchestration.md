@@ -23,6 +23,10 @@ Display kanban by running:
 bash vendor/ai-sdd-guide/orchestration/tools/kanban.sh
 ```
 
+For a shareable web view, `orchestration/tools/kanban-html.sh` renders the same
+`.sdd/tasks.json` as a self-contained static HTML page (auto-published via
+`integration/ci/kanban-pages.yml` on GitHub Pages).
+
 ## Rules for design agents (brainstorm/spec/plan/tasks)
 
 - Use superpowers: brainstorming → writing-plans skills.
