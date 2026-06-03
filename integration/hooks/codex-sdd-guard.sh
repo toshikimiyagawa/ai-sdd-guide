@@ -104,6 +104,17 @@ if [ -z "$non_exempt" ]; then
   exit 0
 fi
 
+# Block source edits from the primary checkout; linked worktrees only.
+if [ "${SDD_ALLOW_MAIN_WORKTREE:-}" != "1" ] && git rev-parse --git-dir >/dev/null 2>&1; then
+  _git_dir="$(cd "$(git rev-parse --git-dir)" && pwd -P)"
+  _git_common="$(cd "$(git rev-parse --git-common-dir)" && pwd -P)"
+  _superproject="$(git rev-parse --show-superproject-working-tree 2>/dev/null || true)"
+  if [ "$_git_dir" = "$_git_common" ] && [ -z "$_superproject" ]; then
+    deny "SDD: source edits are only allowed from a linked git worktree. Create one with: git worktree add .worktrees/<branch> -b <branch>. For maintenance, set SDD_ALLOW_MAIN_WORKTREE=1."
+    exit 0
+  fi
+fi
+
 tier=""
 phase=""
 if [ -f "$state" ]; then
