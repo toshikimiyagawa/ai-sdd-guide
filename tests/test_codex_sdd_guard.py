@@ -1,14 +1,22 @@
 import json
+import os
 import subprocess
 from pathlib import Path
 
 
 ROOT = Path(__file__).parents[1]
 HOOK = ROOT / "integration" / "hooks" / "codex-sdd-guard.sh"
+GIT_ENV = {
+    **os.environ,
+    "GIT_AUTHOR_NAME": "Test User",
+    "GIT_AUTHOR_EMAIL": "test@example.invalid",
+    "GIT_COMMITTER_NAME": "Test User",
+    "GIT_COMMITTER_EMAIL": "test@example.invalid",
+}
 
 
 def _run(command, cwd):
-    subprocess.run(command, cwd=cwd, check=True, text=True)
+    subprocess.run(command, cwd=cwd, check=True, text=True, env=GIT_ENV)
 
 
 def _make_repo(tmp_path):
@@ -40,6 +48,7 @@ def _guard(cwd, payload):
         text=True,
         capture_output=True,
         check=True,
+        env=GIT_ENV,
     )
 
 
