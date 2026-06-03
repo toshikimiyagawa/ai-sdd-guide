@@ -12,6 +12,20 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: State reset gate
+        run: |
+          if [ ! -f ".sdd/state.json" ]; then
+            echo "No .sdd/state.json — state check skipped."; exit 0
+          fi
+          tier=$(jq -r '.tier // empty' .sdd/state.json)
+          phase=$(jq -r '.phase // empty' .sdd/state.json)
+          [ "$tier" = "0" ] && echo "Tier 0 — state check skipped." && exit 0
+          if [ "$phase" != "done" ]; then
+            echo "::error::.sdd/state.json phase is '$phase' (expected 'done'). Reset before creating a PR: {\"tier\": 0, \"phase\": \"done\", \"note\": \"no active feature\"}"
+            exit 1
+          fi
+          echo "state.json phase=done — OK."
+
       - name: Spec gate
         run: |
           base="${{ github.event.pull_request.base.sha }}"
