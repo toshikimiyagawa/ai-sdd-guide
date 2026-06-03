@@ -6,6 +6,35 @@ PROJECT="${1:-$(git rev-parse --show-toplevel 2>/dev/null || pwd)}"
 
 log() { printf '[update.sh] %s\n' "$*"; }
 
+# --- Dependency check ---
+
+check_dep() {
+  local cmd="$1" brew_pkg="${2:-$1}" apt_pkg="${3:-$1}" dnf_pkg="${4:-$1}"
+  command -v "$cmd" >/dev/null 2>&1 && return 0
+  log "WARNING: $cmd が見つかりません"
+  if command -v brew >/dev/null 2>&1; then
+    read -r -p "[update.sh] brew install $brew_pkg を実行しますか？ [y/N] " yn || true
+    if [[ "${yn:-N}" =~ ^[Yy]$ ]]; then
+      brew install "$brew_pkg" && return 0
+    fi
+  elif command -v apt-get >/dev/null 2>&1; then
+    log "インストール: sudo apt-get install -y $apt_pkg"
+    [[ "$cmd" == "gh" ]] && log "  (gh の公式手順: https://cli.github.com/)"
+  elif command -v dnf >/dev/null 2>&1; then
+    log "インストール: sudo dnf install -y $dnf_pkg"
+    [[ "$cmd" == "gh" ]] && log "  (gh の公式手順: https://cli.github.com/)"
+  elif command -v yum >/dev/null 2>&1; then
+    log "インストール: sudo yum install -y $dnf_pkg"
+    [[ "$cmd" == "gh" ]] && log "  (gh の公式手順: https://cli.github.com/)"
+  else
+    log "インストール手順: https://stedolan.github.io/jq/download/ (jq) / https://cli.github.com/ (gh)"
+  fi
+  return 1
+}
+
+check_dep jq jq jq jq || true
+check_dep gh gh gh gh || true
+
 # --- Managed: always overwrite ---
 
 if [[ -d "$INTEGRATION/agents" ]]; then
