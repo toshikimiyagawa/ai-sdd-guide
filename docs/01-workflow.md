@@ -25,9 +25,11 @@
 - `specs/<feature>/` を読み、凍結された tasks を**そのまま**実装する（過不足なく）。
 - 受入条件は必ずテストに対応させる。
 - spec が間違っていたら**止めて人間にエスカレーション**。勝手に再設計しない。
+- 実装が完了したら `.sdd/state.json` を `phase=verify` に更新する。オーケストレーション使用時は `.sdd/tasks.json` のエントリも `status=in_progress` に更新する。
 
 ### 検証（superpowers必須）
 - テスト実行。`sdd-reviewer` subagent で凍結specへの適合を独立監査。
+- PR 作成前に `.sdd/state.json` を `{"tier": 0, "phase": "done", "note": "no active feature"}` にリセットする。オーケストレーション使用時は `.sdd/tasks.json` のエントリを `status=completed` に更新する。
 - PR を作成し、CI が全てパスしてマージ可能な状態であることを確認してから完了とする。
 - 最終的な合否は CI が独立に再判定する。
 
