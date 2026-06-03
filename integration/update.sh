@@ -19,10 +19,13 @@ check_dep() {
     fi
   elif command -v apt-get >/dev/null 2>&1; then
     log "インストール: sudo apt-get install -y $apt_pkg"
+    [[ "$cmd" == "gh" ]] && log "  (gh の公式手順: https://cli.github.com/)"
   elif command -v dnf >/dev/null 2>&1; then
     log "インストール: sudo dnf install -y $dnf_pkg"
+    [[ "$cmd" == "gh" ]] && log "  (gh の公式手順: https://cli.github.com/)"
   elif command -v yum >/dev/null 2>&1; then
     log "インストール: sudo yum install -y $dnf_pkg"
+    [[ "$cmd" == "gh" ]] && log "  (gh の公式手順: https://cli.github.com/)"
   else
     log "インストール手順: https://stedolan.github.io/jq/download/ (jq) / https://cli.github.com/ (gh)"
   fi
