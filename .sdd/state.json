@@ -1,1 +1,1 @@
-{"tier": 2, "phase": "implement", "feature": "worktree-isolation-guard", "spec": "_dev/specs/2026-06-03-worktree-isolation-guard-design.md"}
+{"tier": 2, "phase": "verify", "feature": "worktree-isolation-guard"}
