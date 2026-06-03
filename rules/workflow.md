@@ -26,10 +26,12 @@ For exploration/parallelism use skills `dispatching-parallel-agents` / `subagent
 - Map every acceptance criterion to a passing test.
 - When Claude implements: use skills `executing-plans` + `test-driven-development` (RED-GREEN-REFACTOR) + `systematic-debugging`. Other agents follow `tasks.md` directly.
 - If the spec is wrong, ambiguous, or insufficient: STOP and escalate. Do not redesign.
+- When implementation is complete: update `.sdd/state.json` (`phase=verify`) and, if using orchestration, add/update the feature entry in `.sdd/tasks.json` (`status=in_progress`).
 
 ## Verify phase (superpowers required)
 - Skill `verification-before-completion`. Run tests; spawn the `sdd-reviewer` subagent to check conformance to the frozen spec.
 - When sdd-reviewer or any code review returns feedback: skill `receiving-code-review`. Evaluate each item against the frozen spec before acting. If feedback conflicts with the frozen spec, STOP and escalate to the human — do not silently redesign. Scope-expanding suggestions become a new spec, not a quiet addition.
+- Before creating the PR: reset `.sdd/state.json` to `{"tier": 0, "phase": "done", "note": "no active feature"}`. If using orchestration, update `.sdd/tasks.json` entry to `status=completed`.
 - Create the PR. If CI is configured, wait for completion and confirm all checks pass and the PR is mergeable before declaring completion. Never declare completion without verifying CI results.
 - Optionally `requesting-code-review` / `finishing-a-development-branch`.
 - CI is authoritative: it independently re-checks spec presence + tests.
