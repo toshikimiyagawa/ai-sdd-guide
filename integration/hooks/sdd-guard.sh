@@ -1,11 +1,24 @@
 #!/usr/bin/env bash
 # SDD PreToolUse guard for Claude Code. A nudge, not a wall — CI is the real enforcement.
 # Blocks source edits before a spec is frozen, unless the task is Tier 0.
-# Requires: jq.
+# Prefers jq; falls back to python3.
 set -euo pipefail
 
+json_get() {
+  local file="$1" key="$2"
+  if command -v jq >/dev/null 2>&1; then
+    jq -r ".${key} // empty" "$file" 2>/dev/null || true
+  else
+    python3 -c "import json; d=json.load(open('$file')); print(d.get('$key') or '')" 2>/dev/null || true
+  fi
+}
+
 input="$(cat)"
-file_path="$(printf '%s' "$input" | jq -r '.tool_input.file_path // .tool_input.path // empty')"
+if command -v jq >/dev/null 2>&1; then
+  file_path="$(printf '%s' "$input" | jq -r '.tool_input.file_path // .tool_input.path // empty')"
+else
+  file_path="$(printf '%s' "$input" | python3 -c "import json,sys; d=json.load(sys.stdin); ti=d.get('tool_input',{}); print(ti.get('file_path') or ti.get('path') or '')" 2>/dev/null || true)"
+fi
 
 # Always allow design/doc/state files.
 case "$file_path" in
@@ -15,8 +28,8 @@ esac
 state=".sdd/state.json"
 tier=""; phase=""
 if [ -f "$state" ]; then
-  tier="$(jq -r '.tier // empty' "$state" 2>/dev/null || true)"
-  phase="$(jq -r '.phase // empty' "$state" 2>/dev/null || true)"
+  tier="$(json_get "$state" "tier")"
+  phase="$(json_get "$state" "phase")"
 fi
 
 # Tier must be classified before any source edit.

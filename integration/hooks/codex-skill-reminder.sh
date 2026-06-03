@@ -1,16 +1,29 @@
 #!/usr/bin/env bash
 # SDD UserPromptSubmit reminder hook for Codex. Non-blocking context injection.
-# Requires: jq.
+# Prefers jq; falls back to python3.
 set -euo pipefail
+
+json_get() {
+  local file="$1" key="$2"
+  if command -v jq >/dev/null 2>&1; then
+    jq -r ".${key} // empty" "$file" 2>/dev/null || true
+  else
+    python3 -c "import json; d=json.load(open('$file')); print(d.get('$key') or '')" 2>/dev/null || true
+  fi
+}
 
 input="$(cat)"
 root="$(git rev-parse --show-toplevel 2>/dev/null || printf '%s' "${PWD}")"
 state="$root/.sdd/state.json"
 [ -f "$state" ] || exit 0
 
-event="$(printf '%s' "$input" | jq -r '.hook_event_name // "UserPromptSubmit"' 2>/dev/null || printf 'UserPromptSubmit')"
-tier="$(jq -r '.tier // empty' "$state" 2>/dev/null || true)"
-phase="$(jq -r '.phase // empty' "$state" 2>/dev/null || true)"
+if command -v jq >/dev/null 2>&1; then
+  event="$(printf '%s' "$input" | jq -r '.hook_event_name // "UserPromptSubmit"' 2>/dev/null || printf 'UserPromptSubmit')"
+else
+  event="$(printf '%s' "$input" | python3 -c "import json,sys; d=json.load(sys.stdin); print(d.get('hook_event_name') or 'UserPromptSubmit')" 2>/dev/null || printf 'UserPromptSubmit')"
+fi
+tier="$(json_get "$state" "tier")"
+phase="$(json_get "$state" "phase")"
 
 [ "$tier" = "0" ] && exit 0
 [ -z "$tier" ] || [ -z "$phase" ] && exit 0
@@ -39,4 +52,8 @@ case "$phase" in
 esac
 
 [ -n "$msg" ] || exit 0
-jq -cn --arg event "$event" --arg msg "$msg" '{hookSpecificOutput:{hookEventName:$event,additionalContext:$msg}}'
+if command -v jq >/dev/null 2>&1; then
+  jq -cn --arg event "$event" --arg msg "$msg" '{hookSpecificOutput:{hookEventName:$event,additionalContext:$msg}}'
+else
+  python3 -c "import json,sys; print(json.dumps({'hookSpecificOutput':{'hookEventName':sys.argv[1],'additionalContext':sys.argv[2]}}))" "$event" "$msg"
+fi

@@ -1,15 +1,29 @@
 #!/usr/bin/env bash
 # SDD PreToolUse guard for Codex. A nudge, not a wall — CI is the real enforcement.
 # Blocks detected source edits before a spec is frozen, unless the task is Tier 0.
-# Requires: jq.
+# Prefers jq; falls back to python3.
 set -euo pipefail
+
+json_get() {
+  local file="$1" key="$2"
+  if command -v jq >/dev/null 2>&1; then
+    jq -r ".${key} // empty" "$file" 2>/dev/null || true
+  else
+    python3 -c "import json; d=json.load(open('$file')); print(d.get('$key') or '')" 2>/dev/null || true
+  fi
+}
 
 input="$(cat)"
 root="$(git rev-parse --show-toplevel 2>/dev/null || printf '%s' "${PWD}")"
 state="$root/.sdd/state.json"
 
-tool_name="$(printf '%s' "$input" | jq -r '.tool_name // empty' 2>/dev/null || true)"
-command="$(printf '%s' "$input" | jq -r '.tool_input.command // .tool_input.patch // empty' 2>/dev/null || true)"
+if command -v jq >/dev/null 2>&1; then
+  tool_name="$(printf '%s' "$input" | jq -r '.tool_name // empty' 2>/dev/null || true)"
+  command="$(printf '%s' "$input" | jq -r '.tool_input.command // .tool_input.patch // empty' 2>/dev/null || true)"
+else
+  tool_name="$(printf '%s' "$input" | python3 -c "import json,sys; d=json.load(sys.stdin); print(d.get('tool_name') or '')" 2>/dev/null || true)"
+  command="$(printf '%s' "$input" | python3 -c "import json,sys; d=json.load(sys.stdin); ti=d.get('tool_input',{}); print(ti.get('command') or ti.get('patch') or '')" 2>/dev/null || true)"
+fi
 
 is_exempt_path() {
   case "$1" in
@@ -19,11 +33,19 @@ is_exempt_path() {
 }
 
 print_context() {
-  jq -cn --arg msg "$1" '{hookSpecificOutput:{hookEventName:"PreToolUse",additionalContext:$msg}}'
+  if command -v jq >/dev/null 2>&1; then
+    jq -cn --arg msg "$1" '{hookSpecificOutput:{hookEventName:"PreToolUse",additionalContext:$msg}}'
+  else
+    python3 -c "import json,sys; print(json.dumps({'hookSpecificOutput':{'hookEventName':'PreToolUse','additionalContext':sys.argv[1]}}))" "$1"
+  fi
 }
 
 deny() {
-  jq -cn --arg reason "$1" '{hookSpecificOutput:{hookEventName:"PreToolUse",permissionDecision:"deny",permissionDecisionReason:$reason}}'
+  if command -v jq >/dev/null 2>&1; then
+    jq -cn --arg reason "$1" '{hookSpecificOutput:{hookEventName:"PreToolUse",permissionDecision:"deny",permissionDecisionReason:$reason}}'
+  else
+    python3 -c "import json,sys; print(json.dumps({'hookSpecificOutput':{'hookEventName':'PreToolUse','permissionDecision':'deny','permissionDecisionReason':sys.argv[1]}}))" "$1"
+  fi
 }
 
 join_paths() {
@@ -85,8 +107,8 @@ fi
 tier=""
 phase=""
 if [ -f "$state" ]; then
-  tier="$(jq -r '.tier // empty' "$state" 2>/dev/null || true)"
-  phase="$(jq -r '.phase // empty' "$state" 2>/dev/null || true)"
+  tier="$(json_get "$state" "tier")"
+  phase="$(json_get "$state" "phase")"
 fi
 
 if [ -z "$tier" ]; then
