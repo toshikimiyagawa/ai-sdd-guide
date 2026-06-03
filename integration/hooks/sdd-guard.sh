@@ -26,11 +26,11 @@ case "$file_path" in
 esac
 
 # Block source edits from the primary checkout; linked worktrees only.
-if [ "${SDD_ALLOW_MAIN_WORKTREE:-}" != "1" ]; then
-  git_dir="$(cd "$(git rev-parse --git-dir)" 2>/dev/null && pwd -P || true)"
-  git_common="$(cd "$(git rev-parse --git-common-dir)" 2>/dev/null && pwd -P || true)"
+if [ "${SDD_ALLOW_MAIN_WORKTREE:-}" != "1" ] && git rev-parse --git-dir >/dev/null 2>&1; then
+  git_dir="$(cd "$(git rev-parse --git-dir)" && pwd -P)"
+  git_common="$(cd "$(git rev-parse --git-common-dir)" && pwd -P)"
   superproject="$(git rev-parse --show-superproject-working-tree 2>/dev/null || true)"
-  if [ -n "$git_dir" ] && [ "$git_dir" = "$git_common" ] && [ -z "$superproject" ]; then
+  if [ "$git_dir" = "$git_common" ] && [ -z "$superproject" ]; then
     {
       echo "SDD: ソース編集はリンク worktree からのみ許可されています。"
       echo "  git worktree add .worktrees/<branch> -b <branch> で worktree を作成してください。"
