@@ -125,3 +125,59 @@ def test_bash_read_with_stderr_redirect_is_not_treated_as_write(tmp_path):
     )
 
     assert result.stdout == ""
+
+
+def test_bash_explicit_fd_redirect_write_is_detected(tmp_path):
+    repo, _ = _make_repo(tmp_path)
+
+    result = _guard(
+        repo,
+        {
+            "tool_name": "Bash",
+            "tool_input": {"command": f"echo x 1> {repo / 'src' / 'app.py'}"},
+        },
+    )
+
+    assert "source edits are only allowed from a linked git worktree" in _deny_reason(result)
+
+
+def test_bash_plain_redirect_write_is_detected(tmp_path):
+    repo, _ = _make_repo(tmp_path)
+
+    result = _guard(
+        repo,
+        {
+            "tool_name": "Bash",
+            "tool_input": {"command": f"echo x > {repo / 'src' / 'app.py'}"},
+        },
+    )
+
+    assert "source edits are only allowed from a linked git worktree" in _deny_reason(result)
+
+
+def test_bash_stderr_redirect_to_real_file_is_detected(tmp_path):
+    repo, _ = _make_repo(tmp_path)
+
+    result = _guard(
+        repo,
+        {
+            "tool_name": "Bash",
+            "tool_input": {"command": f"echo log 2> {repo / 'src' / 'out.py'}"},
+        },
+    )
+
+    assert "source edits are only allowed from a linked git worktree" in _deny_reason(result)
+
+
+def test_bash_fd_dup_redirect_is_not_treated_as_write(tmp_path):
+    repo, _ = _make_repo(tmp_path)
+
+    result = _guard(
+        repo,
+        {
+            "tool_name": "Bash",
+            "tool_input": {"command": f"cat {repo / 'src' / 'app.py'} 2>&1"},
+        },
+    )
+
+    assert result.stdout == ""

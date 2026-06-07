@@ -69,7 +69,11 @@ bash_paths() {
 
 looks_like_write_bash() {
   printf '%s' "$command" | grep -Eq '(apply_patch|\bsed\b[^\n]*[[:space:]]-i|\bperl\b[^\n]*[[:space:]]-pi|\b(rm|mv|cp|touch)\b)' && return 0
-  printf '%s' "$command" | grep -Eq '(^|[^0-9])>>?([^&]|$)'
+  # A redirect to a real file is a write. Strip /dev/null targets and fd dups
+  # (2>&1, >&2) first so reads like `sed ... 2>/dev/null` are not flagged.
+  local redir
+  redir="$(printf '%s' "$command" | sed -E 's#[0-9]*>>?[[:space:]]*/dev/null##g; s#&>>?[[:space:]]*/dev/null##g; s#[0-9]*>&[0-9-]*##g')"
+  printf '%s' "$redir" | grep -Eq '>>?'
 }
 
 resolve_path() {
