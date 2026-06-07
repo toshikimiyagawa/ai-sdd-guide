@@ -14,16 +14,19 @@ json_get() {
 }
 
 input="$(cat)"
-root="$(git rev-parse --show-toplevel 2>/dev/null || printf '%s' "${PWD}")"
-state="$root/.sdd/state.json"
+invocation_root="$(git rev-parse --show-toplevel 2>/dev/null || printf '%s' "${PWD}")"
 
 if command -v jq >/dev/null 2>&1; then
   tool_name="$(printf '%s' "$input" | jq -r '.tool_name // empty' 2>/dev/null || true)"
   command="$(printf '%s' "$input" | jq -r '.tool_input.command // .tool_input.patch // empty' 2>/dev/null || true)"
+  tool_workdir="$(printf '%s' "$input" | jq -r '.tool_input.workdir // .tool_input.cwd // .cwd // empty' 2>/dev/null || true)"
 else
   tool_name="$(printf '%s' "$input" | python3 -c "import json,sys; d=json.load(sys.stdin); print(d.get('tool_name') or '')" 2>/dev/null || true)"
   command="$(printf '%s' "$input" | python3 -c "import json,sys; d=json.load(sys.stdin); ti=d.get('tool_input',{}); print(ti.get('command') or ti.get('patch') or '')" 2>/dev/null || true)"
+  tool_workdir="$(printf '%s' "$input" | python3 -c "import json,sys; d=json.load(sys.stdin); ti=d.get('tool_input',{}); print(ti.get('workdir') or ti.get('cwd') or d.get('cwd') or '')" 2>/dev/null || true)"
 fi
+
+base_dir="${tool_workdir:-$invocation_root}"
 
 is_exempt_path() {
   case "$1" in
@@ -61,11 +64,47 @@ patch_paths() {
 }
 
 bash_paths() {
-  printf '%s\n' "$command" | grep -Eo '([A-Za-z0-9_.@+-]+/)*[A-Za-z0-9_.@+-]+\.(c|cc|cpp|css|go|h|hpp|html|java|js|json|jsx|php|py|rb|rs|scss|sh|tf|toml|ts|tsx|yaml|yml)' || true
+  printf '%s\n' "$command" | grep -Eo '/?([A-Za-z0-9_.@+-]+/)*[A-Za-z0-9_.@+-]+\.(c|cc|cpp|css|go|h|hpp|html|java|js|json|jsx|php|py|rb|rs|scss|sh|tf|toml|ts|tsx|yaml|yml)' || true
 }
 
 looks_like_write_bash() {
-  printf '%s' "$command" | grep -Eq '(apply_patch|>>?|\bsed\b[^\n]*[[:space:]]-i|\bperl\b[^\n]*[[:space:]]-pi|\b(rm|mv|cp|touch)\b)'
+  printf '%s' "$command" | grep -Eq '(apply_patch|\bsed\b[^\n]*[[:space:]]-i|\bperl\b[^\n]*[[:space:]]-pi|\b(rm|mv|cp|touch)\b)' && return 0
+  printf '%s' "$command" | grep -Eq '(^|[^0-9])>>?([^&]|$)'
+}
+
+resolve_path() {
+  case "$1" in
+    /*) printf '%s\n' "$1" ;;
+    *) printf '%s/%s\n' "$base_dir" "$1" ;;
+  esac
+}
+
+existing_parent() {
+  local target="$1" dir
+  if [ -d "$target" ]; then
+    dir="$target"
+  else
+    dir="$(dirname "$target")"
+  fi
+  while [ ! -d "$dir" ] && [ "$dir" != "/" ]; do
+    dir="$(dirname "$dir")"
+  done
+  printf '%s\n' "$dir"
+}
+
+repo_root_for_path() {
+  local path dir
+  path="$(resolve_path "$1")"
+  dir="$(existing_parent "$path")"
+  git -C "$dir" rev-parse --show-toplevel 2>/dev/null || printf '%s\n' "$invocation_root"
+}
+
+git_abs_path() {
+  local root="$1" git_path="$2"
+  case "$git_path" in
+    /*) printf '%s\n' "$git_path" ;;
+    *) printf '%s/%s\n' "$root" "$git_path" ;;
+  esac
 }
 
 paths=""
@@ -104,31 +143,57 @@ if [ -z "$non_exempt" ]; then
   exit 0
 fi
 
+roots=""
+while IFS= read -r path; do
+  [ -n "$path" ] || continue
+  roots="${roots}$(repo_root_for_path "$path")\n"
+done <<EOF
+$(printf '%b' "$non_exempt")
+EOF
+roots="$(printf '%b' "$roots" | sed '/^$/d' | sort -u)"
+
 # Block source edits from the primary checkout; linked worktrees only.
-if [ "${SDD_ALLOW_MAIN_WORKTREE:-}" != "1" ] && git rev-parse --git-dir >/dev/null 2>&1; then
-  _git_dir="$(cd "$(git rev-parse --git-dir)" && pwd -P)"
-  _git_common="$(cd "$(git rev-parse --git-common-dir)" && pwd -P)"
-  _superproject="$(git rev-parse --show-superproject-working-tree 2>/dev/null || true)"
-  if [ "$_git_dir" = "$_git_common" ] && [ -z "$_superproject" ]; then
-    deny "SDD: source edits are only allowed from a linked git worktree. Create one with: git worktree add .worktrees/<branch> -b <branch>. For maintenance, set SDD_ALLOW_MAIN_WORKTREE=1."
+if [ "${SDD_ALLOW_MAIN_WORKTREE:-}" != "1" ]; then
+  while IFS= read -r check_root; do
+    [ -n "$check_root" ] || continue
+    if git -C "$check_root" rev-parse --git-dir >/dev/null 2>&1; then
+      _git_dir="$(git_abs_path "$check_root" "$(git -C "$check_root" rev-parse --git-dir)")"
+      _git_common="$(git_abs_path "$check_root" "$(git -C "$check_root" rev-parse --git-common-dir)")"
+      _git_dir="$(cd "$_git_dir" && pwd -P)"
+      _git_common="$(cd "$_git_common" && pwd -P)"
+      _superproject="$(git -C "$check_root" rev-parse --show-superproject-working-tree 2>/dev/null || true)"
+      if [ "$_git_dir" = "$_git_common" ] && [ -z "$_superproject" ]; then
+        deny "SDD: source edits are only allowed from a linked git worktree. Create one with: git worktree add .worktrees/<branch> -b <branch>. For maintenance, set SDD_ALLOW_MAIN_WORKTREE=1."
+        exit 0
+      fi
+    fi
+  done <<EOF
+$roots
+EOF
+fi
+
+while IFS= read -r check_root; do
+  [ -n "$check_root" ] || continue
+  state="$check_root/.sdd/state.json"
+  tier=""
+  phase=""
+  if [ -f "$state" ]; then
+    tier="$(json_get "$state" "tier")"
+    phase="$(json_get "$state" "phase")"
+  fi
+
+  if [ -z "$tier" ]; then
+    deny "SDD: Tier is not classified. Before editing source files, set .sdd/state.json tier to 0, 1, or 2. Detected source path(s): $(join_paths "$non_exempt")"
     exit 0
   fi
-fi
 
-tier=""
-phase=""
-if [ -f "$state" ]; then
-  tier="$(json_get "$state" "tier")"
-  phase="$(json_get "$state" "phase")"
-fi
+  [ "$tier" = "0" ] && continue
+  case "$phase" in implement|verify) continue ;; esac
 
-if [ -z "$tier" ]; then
-  deny "SDD: Tier is not classified. Before editing source files, set .sdd/state.json tier to 0, 1, or 2. Detected source path(s): $(join_paths "$non_exempt")"
+  deny "SDD: source edits are blocked before the spec is frozen. Set .sdd/state.json phase to implement or verify, or declare Tier 0 with justification. Detected source path(s): $(join_paths "$non_exempt")"
   exit 0
-fi
+done <<EOF
+$roots
+EOF
 
-[ "$tier" = "0" ] && exit 0
-case "$phase" in implement|verify) exit 0 ;; esac
-
-deny "SDD: source edits are blocked before the spec is frozen. Set .sdd/state.json phase to implement or verify, or declare Tier 0 with justification. Detected source path(s): $(join_paths "$non_exempt")"
 exit 0
