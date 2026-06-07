@@ -181,3 +181,73 @@ def test_bash_fd_dup_redirect_is_not_treated_as_write(tmp_path):
     )
 
     assert result.stdout == ""
+
+
+def _set_state(root, data):
+    (root / ".sdd" / "state.json").write_text(json.dumps(data) + "\n")
+
+
+def test_tier0_source_edit_in_linked_worktree_is_allowed(tmp_path):
+    repo, worktree = _make_repo(tmp_path)
+    _set_state(worktree, {"tier": 0, "phase": "design"})
+    patch = f"""*** Begin Patch
+*** Update File: {worktree / 'src' / 'app.py'}
+@@
+-print('hello')
++print('tier0')
+*** End Patch
+"""
+
+    result = _guard(repo, {"tool_name": "apply_patch", "tool_input": {"patch": patch}})
+
+    assert result.stdout == ""
+
+
+def test_unclassified_tier_in_linked_worktree_is_denied(tmp_path):
+    repo, worktree = _make_repo(tmp_path)
+    _set_state(worktree, {"phase": "implement"})
+    patch = f"""*** Begin Patch
+*** Update File: {worktree / 'src' / 'app.py'}
+@@
+-print('hello')
++print('no tier')
+*** End Patch
+"""
+
+    result = _guard(repo, {"tool_name": "apply_patch", "tool_input": {"patch": patch}})
+
+    assert "Tier is not classified" in _deny_reason(result)
+
+
+def test_relative_path_without_workdir_falls_back_to_invocation_root(tmp_path):
+    repo, _ = _make_repo(tmp_path)
+    patch = """*** Begin Patch
+*** Update File: src/app.py
+@@
+-print('hello')
++print('relative')
+*** End Patch
+"""
+
+    result = _guard(repo, {"tool_name": "apply_patch", "tool_input": {"patch": patch}})
+
+    assert "source edits are only allowed from a linked git worktree" in _deny_reason(result)
+
+
+def test_multi_repo_patch_denies_when_any_root_is_primary_checkout(tmp_path):
+    repo, worktree = _make_repo(tmp_path)
+    patch = f"""*** Begin Patch
+*** Update File: {worktree / 'src' / 'app.py'}
+@@
+-print('hello')
++print('worktree')
+*** Update File: {repo / 'src' / 'app.py'}
+@@
+-print('hello')
++print('primary')
+*** End Patch
+"""
+
+    result = _guard(repo, {"tool_name": "apply_patch", "tool_input": {"patch": patch}})
+
+    assert "source edits are only allowed from a linked git worktree" in _deny_reason(result)
