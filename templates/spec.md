@@ -3,6 +3,7 @@
 - Tier: 1 | 2
 - Status: draft | frozen
 - Feature slug: <feature>
+- Traceability: [traceability.json](traceability.json) *(Tier 2 必須)*
 
 ## 背景 / 意図
 何を達成したいか。解決する課題。
