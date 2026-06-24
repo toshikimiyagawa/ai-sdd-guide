@@ -54,12 +54,14 @@
           },
           "reason": {
             "type": "string",
-            "description": "status が out-of-scope / deferred の場合に必須。scope 外化の理由。"
+            "minLength": 1,
+            "description": "status が out-of-scope / deferred の場合に必須。scope 外化の理由（空文字不可）。"
           },
           "followup_issue": {
             "type": "string",
             "format": "uri",
-            "description": "status が out-of-scope / deferred の場合に必須。follow-up Issue URL。"
+            "pattern": "^https?://",
+            "description": "status が out-of-scope / deferred の場合に必須。follow-up Issue の HTTP(S) URL。"
           }
         },
         "if": {
@@ -71,12 +73,17 @@
           "required": ["spec_ac", "task", "test"],
           "properties": {
             "spec_ac": {"type": "string"},
-            "task": {"type": "string"},
-            "test": {"type": "string"}
+            "task": {"type": "string", "pattern": "^T[0-9]+$"},
+            "test": {"type": "string", "pattern": "^.+::.+$"}
           }
         },
         "else": {
-          "required": ["reason", "followup_issue"]
+          "required": ["reason", "followup_issue"],
+          "properties": {
+            "spec_ac": {"type": "null"},
+            "task": {"type": "null"},
+            "test": {"type": "null"}
+          }
         }
       }
     }

@@ -182,3 +182,136 @@ def test_missing_issue_url_fails(schema):
     instance = {k: v for k, v in VALID_IN_SCOPE.items() if k != "issue_url"}
     with pytest.raises(jsonschema.ValidationError):
         validate(instance, schema)
+
+
+# --- out-of-scope / deferred strict null constraints ---
+
+def test_out_of_scope_nonnull_spec_ac_fails(schema):
+    instance = {
+        **VALID_OUT_OF_SCOPE,
+        "entries": [
+            {
+                "issue_ac": "50-AC1",
+                "spec_ac": "SAC-1",
+                "task": None,
+                "test": None,
+                "status": "out-of-scope",
+                "reason": "別 feature で扱う",
+                "followup_issue": "https://github.com/owner/repo/issues/51",
+            }
+        ],
+    }
+    with pytest.raises(jsonschema.ValidationError):
+        validate(instance, schema)
+
+
+def test_out_of_scope_nonnull_task_fails(schema):
+    instance = {
+        **VALID_OUT_OF_SCOPE,
+        "entries": [
+            {
+                "issue_ac": "50-AC1",
+                "spec_ac": None,
+                "task": "T1",
+                "test": None,
+                "status": "out-of-scope",
+                "reason": "別 feature で扱う",
+                "followup_issue": "https://github.com/owner/repo/issues/51",
+            }
+        ],
+    }
+    with pytest.raises(jsonschema.ValidationError):
+        validate(instance, schema)
+
+
+def test_out_of_scope_nonnull_test_fails(schema):
+    instance = {
+        **VALID_OUT_OF_SCOPE,
+        "entries": [
+            {
+                "issue_ac": "50-AC1",
+                "spec_ac": None,
+                "task": None,
+                "test": "tests/test_form.py::test_validation",
+                "status": "out-of-scope",
+                "reason": "別 feature で扱う",
+                "followup_issue": "https://github.com/owner/repo/issues/51",
+            }
+        ],
+    }
+    with pytest.raises(jsonschema.ValidationError):
+        validate(instance, schema)
+
+
+# --- reason / followup_issue format constraints ---
+
+def test_empty_reason_fails(schema):
+    instance = {
+        **VALID_OUT_OF_SCOPE,
+        "entries": [
+            {
+                **VALID_OUT_OF_SCOPE["entries"][0],
+                "reason": "",
+            }
+        ],
+    }
+    with pytest.raises(jsonschema.ValidationError):
+        validate(instance, schema)
+
+
+def test_mailto_followup_issue_fails(schema):
+    instance = {
+        **VALID_OUT_OF_SCOPE,
+        "entries": [
+            {
+                **VALID_OUT_OF_SCOPE["entries"][0],
+                "followup_issue": "mailto:test@example.com",
+            }
+        ],
+    }
+    with pytest.raises(jsonschema.ValidationError):
+        validate(instance, schema)
+
+
+def test_ftp_followup_issue_fails(schema):
+    instance = {
+        **VALID_OUT_OF_SCOPE,
+        "entries": [
+            {
+                **VALID_OUT_OF_SCOPE["entries"][0],
+                "followup_issue": "ftp://example.com/issues/1",
+            }
+        ],
+    }
+    with pytest.raises(jsonschema.ValidationError):
+        validate(instance, schema)
+
+
+# --- in-scope task / test format constraints ---
+
+def test_in_scope_invalid_task_format_fails(schema):
+    instance = {
+        **VALID_IN_SCOPE,
+        "entries": [
+            {
+                **VALID_IN_SCOPE["entries"][0],
+                "task": "anything",
+            }
+        ],
+    }
+    with pytest.raises(jsonschema.ValidationError):
+        validate(instance, schema)
+
+
+def test_in_scope_invalid_test_format_fails(schema):
+    instance = {
+        **VALID_IN_SCOPE,
+        "entries": [
+            {
+                **VALID_IN_SCOPE["entries"][0],
+                "test": "visual check",
+            }
+        ],
+    }
+    with pytest.raises(jsonschema.ValidationError):
+        validate(instance, schema)

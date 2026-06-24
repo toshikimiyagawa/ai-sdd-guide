@@ -1,0 +1,56 @@
+{
+  "issue": 44,
+  "issue_url": "https://github.com/toshikimiyagawa/ai-sdd-guide/issues/44",
+  "feature": "traceability-format",
+  "entries": [
+    {
+      "issue_ac": "44-AC1",
+      "spec_ac": "SAC-1",
+      "task": "T1",
+      "test": "tests/test_traceability_schema.py::test_valid_in_scope_passes",
+      "status": "in-scope"
+    },
+    {
+      "issue_ac": "44-AC2",
+      "spec_ac": "SAC-2",
+      "task": "T2",
+      "test": "tests/test_traceability_schema.py::test_in_scope_missing_spec_ac_fails",
+      "status": "in-scope"
+    },
+    {
+      "issue_ac": "44-AC3",
+      "spec_ac": "SAC-3",
+      "task": "T2",
+      "test": "tests/test_traceability_schema.py::test_out_of_scope_missing_reason_fails",
+      "status": "in-scope"
+    },
+    {
+      "issue_ac": "44-AC4",
+      "spec_ac": "SAC-4",
+      "task": "T3",
+      "test": "tests/test_traceability_schema.py::test_valid_out_of_scope_passes",
+      "status": "in-scope"
+    },
+    {
+      "issue_ac": "44-AC5",
+      "spec_ac": "SAC-5",
+      "task": "T4",
+      "test": "tests/test_traceability_schema.py::test_valid_in_scope_passes",
+      "status": "in-scope"
+    },
+    {
+      "issue_ac": "44-AC6",
+      "spec_ac": "SAC-6",
+      "task": "T5",
+      "test": "tests/test_traceability_schema.py::test_valid_in_scope_passes",
+      "status": "in-scope"
+    },
+    {
+      "issue_ac": "44-AC7",
+      "spec_ac": "SAC-7",
+      "task": "T1",
+      "test": "tests/test_traceability_schema.py::test_valid_in_scope_passes",
+      "status": "in-scope"
+    }
+  ]
+}
