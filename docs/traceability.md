@@ -58,6 +58,17 @@ spec.md の受入条件に付ける ID。spec 固有の連番。
 4. `out-of-scope` / `deferred` の entries に `reason` と `followup_issue` がある
 5. `in-scope` の entries の `spec_ac` / `task` / `test` がすべて非 null
 
+## 1対多マッピング（1 Issue AC → 複数 spec AC）
+
+1 つの Issue AC が複数の spec AC に展開される場合、同じ `issue_ac` を持つエントリを複数記述する:
+
+```json
+{"issue_ac": "50-AC1", "spec_ac": "SAC-1", "task": "T1", "test": "tests/test_foo.py::test_a", "status": "in-scope"},
+{"issue_ac": "50-AC1", "spec_ac": "SAC-2", "task": "T2", "test": "tests/test_foo.py::test_b", "status": "in-scope"}
+```
+
+重複 `issue_ac` は意図的な展開を表す。誤記による意図しない重複は validator (#46) が検出する。
+
 ## テンプレート
 
 `templates/traceability.json.example` を参照。

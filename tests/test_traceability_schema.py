@@ -315,3 +315,24 @@ def test_in_scope_invalid_test_format_fails(schema):
     }
     with pytest.raises(jsonschema.ValidationError):
         validate(instance, schema)
+
+
+# --- structural / artifact existence tests ---
+
+def test_schema_file_exists():
+    assert SCHEMA_PATH.exists(), f"Schema not found: {SCHEMA_PATH}"
+
+
+def test_example_is_schema_valid(schema):
+    example_path = ROOT / "templates" / "traceability.json.example"
+    assert example_path.exists(), f"Example not found: {example_path}"
+    example = json.loads(example_path.read_text())
+    validate(example, schema)
+
+
+def test_docs_naming_convention():
+    docs_path = ROOT / "docs" / "traceability.md"
+    assert docs_path.exists(), f"Docs not found: {docs_path}"
+    content = docs_path.read_text()
+    assert "SAC-" in content, "docs/traceability.md must document SAC-N spec AC ID format"
+    assert "AC" in content, "docs/traceability.md must document Issue AC ID format"
