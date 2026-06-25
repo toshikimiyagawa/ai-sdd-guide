@@ -28,11 +28,26 @@ treat a board as the canonical status.
   Bitbucket) or `AB#N` (Azure DevOps).
 - Carry the matching `sdd:tier-{0,1,2}` label onto the PR (`rules/conventions.md`).
 
+## Tier 2 freeze gate (check before setting phase=implement)
+
+- Assign a stable ID to every Issue AC using the `<issue番号>-AC<連番>` format
+  defined in `docs/traceability.md`. IDs are assigned in order of appearance;
+  no edit to the Issue body is required.
+- Create `specs/<feature>/traceability.json` mapping each Issue AC to a spec AC,
+  task, and test. See `orchestration/schema/traceability.schema.json` for the schema.
+- Every Issue AC must appear in an entry. If any AC is untracked, freeze is blocked.
+- Entries with status `out-of-scope` or `deferred` must have a non-empty `reason`
+  and an HTTP(S) `followup_issue` URL. No orphaned scope-outs allowed.
+- If the frozen spec is weaker than the Issue (criteria removed or softened),
+  surface a diff summary and obtain explicit human approval before freezing.
+
 ## Never
 
 - Never implement an unlabeled issue — escalate for a Tier first.
 - Never treat a platform board as the status source of truth; `.sdd/tasks.json` is canonical.
 - Never expand scope beyond the issue. New scope is a new issue + a new spec.
+- Never freeze a Tier 2 spec that has untracked Issue ACs or out-of-scope entries
+  without a followup_issue URL.
 
 ## Per-platform mechanisms
 
