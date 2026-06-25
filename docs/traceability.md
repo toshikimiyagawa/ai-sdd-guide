@@ -13,8 +13,10 @@ validator (#46) がこのファイルを機械検査する。
 例: 50-AC1, 50-AC2, 100-AC1
 ```
 
-freeze 前に設計者が元 Issue の各 AC に付ける。
-spec.md の受入条件にも同じ ID を付記する:
+freeze 前に設計者が元 Issue の各 AC に順番に付ける。
+**Issue 本文の編集は不要**。採番ルールは「Issue 本文に記載された AC の出現順で連番」であり、
+その対応は `traceability.json` の entries として記録する。
+spec.md の受入条件には同じ Issue AC ID を括弧書きで付記する:
 
 ```markdown
 ## 受入条件
