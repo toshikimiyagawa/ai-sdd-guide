@@ -47,3 +47,23 @@ def test_intake_weakened_spec_approval():
 def test_intake_never_freeze_untracked():
     content = read("rules/issue-intake.md")
     assert "Never freeze a Tier 2 spec that has untracked Issue ACs" in content
+
+
+# --- workflow.md ---
+
+def test_workflow_freeze_step_3b():
+    content = read("rules/workflow.md")
+    assert "3b. Traceability" in content
+    assert "sdd-validate.sh" in content
+    assert "diff summary of Issue ACs vs" in content
+
+
+def test_workflow_verify_sdd_reviewer_items():
+    content = read("rules/workflow.md")
+    assert "sdd-reviewer must also verify" in content
+    assert "tracked to a spec AC" in content
+    assert "followup_issue URL" in content
+    assert "feature/tier/phase matches" in content
+    assert "schema-valid" in content
+    assert "All task checkboxes in tasks.md are complete" in content
+    assert "runnable test, not a manual/visual check" in content
