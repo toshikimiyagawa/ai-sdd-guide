@@ -18,8 +18,10 @@ def test_core_untracked_ac_stop():
 def test_core_frozen_artifact_immutable():
     content = read("rules/core.md")
     assert "Frozen artifacts" in content
+    assert "traceability.json" in content
     assert "only permitted post-freeze edit" in content
     assert "[ ] → [x]" in content
+    assert "explicit unfreeze" in content
 
 
 # --- issue-intake.md ---
@@ -63,7 +65,7 @@ def test_workflow_verify_sdd_reviewer_items():
     assert "sdd-reviewer must also verify" in content
     assert "tracked to a spec AC" in content
     assert "followup_issue URL" in content
-    assert "feature/tier/phase matches" in content
+    assert "`feature` matches the spec directory" in content
     assert "schema-valid" in content
     assert "All task checkboxes in tasks.md are complete" in content
     assert "runnable test, not a manual/visual check" in content

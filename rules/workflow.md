@@ -16,9 +16,10 @@ Capture each skill's output into the portable `specs/<feature>/` artifacts.
    - If `.sdd/catalog.json` exists: register new catalog entries as `planned` in `docs/design/` (see `catalog/rules/catalog.md`). Update to `confirmed` in the verify phase.
 3. Plan & Tasks — skill `writing-plans` (bite-sized ordered steps). Capture into `plan.md` (approach, affected files, tradeoffs, alternatives) and `tasks.md` (concrete steps + the test proving each acceptance criterion). (Tier 2)
 3b. Traceability — Before freezing, complete `specs/<feature>/traceability.json`
-   (schema: `orchestration/schema/traceability.schema.json`). Run `sdd-validate.sh`
-   (see #46) to confirm all Issue ACs are tracked and no orphaned out-of-scope entries
-   exist. When presenting for human approval, include a diff summary of Issue ACs vs
+   (schema: `orchestration/schema/traceability.schema.json`). Verify the following
+   conditions (using `sdd-validate.sh` (see #46) when available, otherwise check
+   manually): all Issue ACs are tracked, no orphaned out-of-scope entries exist.
+   When presenting for human approval, include a diff summary of Issue ACs vs
    frozen spec ACs — not just the design body.
 4. Freeze — set `.sdd/state.json` `phase=implement`. This is the handoff gate to other agents.
    STOP. Do not begin implementation in the same session as freeze.
@@ -38,7 +39,7 @@ For exploration/parallelism use skills `dispatching-parallel-agents` / `subagent
 - The sdd-reviewer must also verify (in addition to spec conformance):
   1. Every Issue AC appears in traceability.json and is tracked to a spec AC.
   2. Every out-of-scope/deferred entry has a followup_issue URL.
-  3. state.json feature/tier/phase matches the work under review.
+  3. state.json `feature` matches the spec directory under review. (The orchestrating agent, not the implementation subagent, is responsible for phase updates; skip this check when using manual workflow without orchestration.)
   4. tasks.json has an entry for this feature and is schema-valid.
   5. All task checkboxes in tasks.md are complete (no unchecked items).
   6. Each AC maps to a runnable test, not a manual/visual check.
