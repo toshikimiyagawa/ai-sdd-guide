@@ -458,3 +458,51 @@ def test_check_traceability_internal_tasks_md_missing(tmp_path):
     # tasks.md does not exist
     errors = _v.check_traceability_internal(tmp_path, "foo")
     assert any("tasks.md not found" in e for e in errors)
+
+
+# ---------------------------------------------------------------------------
+# Fix: check_traceability_internal — spec_ac not in spec.md
+# ---------------------------------------------------------------------------
+
+def test_check_traceability_internal_spec_ac_not_in_spec_md(tmp_path):
+    (tmp_path / "specs" / "foo").mkdir(parents=True)
+    (tmp_path / "specs" / "foo" / "spec.md").write_text(
+        "# Spec\n## 受入条件\n- [ ] SAC-1: criterion one\n"
+    )
+    (tmp_path / "specs" / "foo" / "tasks.md").write_text(
+        "# Tasks\n- [x] T1: done. AC: SAC-1\n"
+    )
+    (tmp_path / "tests").mkdir()
+    (tmp_path / "tests" / "test_foo.py").write_text("def test_a(): pass")
+    (tmp_path / "specs" / "foo" / "traceability.json").write_text(json.dumps({
+        "issue": 99, "issue_url": "https://github.com/o/r/issues/99",
+        "feature": "foo",
+        "entries": [{
+            "issue_ac": "99-AC1", "spec_ac": "SAC-2",  # SAC-2 not in spec.md
+            "task": "T1", "test": "tests/test_foo.py::test_a", "status": "in-scope"
+        }]
+    }))
+    errors = _v.check_traceability_internal(tmp_path, "foo")
+    assert any("SAC-2" in e for e in errors)
+
+
+def test_check_traceability_internal_spec_ac_valid_in_spec_md(tmp_path):
+    (tmp_path / "specs" / "foo").mkdir(parents=True)
+    (tmp_path / "specs" / "foo" / "spec.md").write_text(
+        "# Spec\n## 受入条件\n- [ ] SAC-1: criterion one\n"
+    )
+    (tmp_path / "specs" / "foo" / "tasks.md").write_text(
+        "# Tasks\n- [x] T1: done. AC: SAC-1\n"
+    )
+    (tmp_path / "tests").mkdir()
+    (tmp_path / "tests" / "test_foo.py").write_text("def test_a(): pass")
+    (tmp_path / "specs" / "foo" / "traceability.json").write_text(json.dumps({
+        "issue": 99, "issue_url": "https://github.com/o/r/issues/99",
+        "feature": "foo",
+        "entries": [{
+            "issue_ac": "99-AC1", "spec_ac": "SAC-1",  # SAC-1 exists in spec.md
+            "task": "T1", "test": "tests/test_foo.py::test_a", "status": "in-scope"
+        }]
+    }))
+    errors = _v.check_traceability_internal(tmp_path, "foo")
+    assert errors == []

@@ -149,6 +149,17 @@ def check_traceability_internal(root: Path, feature: str) -> list[str]:
                     f"traceability.json: task '{task}' not found in tasks.md"
                 )
 
+    # spec_ac references exist in spec.md
+    spec_md = root / "specs" / feature / "spec.md"
+    if spec_md.exists():
+        defined_acs = set(re.findall(r"\bSAC-\d+\b", spec_md.read_text()))
+        for entry in entries:
+            spec_ac = entry.get("spec_ac")
+            if spec_ac and spec_ac not in defined_acs:
+                errors.append(
+                    f"traceability.json: spec_ac '{spec_ac}' not found in spec.md"
+                )
+
     # Test file existence (path before ::)
     for entry in entries:
         test = entry.get("test")
