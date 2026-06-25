@@ -47,6 +47,16 @@ jobs:
           fi
           echo "Spec present."
 
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -e ".[test]"
+
+      - name: Run sdd-validate
+        run: bash integration/ci/sdd-validate.sh --root .
+
       - name: Tests
         run: |
           echo "TODO: replace with this project's test command"

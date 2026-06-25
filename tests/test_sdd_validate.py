@@ -375,3 +375,51 @@ def test_check_scope_out_missing_followup(tmp_path):
     }))
     errors = _v.check_scope_out(tmp_path, "foo")
     assert any("followup_issue" in e for e in errors)
+
+
+# ---------------------------------------------------------------------------
+# Shell integration tests (subprocess)
+# ---------------------------------------------------------------------------
+
+import subprocess as _subprocess
+
+
+def _run_sh(fixture_name: str, extra_args: list[str] | None = None) -> _subprocess.CompletedProcess:
+    sh = ROOT / "integration" / "ci" / "sdd-validate.sh"
+    root = FIXTURES / fixture_name
+    cmd = ["bash", str(sh), "--root", str(root)] + (extra_args or [])
+    return _subprocess.run(cmd, capture_output=True, text=True)
+
+
+def test_sh_valid_active_exits_0():
+    result = _run_sh("valid-active")
+    assert result.returncode == 0
+
+
+def test_sh_valid_done_exits_0():
+    result = _run_sh("valid-done")
+    assert result.returncode == 0
+
+
+def test_sh_invalid_state_mismatch_exits_1():
+    result = _run_sh("invalid-state-mismatch")
+    assert result.returncode == 1
+
+
+def test_sh_invalid_traceability_exits_1():
+    result = _run_sh("invalid-traceability")
+    assert result.returncode == 1
+
+
+def test_sh_invalid_tasks_incomplete_exits_1():
+    result = _run_sh("invalid-tasks-incomplete")
+    assert result.returncode == 1
+
+
+def test_sh_missing_state_json_exits_1(tmp_path):
+    sh = ROOT / "integration" / "ci" / "sdd-validate.sh"
+    result = _subprocess.run(
+        ["bash", str(sh), "--root", str(tmp_path)],
+        capture_output=True, text=True,
+    )
+    assert result.returncode == 1
