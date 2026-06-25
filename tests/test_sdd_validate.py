@@ -423,3 +423,38 @@ def test_sh_missing_state_json_exits_1(tmp_path):
         capture_output=True, text=True,
     )
     assert result.returncode == 1
+
+
+# ---------------------------------------------------------------------------
+# Fix 1: check_state_tasks_consistency — phase mismatch detection
+# ---------------------------------------------------------------------------
+
+def test_check_state_tasks_consistency_phase_mismatch(tmp_path):
+    (tmp_path / ".sdd").mkdir()
+    (tmp_path / ".sdd" / "state.json").write_text(
+        json.dumps({"tier": 2, "phase": "verify", "feature": "foo"})
+    )
+    (tmp_path / ".sdd" / "tasks.json").write_text(json.dumps([
+        {"id": "foo", "phase": "implement", "status": "in_progress",
+         "handoff": None, "blocked_reason": None}
+    ]))
+    errors = _v.check_state_tasks_consistency(tmp_path, "foo")
+    assert any("phase" in e for e in errors)
+
+
+# ---------------------------------------------------------------------------
+# Fix 2: check_traceability_internal — tasks.md missing is an error
+# ---------------------------------------------------------------------------
+
+def test_check_traceability_internal_tasks_md_missing(tmp_path):
+    (tmp_path / "specs" / "foo").mkdir(parents=True)
+    (tmp_path / "specs" / "foo" / "traceability.json").write_text(json.dumps({
+        "issue": 99, "issue_url": "https://github.com/o/r/issues/99",
+        "feature": "foo",
+        "entries": [{"issue_ac": "99-AC1", "spec_ac": "SAC-1",
+                      "task": "T1", "test": "tests/test_foo.py::test_a",
+                      "status": "in-scope"}]
+    }))
+    # tasks.md does not exist
+    errors = _v.check_traceability_internal(tmp_path, "foo")
+    assert any("tasks.md not found" in e for e in errors)

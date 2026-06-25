@@ -76,18 +76,25 @@ def check_schema_traceability(root: Path, feature: str) -> list[str]:
 
 
 def check_state_tasks_consistency(root: Path, feature: str) -> list[str]:
-    """Check 4: state.json feature must have a matching entry in tasks.json."""
+    """Check 4: state.json feature/phase must match the tasks.json entry."""
     tasks_path = root / ".sdd" / "tasks.json"
     if not tasks_path.exists():
         return []
     state = _load_json(root / ".sdd" / "state.json")
     tasks = _load_json(tasks_path)
     state_feature = state.get("feature", "")
+    state_phase = state.get("phase", "")
     if not state_feature:
         return []
-    entry_ids = [t.get("id") for t in tasks]
-    if state_feature not in entry_ids:
+    entries = {t.get("id"): t for t in tasks if "id" in t}
+    if state_feature not in entries:
         return [f"state.json feature='{state_feature}' has no matching entry in tasks.json"]
+    entry_phase = entries[state_feature].get("phase", "")
+    if entry_phase != state_phase:
+        return [
+            f"state.json phase='{state_phase}' does not match tasks.json entry"
+            f" phase='{entry_phase}' for feature '{state_feature}'"
+        ]
     return []
 
 
@@ -125,7 +132,13 @@ def check_traceability_internal(root: Path, feature: str) -> list[str]:
 
     # Task references exist in tasks.md
     tasks_md = root / "specs" / feature / "tasks.md"
-    if tasks_md.exists():
+    in_scope_with_task = [e for e in entries if e.get("task")]
+    if in_scope_with_task and not tasks_md.exists():
+        errors.append(
+            f"traceability.json: tasks.md not found ({tasks_md})"
+            " — required to resolve task references"
+        )
+    elif tasks_md.exists():
         tasks_md_text = tasks_md.read_text()
         for entry in entries:
             task = entry.get("task")

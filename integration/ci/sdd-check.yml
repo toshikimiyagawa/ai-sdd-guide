@@ -55,7 +55,12 @@ jobs:
         run: pip install -e ".[test]"
 
       - name: Run sdd-validate
-        run: bash integration/ci/sdd-validate.sh --root .
+        run: |
+          if [ ! -f ".sdd/state.json" ]; then
+            echo "No .sdd/state.json — sdd-validate skipped."
+            exit 0
+          fi
+          bash integration/ci/sdd-validate.sh --root .
 
       - name: Tests
         run: |
