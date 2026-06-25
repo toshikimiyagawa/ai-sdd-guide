@@ -155,3 +155,77 @@ def test_check_schema_tasks_feature_missing_in_tasks(tmp_path):
     ]))
     errors = _v.check_schema_tasks(tmp_path, "my-feature")
     assert any("my-feature" in e for e in errors)
+
+
+# ---------------------------------------------------------------------------
+# check_state_tasks_consistency
+# ---------------------------------------------------------------------------
+
+def test_check_state_tasks_consistency_no_tasks_file(tmp_path):
+    (tmp_path / ".sdd").mkdir()
+    (tmp_path / ".sdd" / "state.json").write_text(
+        json.dumps({"tier": 2, "phase": "implement", "feature": "foo"})
+    )
+    assert _v.check_state_tasks_consistency(tmp_path, "foo") == []
+
+
+def test_check_state_tasks_consistency_match(tmp_path):
+    (tmp_path / ".sdd").mkdir()
+    (tmp_path / ".sdd" / "state.json").write_text(
+        json.dumps({"tier": 2, "phase": "implement", "feature": "foo"})
+    )
+    (tmp_path / ".sdd" / "tasks.json").write_text(json.dumps([
+        {"id": "foo", "phase": "implement", "status": "in_progress",
+         "handoff": None, "blocked_reason": None}
+    ]))
+    assert _v.check_state_tasks_consistency(tmp_path, "foo") == []
+
+
+def test_check_state_tasks_consistency_mismatch(tmp_path):
+    (tmp_path / ".sdd").mkdir()
+    (tmp_path / ".sdd" / "state.json").write_text(
+        json.dumps({"tier": 2, "phase": "implement", "feature": "foo"})
+    )
+    (tmp_path / ".sdd" / "tasks.json").write_text(json.dumps([
+        {"id": "bar", "phase": "implement", "status": "in_progress",
+         "handoff": None, "blocked_reason": None}
+    ]))
+    errors = _v.check_state_tasks_consistency(tmp_path, "foo")
+    assert any("foo" in e for e in errors)
+
+
+# ---------------------------------------------------------------------------
+# check_tasks_md_consistency
+# ---------------------------------------------------------------------------
+
+def test_check_tasks_md_not_verify_skips(tmp_path):
+    (tmp_path / ".sdd").mkdir()
+    (tmp_path / ".sdd" / "state.json").write_text(
+        json.dumps({"tier": 2, "phase": "implement", "feature": "foo"})
+    )
+    assert _v.check_tasks_md_consistency(tmp_path, "foo") == []
+
+
+def test_check_tasks_md_all_checked(tmp_path):
+    (tmp_path / ".sdd").mkdir()
+    (tmp_path / ".sdd" / "state.json").write_text(
+        json.dumps({"tier": 2, "phase": "verify", "feature": "foo"})
+    )
+    (tmp_path / "specs" / "foo").mkdir(parents=True)
+    (tmp_path / "specs" / "foo" / "tasks.md").write_text(
+        "# Tasks\n- [x] T1: done task. AC: SAC-1\n"
+    )
+    assert _v.check_tasks_md_consistency(tmp_path, "foo") == []
+
+
+def test_check_tasks_md_unchecked_item_error(tmp_path):
+    (tmp_path / ".sdd").mkdir()
+    (tmp_path / ".sdd" / "state.json").write_text(
+        json.dumps({"tier": 2, "phase": "verify", "feature": "foo"})
+    )
+    (tmp_path / "specs" / "foo").mkdir(parents=True)
+    (tmp_path / "specs" / "foo" / "tasks.md").write_text(
+        "# Tasks\n- [ ] T1: incomplete task. AC: SAC-1\n"
+    )
+    errors = _v.check_tasks_md_consistency(tmp_path, "foo")
+    assert any("unchecked" in e for e in errors)
