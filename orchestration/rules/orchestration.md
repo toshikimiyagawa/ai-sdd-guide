@@ -30,6 +30,12 @@ For a shareable web view, `orchestration/tools/kanban-html.sh` renders the same
 ## Rules for design agents (brainstorm/spec/plan/tasks)
 
 - Use superpowers: brainstorming → writing-plans skills.
+- Before generating `handoff.md`, run `sdd-validate.sh` (see #46) to confirm:
+  (a) `specs/<feature>/traceability.json` exists and is schema-valid,
+  (b) all Issue ACs are tracked (no untracked entries),
+  (c) all out-of-scope/deferred entries have a followup_issue URL.
+  If validation fails, fix `traceability.json` before proceeding — do not generate
+  a handoff for an incomplete spec.
 - At end of tasks phase, generate `specs/<feature>/handoff.md` from `orchestration/templates/handoff.md.example`.
 - Update `.sdd/tasks.json`: add the feature entry with `id` (feature slug), `phase: "tasks"`, `status: "pending"`, and optionally `handoff: null`.
 - Display kanban and stop.

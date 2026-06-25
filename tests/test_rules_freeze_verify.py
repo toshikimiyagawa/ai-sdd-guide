@@ -67,3 +67,21 @@ def test_workflow_verify_sdd_reviewer_items():
     assert "schema-valid" in content
     assert "All task checkboxes in tasks.md are complete" in content
     assert "runnable test, not a manual/visual check" in content
+
+
+# --- orchestration.md ---
+
+def test_orchestration_handoff_gate():
+    content = read("orchestration/rules/orchestration.md")
+    assert "Before generating" in content
+    assert "sdd-validate.sh" in content
+    assert "do not generate" in content
+    assert "handoff for an incomplete spec" in content
+
+
+# --- conventions.md ---
+
+def test_conventions_checkbox_only():
+    content = read("rules/conventions.md")
+    assert "only permitted change to `tasks.md` is checking" in content
+    assert "out-of-spec and must be rejected" in content
