@@ -229,3 +229,149 @@ def test_check_tasks_md_unchecked_item_error(tmp_path):
     )
     errors = _v.check_tasks_md_consistency(tmp_path, "foo")
     assert any("unchecked" in e for e in errors)
+
+
+# ---------------------------------------------------------------------------
+# check_schema_traceability
+# ---------------------------------------------------------------------------
+
+def test_check_schema_traceability_valid(tmp_path):
+    (tmp_path / "specs" / "foo").mkdir(parents=True)
+    (tmp_path / "specs" / "foo" / "traceability.json").write_text(json.dumps({
+        "issue": 99,
+        "issue_url": "https://github.com/owner/repo/issues/99",
+        "feature": "foo",
+        "entries": [{
+            "issue_ac": "99-AC1", "spec_ac": "SAC-1",
+            "task": "T1", "test": "tests/test_foo.py::test_a",
+            "status": "in-scope"
+        }]
+    }))
+    assert _v.check_schema_traceability(tmp_path, "foo") == []
+
+
+def test_check_schema_traceability_file_missing(tmp_path):
+    errors = _v.check_schema_traceability(tmp_path, "foo")
+    assert any("not found" in e for e in errors)
+
+
+def test_check_schema_traceability_invalid_schema(tmp_path):
+    (tmp_path / "specs" / "foo").mkdir(parents=True)
+    # entries が空 → minItems: 1 に違反
+    (tmp_path / "specs" / "foo" / "traceability.json").write_text(json.dumps({
+        "issue": 99,
+        "issue_url": "https://github.com/owner/repo/issues/99",
+        "feature": "foo",
+        "entries": []
+    }))
+    errors = _v.check_schema_traceability(tmp_path, "foo")
+    assert len(errors) == 1
+
+
+# ---------------------------------------------------------------------------
+# check_traceability_internal
+# ---------------------------------------------------------------------------
+
+def _make_traceability_fixture(tmp_path, entries):
+    (tmp_path / "specs" / "foo").mkdir(parents=True)
+    (tmp_path / "specs" / "foo" / "traceability.json").write_text(json.dumps({
+        "issue": 99,
+        "issue_url": "https://github.com/owner/repo/issues/99",
+        "feature": "foo",
+        "entries": entries,
+    }))
+    (tmp_path / "specs" / "foo" / "tasks.md").write_text(
+        "# Tasks\n- [x] T1: done. AC: SAC-1\n"
+    )
+
+
+def test_check_traceability_internal_valid(tmp_path):
+    (tmp_path / "tests").mkdir()
+    (tmp_path / "tests" / "test_foo.py").write_text("def test_a(): pass")
+    _make_traceability_fixture(tmp_path, [{
+        "issue_ac": "99-AC1", "spec_ac": "SAC-1",
+        "task": "T1", "test": "tests/test_foo.py::test_a",
+        "status": "in-scope"
+    }])
+    assert _v.check_traceability_internal(tmp_path, "foo") == []
+
+
+def test_check_traceability_internal_duplicate_spec_ac(tmp_path):
+    (tmp_path / "tests").mkdir()
+    (tmp_path / "tests" / "test_foo.py").write_text("def test_a(): pass")
+    _make_traceability_fixture(tmp_path, [
+        {"issue_ac": "99-AC1", "spec_ac": "SAC-1",
+         "task": "T1", "test": "tests/test_foo.py::test_a", "status": "in-scope"},
+        {"issue_ac": "99-AC2", "spec_ac": "SAC-1",  # duplicate SAC-1
+         "task": "T1", "test": "tests/test_foo.py::test_a", "status": "in-scope"},
+    ])
+    errors = _v.check_traceability_internal(tmp_path, "foo")
+    assert any("duplicate" in e for e in errors)
+
+
+def test_check_traceability_internal_missing_test_file(tmp_path):
+    _make_traceability_fixture(tmp_path, [{
+        "issue_ac": "99-AC1", "spec_ac": "SAC-1",
+        "task": "T1", "test": "tests/test_nonexistent.py::test_a",
+        "status": "in-scope"
+    }])
+    errors = _v.check_traceability_internal(tmp_path, "foo")
+    assert any("test_nonexistent.py" in e for e in errors)
+
+
+def test_check_traceability_internal_missing_task(tmp_path):
+    (tmp_path / "tests").mkdir()
+    (tmp_path / "tests" / "test_foo.py").write_text("def test_a(): pass")
+    _make_traceability_fixture(tmp_path, [{
+        "issue_ac": "99-AC1", "spec_ac": "SAC-1",
+        "task": "T99",  # T99 は tasks.md に存在しない
+        "test": "tests/test_foo.py::test_a", "status": "in-scope"
+    }])
+    errors = _v.check_traceability_internal(tmp_path, "foo")
+    assert any("T99" in e for e in errors)
+
+
+# ---------------------------------------------------------------------------
+# check_scope_out
+# ---------------------------------------------------------------------------
+
+def test_check_scope_out_no_out_of_scope(tmp_path):
+    (tmp_path / "specs" / "foo").mkdir(parents=True)
+    (tmp_path / "specs" / "foo" / "traceability.json").write_text(json.dumps({
+        "issue": 99, "issue_url": "https://github.com/o/r/issues/99",
+        "feature": "foo",
+        "entries": [{"issue_ac": "99-AC1", "spec_ac": "SAC-1",
+                      "task": "T1", "test": "tests/t.py::test_a", "status": "in-scope"}]
+    }))
+    assert _v.check_scope_out(tmp_path, "foo") == []
+
+
+def test_check_scope_out_valid_out_of_scope(tmp_path):
+    (tmp_path / "specs" / "foo").mkdir(parents=True)
+    (tmp_path / "specs" / "foo" / "traceability.json").write_text(json.dumps({
+        "issue": 99, "issue_url": "https://github.com/o/r/issues/99",
+        "feature": "foo",
+        "entries": [{
+            "issue_ac": "99-AC1", "spec_ac": None, "task": None, "test": None,
+            "status": "out-of-scope",
+            "reason": "out of scope for this feature",
+            "followup_issue": "https://github.com/o/r/issues/100"
+        }]
+    }))
+    assert _v.check_scope_out(tmp_path, "foo") == []
+
+
+def test_check_scope_out_missing_followup(tmp_path):
+    (tmp_path / "specs" / "foo").mkdir(parents=True)
+    (tmp_path / "specs" / "foo" / "traceability.json").write_text(json.dumps({
+        "issue": 99, "issue_url": "https://github.com/o/r/issues/99",
+        "feature": "foo",
+        "entries": [{
+            "issue_ac": "99-AC1", "spec_ac": None, "task": None, "test": None,
+            "status": "out-of-scope",
+            "reason": "out of scope",
+            "followup_issue": "mailto:bad@example.com"  # HTTPSでない
+        }]
+    }))
+    errors = _v.check_scope_out(tmp_path, "foo")
+    assert any("followup_issue" in e for e in errors)
