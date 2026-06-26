@@ -1,0 +1,37 @@
+{
+  "issue": 53,
+  "url": "https://github.com/toshikimiyagawa/ai-sdd-guide/issues/53",
+  "fetched_at": "2026-06-26T13:50:53Z",
+  "raw_body": "## 親issue\n\nparent: #46 (grandparent: #43)\n\n## 概要\n\nGitHub Issue 本文を機械検査可能なスナップショットとして保存する CLI と\nその JSON Schema を実装する。#52 で作成した validator に snapshot 検証を追加し、\nIssue本文に記載された AC と frozen spec / traceability の差分を検出できるようにする。\n\n## スコープ\n\n### Issue snapshot CLI（`integration/ci/sdd-issue-snapshot.sh` 相当）\n\n- `gh issue view <N> --json body,title,url` 等を使い snapshot を取得\n- 出力: `specs/<feature>/issue-snapshot.json`\n- Issue本文の AC を出現順に採番し、stable Issue AC として保存する\n- Issue 本文の編集は要求しない\n\n### Issue snapshot JSON Schema（`orchestration/schema/issue-snapshot.schema.json`）\n\nフィールド:\n\n- `issue`: integer — Issue 番号\n- `url`: string (uri) — Issue URL\n- `fetched_at`: string (date-time) — 取得日時（ISO 8601）\n- `raw_body`: string — Issue 本文の raw テキスト\n- `body_hash`: string — raw_body の SHA-256 hex digest\n- `stable_acs`: array — 出現順に採番した Issue AC エントリ\n  - `id`: string（`<issue番号>-AC<連番>` 形式）\n  - `text`: string — AC テキスト\n\n### validator拡張（#52 の `sdd-validate.sh` に追加）\n\n- `issue-snapshot.json` を schema validation する\n- `raw_body` と `body_hash` の一致を検証する\n- `stable_acs` の ID が `<issue番号>-AC<連番>` パターンに一致することを確認する\n- `stable_acs` と `traceability.json entries` の対応を確認し、Issue AC 未追跡を検出する\n- Issue本文ACと frozen spec AC の差分を検出する\n- snapshot が存在しない / 壊れている / hash不一致の場合は fail closed する\n\n## 明示的にスコープ外\n\n- state/tasks schema と core validator entrypoint → #52\n- verification evidence schema / evidence.json / commit SHA 検査 → #54\n- negative fixture 一式 → #47\n- migration guide → #49\n\n## 受入条件\n\n- [ ] `orchestration/schema/issue-snapshot.schema.json` が存在し、全フィールドを定義している\n- [ ] snapshot CLI が Issue 番号を引数に `issue-snapshot.json` を生成できる\n- [ ] `body_hash` が `raw_body` の SHA-256 hex digest と一致することを validator が検出できる\n- [ ] `stable_acs` の `id` が `<issue番号>-AC<連番>` パターンに一致する\n- [ ] validator が `stable_acs` と `traceability.json entries` の不一致を検出できる\n- [ ] validator が Issue AC 未追跡を exit non-zero で検出できる\n- [ ] validator が snapshot 検査不能時に fail closed する\n\n## 依存関係\n\n- 依存: #52（コアvalidator）\n- ブロックする: #47 の snapshot fixture、#49（migration guide）\n\n",
+  "body_hash": "ee7a2e8ac2d2ffba2e1227182c473b55956b11caaa52bf082d6354604401ee35",
+  "stable_acs": [
+    {
+      "id": "53-AC1",
+      "text": "`orchestration/schema/issue-snapshot.schema.json` が存在し、全フィールドを定義している"
+    },
+    {
+      "id": "53-AC2",
+      "text": "snapshot CLI が Issue 番号を引数に `issue-snapshot.json` を生成できる"
+    },
+    {
+      "id": "53-AC3",
+      "text": "`body_hash` が `raw_body` の SHA-256 hex digest と一致することを validator が検出できる"
+    },
+    {
+      "id": "53-AC4",
+      "text": "`stable_acs` の `id` が `<issue番号>-AC<連番>` パターンに一致する"
+    },
+    {
+      "id": "53-AC5",
+      "text": "validator が `stable_acs` と `traceability.json entries` の不一致を検出できる"
+    },
+    {
+      "id": "53-AC6",
+      "text": "validator が Issue AC 未追跡を exit non-zero で検出できる"
+    },
+    {
+      "id": "53-AC7",
+      "text": "validator が snapshot 検査不能時に fail closed する"
+    }
+  ]
+}

@@ -1,1 +1,5 @@
-{"tier": 0, "phase": "done", "note": "no active feature"}
+{
+  "tier": 2,
+  "phase": "implement",
+  "feature": "issue-snapshot"
+}

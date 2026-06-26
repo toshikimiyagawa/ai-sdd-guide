@@ -1,0 +1,56 @@
+{
+  "issue": 53,
+  "issue_url": "https://github.com/toshikimiyagawa/ai-sdd-guide/issues/53",
+  "feature": "issue-snapshot",
+  "entries": [
+    {
+      "issue_ac": "53-AC1",
+      "spec_ac": "SAC-1",
+      "task": "T1",
+      "test": "tests/test_issue_snapshot_schema.py::test_valid_issue_snapshot_passes_schema",
+      "status": "in-scope"
+    },
+    {
+      "issue_ac": "53-AC2",
+      "spec_ac": "SAC-2",
+      "task": "T2",
+      "test": "tests/test_issue_snapshot_cli.py::test_cli_writes_snapshot_from_body_file",
+      "status": "in-scope"
+    },
+    {
+      "issue_ac": "53-AC3",
+      "spec_ac": "SAC-3",
+      "task": "T3",
+      "test": "tests/test_sdd_validate.py::test_check_issue_snapshot_hash_mismatch",
+      "status": "in-scope"
+    },
+    {
+      "issue_ac": "53-AC4",
+      "spec_ac": "SAC-4",
+      "task": "T3",
+      "test": "tests/test_sdd_validate.py::test_check_issue_snapshot_stable_ac_id_mismatch",
+      "status": "in-scope"
+    },
+    {
+      "issue_ac": "53-AC5",
+      "spec_ac": "SAC-5",
+      "task": "T3",
+      "test": "tests/test_sdd_validate.py::test_check_issue_snapshot_traceability_mismatch",
+      "status": "in-scope"
+    },
+    {
+      "issue_ac": "53-AC6",
+      "spec_ac": "SAC-6",
+      "task": "T3",
+      "test": "tests/test_sdd_validate.py::test_check_issue_snapshot_untracked_issue_ac",
+      "status": "in-scope"
+    },
+    {
+      "issue_ac": "53-AC7",
+      "spec_ac": "SAC-7",
+      "task": "T3",
+      "test": "tests/test_sdd_validate.py::test_check_issue_snapshot_missing_fails_closed",
+      "status": "in-scope"
+    }
+  ]
+}

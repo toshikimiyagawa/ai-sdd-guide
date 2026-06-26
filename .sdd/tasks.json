@@ -12,5 +12,12 @@
     "status": "completed",
     "handoff": "specs/issue-48/handoff.md",
     "blocked_reason": null
+  },
+  {
+    "id": "issue-snapshot",
+    "phase": "implement",
+    "status": "pending",
+    "handoff": "specs/issue-snapshot/handoff.md",
+    "blocked_reason": null
   }
 ]
