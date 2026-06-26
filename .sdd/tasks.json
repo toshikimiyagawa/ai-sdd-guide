@@ -22,8 +22,8 @@
   },
   {
     "id": "evidence-validation",
-    "phase": "implement",
-    "status": "pending",
+    "phase": "verify",
+    "status": "in_progress",
     "handoff": "specs/evidence-validation/handoff.md",
     "blocked_reason": null
   }

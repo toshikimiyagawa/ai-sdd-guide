@@ -675,3 +675,138 @@ def test_sh_issue_snapshot_missing_exits_1(tmp_path):
 
     assert result.returncode == 1
     assert "issue-snapshot.json not found" in result.stderr
+
+
+# ---------------------------------------------------------------------------
+# check_evidence
+# ---------------------------------------------------------------------------
+
+def _init_git_repo(path: Path) -> str:
+    _subprocess.run(["git", "init"], cwd=path, check=True, capture_output=True, text=True)
+    (path / "README.md").write_text("fixture\n")
+    _subprocess.run(["git", "add", "README.md"], cwd=path, check=True)
+    _subprocess.run(
+        [
+            "git",
+            "-c",
+            "user.email=test@example.com",
+            "-c",
+            "user.name=Test User",
+            "commit",
+            "-m",
+            "fixture commit",
+        ],
+        cwd=path,
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    result = _subprocess.run(
+        ["git", "rev-parse", "HEAD"],
+        cwd=path,
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    return result.stdout.strip()
+
+
+def _write_evidence_fixture(tmp_path, *, commit_sha: str | None = None) -> str:
+    feature_dir = tmp_path / "specs" / "evidence-validation"
+    feature_dir.mkdir(parents=True)
+    commit_sha = commit_sha or _init_git_repo(tmp_path)
+    (feature_dir / "evidence.json").write_text(json.dumps({
+        "feature": "evidence-validation",
+        "commit_sha": commit_sha,
+        "entries": [
+            {
+                "command_type": "test",
+                "command": "pytest -q",
+                "result": "1 passed",
+                "test_count": 1,
+            },
+            {
+                "command_type": "build",
+                "command": "python -m compileall integration",
+                "result": "ok",
+                "test_count": None,
+            },
+        ],
+    }))
+    return commit_sha
+
+
+def test_check_evidence_valid_existing_commit(tmp_path):
+    _write_evidence_fixture(tmp_path)
+    assert _v.check_evidence(tmp_path, "evidence-validation") == []
+
+
+def test_check_evidence_nonexistent_commit_fails(tmp_path):
+    _init_git_repo(tmp_path)
+    _write_evidence_fixture(tmp_path, commit_sha="0" * 40)
+    errors = _v.check_evidence(tmp_path, "evidence-validation")
+    assert any("commit_sha" in e and "not found" in e for e in errors)
+
+
+def test_check_evidence_missing_fails_closed(tmp_path):
+    (tmp_path / "specs" / "evidence-validation").mkdir(parents=True)
+    errors = _v.check_evidence(tmp_path, "evidence-validation")
+    assert any("evidence.json not found" in e for e in errors)
+
+
+def test_sh_evidence_missing_exits_1(tmp_path):
+    feature = "evidence-validation"
+    (tmp_path / ".sdd").mkdir()
+    (tmp_path / ".sdd" / "state.json").write_text(json.dumps({
+        "tier": 2,
+        "phase": "implement",
+        "feature": feature,
+    }))
+    (tmp_path / ".sdd" / "tasks.json").write_text(json.dumps([
+        {
+            "id": feature,
+            "phase": "implement",
+            "status": "in_progress",
+            "handoff": None,
+            "blocked_reason": None,
+        }
+    ]))
+
+    feature_dir = tmp_path / "specs" / feature
+    feature_dir.mkdir(parents=True)
+    (feature_dir / "spec.md").write_text(
+        "# Spec\n## 受入条件\n- [ ] SAC-1: criterion one\n"
+    )
+    (feature_dir / "tasks.md").write_text("# Tasks\n- [x] T1: done\n")
+    (feature_dir / "traceability.json").write_text(json.dumps({
+        "issue": 54,
+        "issue_url": "https://github.com/owner/repo/issues/54",
+        "feature": feature,
+        "entries": [{
+            "issue_ac": "54-AC1",
+            "spec_ac": "SAC-1",
+            "task": "T1",
+            "test": "tests/test_evidence.py::test_one",
+            "status": "in-scope",
+        }],
+    }))
+    raw_body = "## 受入条件\n\n- [ ] criterion one\n"
+    (feature_dir / "issue-snapshot.json").write_text(json.dumps({
+        "issue": 54,
+        "url": "https://github.com/owner/repo/issues/54",
+        "fetched_at": "2026-06-27T00:00:00Z",
+        "raw_body": raw_body,
+        "body_hash": _snapshot_hash(raw_body),
+        "stable_acs": [{"id": "54-AC1", "text": "criterion one"}],
+    }))
+    (tmp_path / "tests").mkdir()
+    (tmp_path / "tests" / "test_evidence.py").write_text("def test_one(): pass")
+
+    result = _subprocess.run(
+        ["bash", str(ROOT / "integration" / "ci" / "sdd-validate.sh"), "--root", str(tmp_path)],
+        capture_output=True,
+        text=True,
+    )
+
+    assert result.returncode == 1
+    assert "evidence.json not found" in result.stderr
