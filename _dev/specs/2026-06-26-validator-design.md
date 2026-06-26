@@ -118,7 +118,8 @@ python3 sdd-validate.py [--root <path>] [--feature <slug>]
 ### traceability 内部整合性の詳細（`check_traceability_internal`）
 
 - **重複 spec AC ID**: entries 内で `spec_ac` が同じ値を持つ行が複数ある場合にエラー
-- **存在しない task**: `task` フィールドの値（例: `T1`）が `tasks.md` に `- [x] T1:` または `- [ ] T1:` として存在しない場合にエラー
+- **存在しない spec AC**: `spec_ac` の値が `specs/<feature>/spec.md` に定義されていない場合にエラー。`spec.md` が存在しない場合も、in-scope の `spec_ac` 参照があればエラー
+- **存在しない task**: `task` フィールドの値（例: `T1`）が `tasks.md` に `- [x] T1:` または `- [ ] T1:` として存在しない場合にエラー。`tasks.md` が存在しない場合も、task 参照があればエラー
 - **存在しないテストファイル**: `test` フィールドの `::` 前のパスが `root` からの相対パスとして存在しない場合にエラー
 
 ## CI/hook 連携
@@ -138,7 +139,7 @@ exec python3 "$SCRIPT_DIR/sdd-validate.py" "$@"
 
 ```yaml
 - name: Install dependencies
-  run: pip install -e ".[test]"
+  run: pip install jsonschema
 
 - name: Run sdd-validate
   run: bash integration/ci/sdd-validate.sh --root .

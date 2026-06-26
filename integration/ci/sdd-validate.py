@@ -151,7 +151,13 @@ def check_traceability_internal(root: Path, feature: str) -> list[str]:
 
     # spec_ac references exist in spec.md
     spec_md = root / "specs" / feature / "spec.md"
-    if spec_md.exists():
+    in_scope_with_spec_ac = [e for e in entries if e.get("spec_ac")]
+    if in_scope_with_spec_ac and not spec_md.exists():
+        errors.append(
+            f"traceability.json: spec.md not found ({spec_md})"
+            " — required to resolve spec_ac references"
+        )
+    elif spec_md.exists():
         defined_acs = set(re.findall(r"\bSAC-\d+\b", spec_md.read_text()))
         for entry in entries:
             spec_ac = entry.get("spec_ac")
