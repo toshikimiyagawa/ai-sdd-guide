@@ -1,4 +1,6 @@
 from pathlib import Path
+import json
+import re
 
 ROOT = Path(__file__).parents[1]
 
@@ -81,9 +83,63 @@ def test_orchestration_handoff_gate():
     assert "handoff for an incomplete spec" in content
 
 
+def test_orchestration_issue_diff_summary_and_independent_review():
+    content = read("orchestration/rules/orchestration.md")
+    assert "Issue Diff Summary" in content
+    assert "original Issue body" in content
+    assert "frozen spec" in content
+    assert "Independent Reviewer Requirement" in content
+    assert "MUST invoke the `sdd-reviewer` subagent" in content
+
+
 # --- conventions.md ---
 
 def test_conventions_checkbox_only():
     content = read("rules/conventions.md")
     assert "only permitted change to `tasks.md` is checking" in content
     assert "out-of-spec and must be rejected" in content
+
+
+# --- sdd-reviewer prompts ---
+
+def test_sdd_reviewer_prompt_issue_access_and_traceability_checks():
+    for path in [
+        "integration/prompts/sdd-reviewer-prompt.md",
+        "integration/agents/sdd-reviewer.md",
+    ]:
+        content = read(path)
+        assert "Issue URL" in content
+        assert "Issue Body" in content
+        assert "Mandatory Issue Traceability Check" in content
+        assert "verify the following 8 items" in content
+        assert "AC Traceability" in content
+        assert "Audit Trail" in content
+
+
+def test_sdd_reviewer_prompt_bootstrap_and_evidence_count():
+    for path in [
+        "integration/prompts/sdd-reviewer-prompt.md",
+        "integration/agents/sdd-reviewer.md",
+    ]:
+        content = read(path)
+        assert "Bootstrap Exemption Handling" in content
+        assert "separate exemption-range findings from non-exempt findings" in content
+        assert "Evidence Test Count" in content
+        assert "actual test runner execution counts" in content
+
+
+# --- issue-48 SDD artifacts ---
+
+def test_issue_48_traceability_references_defined_artifacts():
+    traceability = json.loads(read("specs/issue-48/traceability.json"))
+    spec = read("specs/issue-48/spec.md")
+    tasks = read("specs/issue-48/tasks.md")
+
+    for entry in traceability["entries"]:
+        spec_ac = entry["spec_ac"]
+        task = entry["task"]
+        test = entry["test"]
+
+        assert re.search(rf"\b{re.escape(spec_ac)}\b", spec)
+        assert re.search(rf"[-\s]\[.\]\s+{re.escape(task)}:", tasks)
+        assert (ROOT / test.split("::", 1)[0]).exists()

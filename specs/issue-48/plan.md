@@ -8,7 +8,7 @@ Issue #48 の実装アプローチと影響範囲。
 
 ### 1. `sdd-reviewer` prompt 更新
 
-**ファイル:** `integration/agents/sdd-reviewer.md`
+**ファイル:** `integration/agents/sdd-reviewer.md`, `integration/prompts/sdd-reviewer-prompt.md`
 
 **変更:**
 - Issue へのアクセス方法を定義（Issue URL, Body の受け取り手順）
@@ -48,9 +48,9 @@ Issue #48 の実装アプローチと影響範囲。
 
 ## テスト戦略
 
-- 既存の 21 テストはすべてパスすることを確認
-- 変更はドキュメント更新のみ（コード変更なし）
+- `tests/test_rules_freeze_verify.py` に reviewer prompt / orchestration rule / issue-48 traceability の回帰テストを追加
+- 全テストがパスすることを確認
 
 ## リスク
 
-- **低:** ドキュメント更新のみで、既存のテストに影響なし
+- **低:** prompt/rules/artifact 更新のみで、実行時コードには影響なし

@@ -45,7 +45,7 @@
 
 ### 変更ファイル
 
-1. **`integration/agents/sdd-reviewer.md`**
+1. **`integration/agents/sdd-reviewer.md` / `integration/prompts/sdd-reviewer-prompt.md`**
    - Issue へのアクセス方法（Issue URL, Body）を定義
    - 8 項目の Mandatory Issue Traceability Check を追加
    - Bootstrap Exemption Handling を追加
@@ -83,8 +83,8 @@
 
 ## テスト
 
-- 既存の 21 テストはすべてパス
-- 変更はドキュメント更新のみ（コード変更なし）
+- `tests/test_rules_freeze_verify.py` に reviewer prompt / orchestration rule / issue-48 traceability の回帰テストを追加
+- 全テストがパス
 
 ## 次のステップ
 

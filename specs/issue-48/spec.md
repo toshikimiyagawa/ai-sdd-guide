@@ -6,12 +6,12 @@
 
 ## 受入条件
 
-- [x] `sdd-reviewer` の prompt/instructions に 8 項目の確認が追加されている
-- [x] `sdd-reviewer` が元 Issue へのアクセス方法（Issue URL, body）を受け取る手順が定義されている
-- [x] Claude agent の freeze フェーズ instructions に「元 Issue との差分サマリ提示」が追加されている
-- [x] 独立 reviewer による review が workflow の必須ステップとして rules に明記されている（#45 と整合）
-- [x] Reviewer が bootstrap exemption の範囲と exemption 外 finding を分離して報告する
-- [x] Evidence の test 件数が実 test command の件数であることを確認する
+- [x] SAC-1: `sdd-reviewer` の prompt/instructions に 8 項目の確認が追加されている（元 Issue: 48-AC1）
+- [x] SAC-2: `sdd-reviewer` が元 Issue へのアクセス方法（Issue URL, body）を受け取る手順が定義されている（元 Issue: 48-AC2）
+- [x] SAC-3: Claude agent の freeze フェーズ instructions に「元 Issue との差分サマリ提示」が追加されている（元 Issue: 48-AC3）
+- [x] SAC-4: 独立 reviewer による review が workflow の必須ステップとして rules に明記されている（#45 と整合）（元 Issue: 48-AC4）
+- [x] SAC-5: Reviewer が bootstrap exemption の範囲と exemption 外 finding を分離して報告する（元 Issue: 48-AC5）
+- [x] SAC-6: Evidence の test 件数が実 test command の件数であることを確認する（元 Issue: 48-AC6）
 
 ## スコープ
 
@@ -61,5 +61,7 @@
 
 ## テスト
 
-- 既存の 21 テストはすべてパス
-- 変更はドキュメント更新のみ（コード変更なし）
+- `tests/test_rules_freeze_verify.py::test_sdd_reviewer_prompt_issue_access_and_traceability_checks`
+- `tests/test_rules_freeze_verify.py::test_sdd_reviewer_prompt_bootstrap_and_evidence_count`
+- `tests/test_rules_freeze_verify.py::test_orchestration_issue_diff_summary_and_independent_review`
+- `tests/test_rules_freeze_verify.py::test_issue_48_traceability_references_defined_artifacts`
