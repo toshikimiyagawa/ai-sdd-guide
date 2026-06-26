@@ -37,6 +37,9 @@ For a shareable web view, `orchestration/tools/kanban-html.sh` renders the same
   (c) all out-of-scope/deferred entries have a followup_issue URL.
   If any condition fails, fix `traceability.json` before proceeding — do not generate
   a handoff for an incomplete spec.
+- **Issue Diff Summary**: When presenting the frozen spec for human approval, include
+  a diff summary comparing the original Issue body to the frozen spec. Explicitly
+  document what changed, what was dropped, and why. This is mandatory for Tier 2.
 - At end of tasks phase, generate `specs/<feature>/handoff.md` from `orchestration/templates/handoff.md.example`.
 - Update `.sdd/tasks.json`: add the feature entry with `id` (feature slug), `phase: "tasks"`, `status: "pending"`, and optionally `handoff: null`.
 - Display kanban and stop.

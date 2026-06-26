@@ -5,14 +5,6 @@
 Implementation phase only. Do not touch `spec.md`, `plan.md`, or the verify phase.
 If the spec needs changes, stop and escalate to a human.
 
-## Before Freeze (design/plan/tasks agents)
-
-When generating handoff or freezing a spec:
-
-1. **Issue Diff Summary**: Always present the original Issue body alongside the frozen spec. Summarize what changed, what was dropped, and what was added.
-2. **Traceability Check**: Before generating handoff, run a self-check to verify the traceability table is complete (all Issue ACs accounted for).
-3. **Independent Review Required**: An independent reviewer (`sdd-reviewer`) must perform adversarial review as a mandatory step before handoff is complete.
-
 ## Done when
 
 - [ ] All tasks in `specs/<feature>/tasks.md` are complete
