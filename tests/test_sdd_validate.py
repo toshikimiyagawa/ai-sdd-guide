@@ -1,5 +1,6 @@
 """Tests for sdd-validate.py and its JSON schemas."""
 import importlib.util
+import hashlib
 import json
 from pathlib import Path
 
@@ -528,3 +529,149 @@ def test_check_traceability_internal_spec_md_missing(tmp_path):
     }))
     errors = _v.check_traceability_internal(tmp_path, "foo")
     assert any("spec.md not found" in e for e in errors)
+
+
+# ---------------------------------------------------------------------------
+# check_issue_snapshot
+# ---------------------------------------------------------------------------
+
+def _snapshot_hash(raw_body: str) -> str:
+    return hashlib.sha256(raw_body.encode("utf-8")).hexdigest()
+
+
+def _write_issue_snapshot_fixture(
+    tmp_path,
+    *,
+    snapshot_acs=None,
+    traceability_acs=None,
+    body_hash=None,
+    issue=53,
+):
+    feature_dir = tmp_path / "specs" / "issue-snapshot"
+    feature_dir.mkdir(parents=True)
+    raw_body = "## 受入条件\n\n- [ ] first criterion\n- [ ] second criterion\n"
+    if snapshot_acs is None:
+        snapshot_acs = [
+            {"id": "53-AC1", "text": "first criterion"},
+            {"id": "53-AC2", "text": "second criterion"},
+        ]
+    if traceability_acs is None:
+        traceability_acs = ["53-AC1", "53-AC2"]
+
+    (feature_dir / "issue-snapshot.json").write_text(json.dumps({
+        "issue": issue,
+        "url": "https://github.com/owner/repo/issues/53",
+        "fetched_at": "2026-06-26T13:50:53Z",
+        "raw_body": raw_body,
+        "body_hash": body_hash or _snapshot_hash(raw_body),
+        "stable_acs": snapshot_acs,
+    }))
+    (feature_dir / "traceability.json").write_text(json.dumps({
+        "issue": issue,
+        "issue_url": "https://github.com/owner/repo/issues/53",
+        "feature": "issue-snapshot",
+        "entries": [
+            {
+                "issue_ac": issue_ac,
+                "spec_ac": f"SAC-{i}",
+                "task": "T3",
+                "test": "tests/test_sdd_validate.py::test_check_issue_snapshot_valid",
+                "status": "in-scope",
+            }
+            for i, issue_ac in enumerate(traceability_acs, 1)
+        ],
+    }))
+
+
+def test_check_issue_snapshot_valid(tmp_path):
+    _write_issue_snapshot_fixture(tmp_path)
+    assert _v.check_issue_snapshot(tmp_path, "issue-snapshot") == []
+
+
+def test_check_issue_snapshot_hash_mismatch(tmp_path):
+    _write_issue_snapshot_fixture(tmp_path, body_hash="0" * 64)
+    errors = _v.check_issue_snapshot(tmp_path, "issue-snapshot")
+    assert any("body_hash" in e and "SHA-256" in e for e in errors)
+
+
+def test_check_issue_snapshot_stable_ac_id_mismatch(tmp_path):
+    _write_issue_snapshot_fixture(
+        tmp_path,
+        snapshot_acs=[{"id": "53-AC2", "text": "first criterion"}],
+        traceability_acs=["53-AC2"],
+    )
+    errors = _v.check_issue_snapshot(tmp_path, "issue-snapshot")
+    assert any("53-AC1" in e and "53-AC2" in e for e in errors)
+
+
+def test_check_issue_snapshot_traceability_mismatch(tmp_path):
+    _write_issue_snapshot_fixture(
+        tmp_path,
+        snapshot_acs=[{"id": "53-AC1", "text": "first criterion"}],
+        traceability_acs=["53-AC2"],
+    )
+    errors = _v.check_issue_snapshot(tmp_path, "issue-snapshot")
+    assert any("snapshot AC not tracked" in e and "53-AC1" in e for e in errors)
+
+
+def test_check_issue_snapshot_untracked_issue_ac(tmp_path):
+    _write_issue_snapshot_fixture(
+        tmp_path,
+        snapshot_acs=[{"id": "53-AC1", "text": "first criterion"}],
+        traceability_acs=["53-AC1", "53-AC2"],
+    )
+    errors = _v.check_issue_snapshot(tmp_path, "issue-snapshot")
+    assert any("traceability AC not in snapshot" in e and "53-AC2" in e for e in errors)
+
+
+def test_check_issue_snapshot_missing_fails_closed(tmp_path):
+    (tmp_path / "specs" / "issue-snapshot").mkdir(parents=True)
+    errors = _v.check_issue_snapshot(tmp_path, "issue-snapshot")
+    assert any("issue-snapshot.json not found" in e for e in errors)
+
+
+def test_sh_issue_snapshot_missing_exits_1(tmp_path):
+    (tmp_path / ".sdd").mkdir()
+    (tmp_path / ".sdd" / "state.json").write_text(json.dumps({
+        "tier": 2,
+        "phase": "implement",
+        "feature": "issue-snapshot",
+    }))
+    (tmp_path / ".sdd" / "tasks.json").write_text(json.dumps([
+        {
+            "id": "issue-snapshot",
+            "phase": "implement",
+            "status": "in_progress",
+            "handoff": None,
+            "blocked_reason": None,
+        }
+    ]))
+    feature_dir = tmp_path / "specs" / "issue-snapshot"
+    feature_dir.mkdir(parents=True)
+    (feature_dir / "spec.md").write_text(
+        "# Spec\n## 受入条件\n- [ ] SAC-1: criterion one\n"
+    )
+    (feature_dir / "tasks.md").write_text("# Tasks\n- [x] T1: done\n")
+    (feature_dir / "traceability.json").write_text(json.dumps({
+        "issue": 53,
+        "issue_url": "https://github.com/owner/repo/issues/53",
+        "feature": "issue-snapshot",
+        "entries": [{
+            "issue_ac": "53-AC1",
+            "spec_ac": "SAC-1",
+            "task": "T1",
+            "test": "tests/test_issue_snapshot.py::test_one",
+            "status": "in-scope",
+        }],
+    }))
+    (tmp_path / "tests").mkdir()
+    (tmp_path / "tests" / "test_issue_snapshot.py").write_text("def test_one(): pass")
+
+    result = _subprocess.run(
+        ["bash", str(ROOT / "integration" / "ci" / "sdd-validate.sh"), "--root", str(tmp_path)],
+        capture_output=True,
+        text=True,
+    )
+
+    assert result.returncode == 1
+    assert "issue-snapshot.json not found" in result.stderr
