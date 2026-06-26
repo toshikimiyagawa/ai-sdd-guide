@@ -1,0 +1,49 @@
+{
+  "issue": 48,
+  "issue_url": "https://github.com/toshikimiyagawa/ai-sdd-guide/issues/48",
+  "feature": "issue-48",
+  "entries": [
+    {
+      "issue_ac": "48-AC1",
+      "spec_ac": "SAC-1",
+      "task": "T2",
+      "test": "tests/test_rules_freeze_verify.py::test_sdd_reviewer_prompt_issue_access_and_traceability_checks",
+      "status": "in-scope"
+    },
+    {
+      "issue_ac": "48-AC2",
+      "spec_ac": "SAC-2",
+      "task": "T1",
+      "test": "tests/test_rules_freeze_verify.py::test_sdd_reviewer_prompt_issue_access_and_traceability_checks",
+      "status": "in-scope"
+    },
+    {
+      "issue_ac": "48-AC3",
+      "spec_ac": "SAC-3",
+      "task": "T5",
+      "test": "tests/test_rules_freeze_verify.py::test_orchestration_issue_diff_summary_and_independent_review",
+      "status": "in-scope"
+    },
+    {
+      "issue_ac": "48-AC4",
+      "spec_ac": "SAC-4",
+      "task": "T6",
+      "test": "tests/test_rules_freeze_verify.py::test_orchestration_issue_diff_summary_and_independent_review",
+      "status": "in-scope"
+    },
+    {
+      "issue_ac": "48-AC5",
+      "spec_ac": "SAC-5",
+      "task": "T3",
+      "test": "tests/test_rules_freeze_verify.py::test_sdd_reviewer_prompt_bootstrap_and_evidence_count",
+      "status": "in-scope"
+    },
+    {
+      "issue_ac": "48-AC6",
+      "spec_ac": "SAC-6",
+      "task": "T4",
+      "test": "tests/test_rules_freeze_verify.py::test_sdd_reviewer_prompt_bootstrap_and_evidence_count",
+      "status": "in-scope"
+    }
+  ]
+}

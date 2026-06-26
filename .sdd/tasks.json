@@ -5,5 +5,12 @@
     "status": "completed",
     "handoff": "specs/traceability-format/handoff.md",
     "blocked_reason": null
+  },
+  {
+    "id": "issue-48",
+    "phase": "implement",
+    "status": "completed",
+    "handoff": "specs/issue-48/handoff.md",
+    "blocked_reason": null
   }
 ]
