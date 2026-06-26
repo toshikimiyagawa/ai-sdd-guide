@@ -53,3 +53,8 @@ For a shareable web view, `orchestration/tools/kanban-html.sh` renders the same
 **Gemini CLI:** Pass the contents of `vendor/ai-sdd-guide/integration/prompts/sdd-reviewer-prompt.md` to `@generalist`.
 
 **Codex:** Pass the contents of `vendor/ai-sdd-guide/integration/prompts/sdd-reviewer-prompt.md` to `spawn_agent`.
+
+**Independent Reviewer Requirement**:
+- No matter which agent performs design/implementation, the verify phase MUST invoke the `sdd-reviewer` subagent.
+- `sdd-reviewer` acts as an independent third party, verifying the diff vs spec from a different context than the implementation agent.
+- An adversarial review by an independent reviewer is a mandatory step before handoff is complete.
