@@ -19,5 +19,12 @@
     "status": "completed",
     "handoff": "specs/issue-snapshot/handoff.md",
     "blocked_reason": null
+  },
+  {
+    "id": "evidence-validation",
+    "phase": "implement",
+    "status": "pending",
+    "handoff": "specs/evidence-validation/handoff.md",
+    "blocked_reason": null
   }
 ]
