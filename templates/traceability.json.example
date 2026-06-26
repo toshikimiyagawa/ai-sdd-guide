@@ -1,0 +1,39 @@
+{
+  "issue": 50,
+  "issue_url": "https://github.com/owner/repo/issues/50",
+  "feature": "your-feature-slug",
+  "entries": [
+    {
+      "issue_ac": "50-AC1",
+      "spec_ac": "SAC-1",
+      "task": "T1",
+      "test": "tests/test_yourfeature.py::test_acceptance_criterion_1",
+      "status": "in-scope"
+    },
+    {
+      "issue_ac": "50-AC2",
+      "spec_ac": "SAC-2",
+      "task": "T2",
+      "test": "tests/test_yourfeature.py::test_acceptance_criterion_2",
+      "status": "in-scope"
+    },
+    {
+      "issue_ac": "50-AC3",
+      "spec_ac": null,
+      "task": null,
+      "test": null,
+      "status": "out-of-scope",
+      "reason": "scope 外化の理由をここに記述する。別 feature / 別 issue で扱う。",
+      "followup_issue": "https://github.com/owner/repo/issues/51"
+    },
+    {
+      "issue_ac": "50-AC4",
+      "spec_ac": null,
+      "task": null,
+      "test": null,
+      "status": "deferred",
+      "reason": "今フェーズでは対応しない理由をここに記述する。",
+      "followup_issue": "https://github.com/owner/repo/issues/52"
+    }
+  ]
+}

@@ -12,6 +12,11 @@ Canonical, always-loaded rules. Terse + imperative. Rationale lives in `docs/` (
 - Every acceptance criterion must map to a test. Tests are mandatory for Tier 1+.
 - Keep `.sdd/state.json` current (`feature`, `tier`, `phase`). Hooks and CI read it.
 - If the spec is wrong or insufficient, STOP and escalate to a human. Never silently redesign during implementation.
+- Tier 2: every Issue AC must appear in `specs/<feature>/traceability.json` before freeze.
+  If any Issue AC is untracked, STOP — do not freeze and do not implement.
+- Frozen artifacts (`spec.md`, `plan.md`, `tasks.md`, `traceability.json`) are immutable after freeze.
+  The only permitted post-freeze edit to `tasks.md` is checkbox state ([ ] → [x]).
+  Post-freeze changes to `traceability.json` require explicit unfreeze and human re-approval.
 
 ## Never
 - Never edit source code during spec/plan/tasks phases (only specs/docs).

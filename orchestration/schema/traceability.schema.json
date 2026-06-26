@@ -1,0 +1,91 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "SDD Traceability",
+  "description": "Issue AC → spec AC → task → test のトレーサビリティテーブル (specs/<feature>/traceability.json)。Tier 2 必須。",
+  "type": "object",
+  "required": ["issue", "issue_url", "feature", "entries"],
+  "additionalProperties": false,
+  "properties": {
+    "issue": {
+      "type": "integer",
+      "description": "GitHub Issue 番号"
+    },
+    "issue_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Issue の URL"
+    },
+    "feature": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]*$",
+      "description": "Feature slug。specs/<feature>/ および state.json の feature と一致する。"
+    },
+    "entries": {
+      "type": "array",
+      "minItems": 1,
+      "description": "AC トレーサビリティエントリ",
+      "items": {
+        "type": "object",
+        "required": ["issue_ac", "status"],
+        "additionalProperties": false,
+        "properties": {
+          "issue_ac": {
+            "type": "string",
+            "pattern": "^[0-9]+-AC[0-9]+$",
+            "description": "Issue AC ID（<issue番号>-AC<連番> 形式、例: 50-AC1）"
+          },
+          "spec_ac": {
+            "type": ["string", "null"],
+            "pattern": "^SAC-[0-9]+$",
+            "description": "spec AC ID（SAC-<連番> 形式、例: SAC-1）"
+          },
+          "task": {
+            "type": ["string", "null"],
+            "description": "tasks.md のタスク参照（例: T1）"
+          },
+          "test": {
+            "type": ["string", "null"],
+            "description": "テスト参照（<ファイル>::<テスト名> 形式）"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["in-scope", "out-of-scope", "deferred"],
+            "description": "この AC がこの spec のスコープ内かどうか"
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 1,
+            "description": "status が out-of-scope / deferred の場合に必須。scope 外化の理由（空文字不可）。"
+          },
+          "followup_issue": {
+            "type": "string",
+            "format": "uri",
+            "pattern": "^https?://",
+            "description": "status が out-of-scope / deferred の場合に必須。follow-up Issue の HTTP(S) URL。"
+          }
+        },
+        "if": {
+          "properties": {
+            "status": {"const": "in-scope"}
+          }
+        },
+        "then": {
+          "required": ["spec_ac", "task", "test"],
+          "properties": {
+            "spec_ac": {"type": "string"},
+            "task": {"type": "string", "pattern": "^T[0-9]+$"},
+            "test": {"type": "string", "pattern": "^.+::.+$"}
+          }
+        },
+        "else": {
+          "required": ["reason", "followup_issue"],
+          "properties": {
+            "spec_ac": {"type": "null"},
+            "task": {"type": "null"},
+            "test": {"type": "null"}
+          }
+        }
+      }
+    }
+  }
+}

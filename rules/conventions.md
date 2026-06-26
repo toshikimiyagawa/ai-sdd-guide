@@ -11,6 +11,9 @@
 - Review for conformance to the frozen spec, not personal preference.
 - Out-of-spec changes are rejected, not negotiated in review.
 - Run `sdd-reviewer` before human review. The subagent confirms spec conformance first, reducing reviewer load.
+- In the implementation phase, the only permitted change to `tasks.md` is checking
+  off completed items (`[ ]` → `[x]`). Any other modification to `tasks.md` content
+  (task text, IDs, order, test mapping) is out-of-spec and must be rejected.
 
 ## Code style
 - Follow the host project's existing style. SDD does not override project conventions.

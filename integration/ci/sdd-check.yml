@@ -47,6 +47,21 @@ jobs:
           fi
           echo "Spec present."
 
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install jsonschema
+
+      - name: Run sdd-validate
+        run: |
+          if [ ! -f ".sdd/state.json" ]; then
+            echo "No .sdd/state.json — sdd-validate skipped."
+            exit 0
+          fi
+          bash integration/ci/sdd-validate.sh --root .
+
       - name: Tests
         run: |
           echo "TODO: replace with this project's test command"
