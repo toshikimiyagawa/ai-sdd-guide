@@ -1,6 +1,6 @@
 ---
 name: sdd-reviewer
-description: Verify an change conforms to its frozen SDD spec and that every acceptance criterion has a passing test. Use in the verify phase. Returns pass/fail + findings; does not fix code.
+description: Verify a change conforms to its frozen SDD spec and that every acceptance criterion has a passing test. Use in the verify phase. Returns pass/fail + findings; does not fix code.
 tools: Read, Bash, Grep, Glob
 ---
 

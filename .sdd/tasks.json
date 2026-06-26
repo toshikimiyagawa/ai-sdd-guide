@@ -8,9 +8,9 @@
   },
   {
     "id": "issue-48",
-    "phase": "verify",
+    "phase": "implement",
     "status": "completed",
-    "handoff": null,
+    "handoff": "specs/issue-48/handoff.md",
     "blocked_reason": null
   }
 ]

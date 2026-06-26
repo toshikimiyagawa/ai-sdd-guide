@@ -1,0 +1,49 @@
+{
+  "issue": 48,
+  "issue_url": "https://github.com/toshikimiyagawa/ai-sdd-guide/issues/48",
+  "feature": "issue-48",
+  "entries": [
+    {
+      "issue_ac": "48-AC1",
+      "spec_ac": "SAC-1",
+      "task": "T1",
+      "test": "integration/agents/sdd-reviewer.md::Issue access defined",
+      "status": "in-scope"
+    },
+    {
+      "issue_ac": "48-AC2",
+      "spec_ac": "SAC-2",
+      "task": "T2",
+      "test": "integration/agents/sdd-reviewer.md::8-item check added",
+      "status": "in-scope"
+    },
+    {
+      "issue_ac": "48-AC3",
+      "spec_ac": "SAC-3",
+      "task": "T3",
+      "test": "orchestration/rules/orchestration.md::Issue Diff Summary added",
+      "status": "in-scope"
+    },
+    {
+      "issue_ac": "48-AC4",
+      "spec_ac": "SAC-4",
+      "task": "T4",
+      "test": "orchestration/rules/orchestration.md::Independent reviewer required",
+      "status": "in-scope"
+    },
+    {
+      "issue_ac": "48-AC5",
+      "spec_ac": "SAC-5",
+      "task": "T5",
+      "test": "integration/agents/sdd-reviewer.md::Bootstrap exemption handling added",
+      "status": "in-scope"
+    },
+    {
+      "issue_ac": "48-AC6",
+      "spec_ac": "SAC-6",
+      "task": "T6",
+      "test": "integration/agents/sdd-reviewer.md::Evidence test count verified",
+      "status": "in-scope"
+    }
+  ]
+}
