@@ -6,6 +6,7 @@ exit 1 = validation error
 exit 2 = internal error (fail-closed)
 """
 import argparse
+import hashlib
 import json
 import re
 import subprocess
@@ -199,6 +200,77 @@ def check_scope_out(root: Path, feature: str) -> list[str]:
     return errors
 
 
+def check_issue_snapshot(root: Path, feature: str) -> list[str]:
+    """Check 8: issue-snapshot.json matches schema, hash, and traceability."""
+    snapshot_path = root / "specs" / feature / "issue-snapshot.json"
+    if not snapshot_path.exists():
+        return [f"issue-snapshot.json not found: {snapshot_path}"]
+
+    errors: list[str] = []
+    try:
+        snapshot = _load_json(snapshot_path)
+    except RuntimeError as exc:
+        return [str(exc)]
+
+    errors.extend(
+        _validate_schema(
+            snapshot,
+            _load_schema("issue-snapshot.schema.json"),
+            "issue-snapshot.json",
+        )
+    )
+    if errors:
+        return errors
+
+    raw_body = snapshot["raw_body"]
+    expected_hash = hashlib.sha256(raw_body.encode("utf-8")).hexdigest()
+    if snapshot["body_hash"] != expected_hash:
+        errors.append(
+            "issue-snapshot.json: body_hash does not match raw_body SHA-256 "
+            f"(expected {expected_hash}, got {snapshot['body_hash']})"
+        )
+
+    issue = snapshot["issue"]
+    stable_acs = snapshot.get("stable_acs", [])
+    for index, ac in enumerate(stable_acs, 1):
+        expected_id = f"{issue}-AC{index}"
+        actual_id = ac.get("id")
+        if actual_id != expected_id:
+            errors.append(
+                "issue-snapshot.json: stable_acs "
+                f"expected {expected_id}, got {actual_id}"
+            )
+
+    traceability_path = root / "specs" / feature / "traceability.json"
+    if not traceability_path.exists():
+        errors.append(f"traceability.json not found: {traceability_path}")
+        return errors
+
+    try:
+        traceability = _load_json(traceability_path)
+    except RuntimeError as exc:
+        errors.append(str(exc))
+        return errors
+
+    snapshot_acs = {ac.get("id") for ac in stable_acs if ac.get("id")}
+    traceability_acs = {
+        entry.get("issue_ac")
+        for entry in traceability.get("entries", [])
+        if entry.get("issue_ac")
+    }
+
+    for issue_ac in sorted(snapshot_acs - traceability_acs):
+        errors.append(
+            f"issue-snapshot.json: snapshot AC not tracked in traceability.json: {issue_ac}"
+        )
+    for issue_ac in sorted(traceability_acs - snapshot_acs):
+        errors.append(
+            f"issue-snapshot.json: traceability AC not in snapshot: {issue_ac}"
+        )
+
+    return errors
+
+
 def _resolve_root() -> Path:
     try:
         result = subprocess.run(
@@ -264,6 +336,10 @@ def main() -> None:  # noqa: C901
         # Check 7: scope-out (Tier 2)
         if tier == 2:
             all_errors.extend(check_scope_out(root, feature))
+
+        # Check 8: issue snapshot (Tier 2)
+        if tier == 2:
+            all_errors.extend(check_issue_snapshot(root, feature))
 
         if all_errors:
             for e in all_errors:

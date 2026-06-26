@@ -1,0 +1,53 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "SDD Issue Snapshot",
+  "description": "GitHub Issue 本文のスナップショットと安定化された受入条件 (AC) のリスト。",
+  "type": "object",
+  "required": ["issue", "url", "fetched_at", "raw_body", "body_hash", "stable_acs"],
+  "additionalProperties": false,
+  "properties": {
+    "issue": {
+      "type": "integer",
+      "description": "GitHub Issue 番号"
+    },
+    "url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Issue の URL"
+    },
+    "fetched_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "取得日時"
+    },
+    "raw_body": {
+      "type": "string",
+      "description": "Issue 本文の raw テキスト"
+    },
+    "body_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$",
+      "description": "raw_body の SHA-256 hex digest"
+    },
+    "stable_acs": {
+      "type": "array",
+      "description": "出現順に採番した Issue AC エントリ",
+      "items": {
+        "type": "object",
+        "required": ["id", "text"],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*-AC[1-9][0-9]*$",
+            "description": "Issue AC ID（<issue番号>-AC<連番> 形式）"
+          },
+          "text": {
+            "type": "string",
+            "description": "AC テキスト"
+          }
+        }
+      }
+    }
+  }
+}
