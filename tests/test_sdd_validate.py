@@ -95,6 +95,7 @@ def _load_module():
 
 
 _v = _load_module()
+HAS_EVIDENCE_CHECK = hasattr(_v, "check_evidence")
 
 
 # ---------------------------------------------------------------------------
@@ -417,6 +418,25 @@ def test_sh_invalid_traceability_exits_1():
 
 def test_sh_invalid_tasks_incomplete_exits_1():
     result = _run_sh("invalid-tasks-incomplete")
+    assert result.returncode == 1
+
+
+def test_sh_valid_active_snapshot_and_evidence_exits_0():
+    result = _run_sh("valid-active")
+    assert result.returncode == 0
+
+
+def test_sh_invalid_snapshot_hash_mismatch_exits_1():
+    result = _run_sh("invalid-snapshot-hash-mismatch")
+    assert result.returncode == 1
+
+
+@pytest.mark.skipif(
+    not HAS_EVIDENCE_CHECK,
+    reason="This branch predates the merged PR #54 evidence validator on origin/main.",
+)
+def test_sh_invalid_evidence_bad_commit_exits_1():
+    result = _run_sh("invalid-evidence-bad-commit")
     assert result.returncode == 1
 
 
