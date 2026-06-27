@@ -1,5 +1,1 @@
-{
-  "tier": 2,
-  "phase": "verify",
-  "feature": "evidence-validation"
-}
+{"tier": 0, "phase": "done", "note": "no active feature"}

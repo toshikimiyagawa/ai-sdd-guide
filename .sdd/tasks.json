@@ -23,7 +23,7 @@
   {
     "id": "evidence-validation",
     "phase": "verify",
-    "status": "in_progress",
+    "status": "completed",
     "handoff": "specs/evidence-validation/handoff.md",
     "blocked_reason": null
   }
