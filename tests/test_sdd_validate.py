@@ -428,11 +428,13 @@ def test_sh_valid_active_snapshot_and_evidence_exits_0():
 def test_sh_invalid_snapshot_hash_mismatch_exits_1():
     result = _run_sh("invalid-snapshot-hash-mismatch")
     assert result.returncode == 1
+    assert "issue-snapshot.json: body_hash does not match" in result.stderr
 
 
 def test_sh_invalid_evidence_bad_commit_exits_1():
     result = _run_sh("invalid-evidence-bad-commit")
     assert result.returncode == 1
+    assert "evidence.json: commit_sha not found" in result.stderr
 
 
 def test_sh_missing_state_json_exits_1(tmp_path):
