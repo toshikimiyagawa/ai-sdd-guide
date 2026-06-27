@@ -1,0 +1,33 @@
+{
+  "issue": 54,
+  "url": "https://github.com/toshikimiyagawa/ai-sdd-guide/issues/54",
+  "fetched_at": "2026-06-26T17:41:11Z",
+  "raw_body": "## 親issue\n\nparent: #46 (grandparent: #43)\n\n## 概要\n\nverify フェーズの証跡（テスト実行結果・commit SHA）を機械検査可能な形式で定義する。\n#52 で作成した validator に evidence 検証を追加し、「目視確認」や compile/syntax check を\nテスト証跡として扱えない制約を schema / validator で保証する。\n\n## スコープ\n\n### Verification evidence JSON Schema（`orchestration/schema/evidence.schema.json`）\n\nフィールド:\n\n- `feature`: string — feature slug\n- `commit_sha`: string — 実装完了時の commit SHA（40桁 hex）\n- `entries`: array — 証跡エントリ\n  - `command_type`: enum — `test` | `lint` | `build` | `other`\n  - `command`: string — 実行したコマンド\n  - `result`: string — 実行結果（stdout/stderr の要約）\n  - `test_count`: integer | null — `command_type: \"test\"` の場合のみ必須、他は null\n\n### evidence 生成手順\n\n- verify フェーズ完了時に `specs/<feature>/evidence.json` として保存する\n- `command_type: \"test\"` のエントリに `test_count` を必須にする\n- compile / syntax check を test 件数として記録することを禁止する\n\n### validator拡張（#52 の `sdd-validate.sh` に追加）\n\n- `evidence.json` を schema validation する\n- `commit_sha` が 40桁 hex であることを確認する\n- `commit_sha` が現在 repo に存在することを git で確認する\n- `command_type: \"test\"` の entry に `test_count` があることを確認する\n- `command_type: \"test\"` 以外の entry に `test_count` が非 null なら失敗させる\n- evidence が存在しない / 壊れている / 検査不能な場合は fail closed する\n\n## 明示的にスコープ外\n\n- state/tasks schema と core validator entrypoint → #52\n- Issue snapshot / Issue本文AC差分検査 → #53\n- negative fixture 一式 → #47\n- migration guide → #49\n\n## 受入条件\n\n- [ ] `orchestration/schema/evidence.schema.json` が存在し、全フィールドを定義している\n- [ ] `command_type: \"test\"` 以外のエントリで `test_count` が非 null の場合 schema validation が失敗する\n- [ ] `command_type: \"test\"` のエントリで `test_count` が欠落している場合 schema validation が失敗する\n- [ ] `commit_sha` が 40 桁 hex でない場合 schema validation が失敗する\n- [ ] validator が `commit_sha` の git 存在チェックを実行できる\n- [ ] validator が evidence 検査不能時に fail closed する\n\n## 依存関係\n\n- 依存: #52（コアvalidator）\n- ブロックする: #47 の evidence fixture、#49（migration guide）\n",
+  "body_hash": "760084413427f768110fcb74bfa9d311e232fd9d5d16e6333230587fbb0613ac",
+  "stable_acs": [
+    {
+      "id": "54-AC1",
+      "text": "`orchestration/schema/evidence.schema.json` が存在し、全フィールドを定義している"
+    },
+    {
+      "id": "54-AC2",
+      "text": "`command_type: \"test\"` 以外のエントリで `test_count` が非 null の場合 schema validation が失敗する"
+    },
+    {
+      "id": "54-AC3",
+      "text": "`command_type: \"test\"` のエントリで `test_count` が欠落している場合 schema validation が失敗する"
+    },
+    {
+      "id": "54-AC4",
+      "text": "`commit_sha` が 40 桁 hex でない場合 schema validation が失敗する"
+    },
+    {
+      "id": "54-AC5",
+      "text": "validator が `commit_sha` の git 存在チェックを実行できる"
+    },
+    {
+      "id": "54-AC6",
+      "text": "validator が evidence 検査不能時に fail closed する"
+    }
+  ]
+}

@@ -271,6 +271,54 @@ def check_issue_snapshot(root: Path, feature: str) -> list[str]:
     return errors
 
 
+def check_evidence(root: Path, feature: str) -> list[str]:
+    """Check 9: evidence.json matches schema and references an existing commit."""
+    evidence_path = root / "specs" / feature / "evidence.json"
+    if not evidence_path.exists():
+        return [f"evidence.json not found: {evidence_path}"]
+
+    try:
+        evidence = _load_json(evidence_path)
+    except RuntimeError as exc:
+        return [str(exc)]
+
+    errors = _validate_schema(
+        evidence,
+        _load_schema("evidence.schema.json"),
+        "evidence.json",
+    )
+    if errors:
+        return errors
+
+    commit_sha = evidence["commit_sha"]
+    result = subprocess.run(
+        ["git", "-C", str(root), "cat-file", "-e", f"{commit_sha}^{{commit}}"],
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    if result.returncode != 0:
+        root_check = subprocess.run(
+            ["git", "-C", str(root), "rev-parse", "--is-inside-work-tree"],
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+        if root_check.returncode != 0:
+            result = subprocess.run(
+                ["git", "-C", str(_resolve_root()), "cat-file", "-e", f"{commit_sha}^{{commit}}"],
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+    if result.returncode != 0:
+        errors.append(
+            f"evidence.json: commit_sha not found in git repository: {commit_sha}"
+        )
+
+    return errors
+
+
 def _resolve_root() -> Path:
     try:
         result = subprocess.run(
@@ -340,6 +388,10 @@ def main() -> None:  # noqa: C901
         # Check 8: issue snapshot (Tier 2)
         if tier == 2:
             all_errors.extend(check_issue_snapshot(root, feature))
+
+        # Check 9: evidence (Tier 2)
+        if tier == 2:
+            all_errors.extend(check_evidence(root, feature))
 
         if all_errors:
             for e in all_errors:
