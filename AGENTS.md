@@ -4,6 +4,7 @@ Read before any work:
 - `rules/core.md`
 - `rules/workflow.md`
 - `rules/subagents.md`
+- `rules/repo-agent-routing.md`
 - `rules/conventions.md`
 - `rules/issue-intake.md`
 - `orchestration/rules/orchestration.md`
