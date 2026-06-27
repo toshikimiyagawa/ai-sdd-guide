@@ -1,0 +1,18 @@
+{
+  "feature": "evidence-validation",
+  "commit_sha": "4f9abc60cd0433fa98ceaca26d900292532771c7",
+  "entries": [
+    {
+      "command_type": "test",
+      "command": "PATH=/tmp/ai-sdd-guide-test-venv/bin:$PATH /tmp/ai-sdd-guide-test-venv/bin/pytest -q",
+      "result": "122 passed in 5.08s",
+      "test_count": 122
+    },
+    {
+      "command_type": "other",
+      "command": "PATH=/tmp/ai-sdd-guide-test-venv/bin:$PATH python3 integration/ci/sdd-validate.py",
+      "result": "sdd-validate: all checks passed for feature 'evidence-validation'",
+      "test_count": null
+    }
+  ]
+}
