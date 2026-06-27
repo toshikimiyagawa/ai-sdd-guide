@@ -1,6 +1,6 @@
 {
   "feature": "my-feature",
-  "commit_sha": "4f9abc60cd0433fa98ceaca26d900292532771c7",
+  "commit_sha": "ea0f619d3416cbffa573357478124adb2eec446f",
   "entries": [
     {
       "command_type": "test",
