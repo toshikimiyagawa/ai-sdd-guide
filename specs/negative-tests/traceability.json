@@ -1,0 +1,56 @@
+{
+  "issue": 47,
+  "issue_url": "https://github.com/toshikimiyagawa/ai-sdd-guide/issues/47",
+  "feature": "negative-tests",
+  "entries": [
+    {
+      "issue_ac": "47-AC1",
+      "spec_ac": "SAC-1",
+      "task": "T1",
+      "test": "tests/test_negative_fixtures.py::test_negative_fixture_fails[fixture-incomplete-tasks-unchecked item]",
+      "status": "in-scope"
+    },
+    {
+      "issue_ac": "47-AC2",
+      "spec_ac": "SAC-2",
+      "task": "T2",
+      "test": "tests/test_negative_fixtures.py::test_negative_fixture_fails[fixture-wrong-state-no matching entry]",
+      "status": "in-scope"
+    },
+    {
+      "issue_ac": "47-AC3",
+      "spec_ac": "SAC-2",
+      "task": "T5",
+      "test": "tests/test_negative_fixtures.py::test_negative_fixture_fails[fixture-stale-snapshot-hash-body_hash does not match]",
+      "status": "in-scope"
+    },
+    {
+      "issue_ac": "47-AC4",
+      "spec_ac": "SAC-2",
+      "task": "T6",
+      "test": "tests/test_negative_fixtures.py::test_negative_fixture_fails[fixture-invalid-evidence-commit-commit_sha not found in git repository]",
+      "status": "in-scope"
+    },
+    {
+      "issue_ac": "47-AC5",
+      "spec_ac": "SAC-3",
+      "task": "T1",
+      "test": "tests/test_negative_fixtures.py::test_valid_fixture_passes[fixture-incomplete-tasks-valid]",
+      "status": "in-scope"
+    },
+    {
+      "issue_ac": "47-AC6",
+      "spec_ac": "SAC-4",
+      "task": "T7",
+      "test": "tests/test_negative_fixtures.py::test_negative_fixture_fails[fixture-incomplete-tasks-unchecked item]",
+      "status": "in-scope"
+    },
+    {
+      "issue_ac": "47-AC7",
+      "spec_ac": "SAC-5",
+      "task": "T1",
+      "test": "tests/test_negative_fixtures.py::test_negative_fixture_fails[fixture-incomplete-tasks-unchecked item]",
+      "status": "in-scope"
+    }
+  ]
+}

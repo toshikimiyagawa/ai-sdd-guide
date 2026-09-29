@@ -1,0 +1,16 @@
+{
+  "issue": 47,
+  "url": "https://github.com/toshikimiyagawa/ai-sdd-guide/issues/47",
+  "fetched_at": "2026-09-29T00:00:00Z",
+  "raw_body": "## 受入条件\n\n- [ ] PR #54 で発生した6パターン以上の negative fixture が存在する\n- [ ] #52 core validator が検出すべき fixture が validator 直接実行で失敗する\n- [ ] #53 snapshot validator が検出すべき fixture が validator 直接実行で失敗する\n- [ ] #54 evidence validator が検出すべき fixture が validator 直接実行で失敗する\n- [ ] 各 fixture の valid版（修正済み）に対して validator が PASS する（GREEN）\n- [ ] tests が CI で自動実行される\n- [ ] fixture の README に「どのパターンを再現しているか」が記載されている",
+  "body_hash": "be6552c2a11696a9c1a25fc72c2c1b78b40bceabc2a3d4a868f25cdf2ba1c6d6",
+  "stable_acs": [
+    {"id": "47-AC1", "text": "PR #54 で発生した6パターン以上の negative fixture が存在する"},
+    {"id": "47-AC2", "text": "#52 core validator が検出すべき fixture が validator 直接実行で失敗する"},
+    {"id": "47-AC3", "text": "#53 snapshot validator が検出すべき fixture が validator 直接実行で失敗する"},
+    {"id": "47-AC4", "text": "#54 evidence validator が検出すべき fixture が validator 直接実行で失敗する"},
+    {"id": "47-AC5", "text": "各 fixture の valid版（修正済み）に対して validator が PASS する（GREEN）"},
+    {"id": "47-AC6", "text": "tests が CI で自動実行される"},
+    {"id": "47-AC7", "text": "fixture の README に「どのパターンを再現しているか」が記載されている"}
+  ]
+}
