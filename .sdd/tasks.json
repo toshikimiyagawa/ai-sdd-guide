@@ -36,8 +36,8 @@
   },
   {
     "id": "migration-guide",
-    "phase": "implement",
-    "status": "pending",
+    "phase": "verify",
+    "status": "completed",
     "handoff": "specs/migration-guide/handoff.md",
     "blocked_reason": null
   }

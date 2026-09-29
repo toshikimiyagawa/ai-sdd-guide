@@ -7,9 +7,9 @@ If the spec needs changes, stop and escalate to a human.
 
 ## Done when
 
-- [ ] `docs/migration.md` が存在する
-- [ ] `tests/test_migration_guide.py` の 6 テストがすべて PASS する
-- [ ] 全テストスイートが PASS する (`pytest tests/ -v`)
+- [x] `docs/migration.md` が存在する
+- [x] `tests/test_migration_guide.py` の 6 テストがすべて PASS する
+- [x] 全テストスイートが PASS する (`pytest tests/ -v`)
 
 ## Reference files
 
