@@ -49,6 +49,9 @@ NEGATIVE_CASES = [
     ("fixture-wrong-state",         "no matching entry"),
     ("fixture-missing-tasks-entry", "no entry for feature"),
     ("fixture-phase-mismatch",      "does not match tasks.json entry"),
+    ("fixture-no-test-mapping",     "test file not found"),
+    ("fixture-orphan-spec-ac",      "not found in spec.md"),
+    ("fixture-duplicate-spec-ac",   "duplicate spec_ac"),
 ]
 
 
@@ -74,6 +77,9 @@ VALID_CASES = [
     "fixture-wrong-state-valid",
     "fixture-missing-tasks-entry-valid",
     "fixture-phase-mismatch-valid",
+    "fixture-no-test-mapping-valid",
+    "fixture-orphan-spec-ac-valid",
+    "fixture-duplicate-spec-ac-valid",
 ]
 
 
