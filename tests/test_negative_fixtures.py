@@ -45,7 +45,10 @@ def _prepare_valid_fixture(fixture_name: str, tmp_path: Path) -> Path:
 # ---------------------------------------------------------------------------
 
 NEGATIVE_CASES = [
-    ("fixture-incomplete-tasks", "unchecked item"),
+    ("fixture-incomplete-tasks",    "unchecked item"),
+    ("fixture-wrong-state",         "no matching entry"),
+    ("fixture-missing-tasks-entry", "no entry for feature"),
+    ("fixture-phase-mismatch",      "does not match tasks.json entry"),
 ]
 
 
@@ -68,6 +71,9 @@ def test_negative_fixture_fails(fixture_name, expected_fragment):
 
 VALID_CASES = [
     "fixture-incomplete-tasks-valid",
+    "fixture-wrong-state-valid",
+    "fixture-missing-tasks-entry-valid",
+    "fixture-phase-mismatch-valid",
 ]
 
 
