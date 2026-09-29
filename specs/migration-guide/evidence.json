@@ -1,0 +1,12 @@
+{
+  "feature": "migration-guide",
+  "commit_sha": "689b65f388749eb4177380ef8ef53f7342a57de0",
+  "entries": [
+    {
+      "command_type": "test",
+      "command": "python3 -m pytest tests/ --ignore=tests/test_sdd_validate.py -v",
+      "result": "101 passed",
+      "test_count": 101
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "issue": 49,
+  "url": "https://github.com/toshikimiyagawa/ai-sdd-guide/issues/49",
+  "fetched_at": "2026-09-29T05:30:00Z",
+  "raw_body": "## 親issue\n\nparent: #43\n\n## 概要\n\n他の子issueで実装される変更（traceability形式・rules更新・validator・snapshot・evidence・reviewer更新）を\nconsumer repository に適用するための migration guide と update 手順を作成する。\n\n## スコープ\n\n### Migration guide（`docs/migration/` または `MIGRATION.md`）\n\n- 変更の概要と影響範囲のサマリ\n- 新規 feature と移行対象の進行中 feature への traceability 追加手順\n- Issue snapshot の作成手順\n- verification evidence の作成手順\n- state.json / tasks.json を新 JSON Schema に合わせる更新手順\n- CI pipeline への single validator 組み込み手順\n- hook への validator 組み込み手順（既存hook からの移行）\n- sdd-reviewer の新 prompt を取り込む手順\n\n### Consumer update チェックリスト\n\n- [ ] 新規または移行対象 feature へ issue snapshot を作成する\n- [ ] 新規または移行対象 feature へ traceability table を追加する\n- [ ] verify phase で evidence.json を作成する\n- [ ] state.json が新 schema に準拠しているか確認する\n- [ ] tasks.json が新 schema に準拠しているか確認する\n- [ ] CI template を更新して single validator を使用する\n- [ ] hook を更新して single validator を使用する\n- [ ] sdd-reviewer prompt を更新する\n\n### 参照先\n\n- consumer 側固有の変更は https://github.com/toshikimiyagawa/agents-devcontainer/issues/55 で管理（このissueは canonical guide 側の docs 作成のみ）\n\n## 移行方針の優先事項\n\n- 完了済みの既存 frozen spec は遡及変更しない。\n- 新規 Tier 1/2 feature から新 traceability contract を必須化する。\n- 進行中 feature は、旧 guide revision を固定して完了するか、snapshot/traceability を作成して human 再承認後に新 gate へ移行するかを選ぶ。\n- validator、schemas、rules、templates、hooks、CI、reviewer を同じ guide revision として更新し、部分移行しない。\n- migration guide には新規導入例と進行中 feature の変換例を含める。完了済み spec の書換例は含めない。\n\n## 受入条件\n\n- [ ] migration guide が `docs/` 配下に存在する\n- [ ] migration guide に全変更項目の適用手順が記載されている\n- [ ] consumer update チェックリストが migration guide に含まれている\n- [ ] 新規 feature と移行対象の進行中 feature へ snapshot/traceability/evidence を追加する具体例が含まれている\n- [ ] 完了済み spec を遡及変更しないことが明記されている\n- [ ] 部分移行を禁止する checklist がある\n\n## 依存関係\n\n- 依存: #45（rules更新）\n- 依存: #52（core validator / state/tasks schema / CI・hook連携）\n- 依存: #53（Issue snapshot / Issue AC 差分検査）\n- 依存: #54（verification evidence / test証跡検査）\n- 依存: #47（negative fixtures & tests）\n- 依存: #48（reviewer/agent更新）\n- ブロックする: なし（最終成果物）\n\n",
+  "body_hash": "8408f9f2b19171251fa5089700d7d2d01d9901259d6422dd8e050b85295b7270",
+  "stable_acs": [
+    {
+      "id": "49-AC1",
+      "text": "migration guide が `docs/` 配下に存在する"
+    },
+    {
+      "id": "49-AC2",
+      "text": "migration guide に全変更項目の適用手順が記載されている"
+    },
+    {
+      "id": "49-AC3",
+      "text": "consumer update チェックリストが migration guide に含まれている"
+    },
+    {
+      "id": "49-AC4",
+      "text": "新規 feature と移行対象の進行中 feature へ snapshot/traceability/evidence を追加する具体例が含まれている"
+    },
+    {
+      "id": "49-AC5",
+      "text": "完了済み spec を遡及変更しないことが明記されている"
+    },
+    {
+      "id": "49-AC6",
+      "text": "部分移行を禁止する checklist がある"
+    }
+  ]
+}

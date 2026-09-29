@@ -1,0 +1,49 @@
+{
+  "issue": 49,
+  "issue_url": "https://github.com/toshikimiyagawa/ai-sdd-guide/issues/49",
+  "feature": "migration-guide",
+  "entries": [
+    {
+      "issue_ac": "49-AC1",
+      "spec_ac": "SAC-1",
+      "task": "T1",
+      "test": "tests/test_migration_guide.py::test_migration_guide_exists",
+      "status": "in-scope"
+    },
+    {
+      "issue_ac": "49-AC2",
+      "spec_ac": "SAC-2",
+      "task": "T1",
+      "test": "tests/test_migration_guide.py::test_migration_guide_has_all_sections",
+      "status": "in-scope"
+    },
+    {
+      "issue_ac": "49-AC3",
+      "spec_ac": "SAC-3",
+      "task": "T1",
+      "test": "tests/test_migration_guide.py::test_migration_guide_has_consumer_checklist",
+      "status": "in-scope"
+    },
+    {
+      "issue_ac": "49-AC4",
+      "spec_ac": "SAC-4",
+      "task": "T1",
+      "test": "tests/test_migration_guide.py::test_migration_guide_has_examples",
+      "status": "in-scope"
+    },
+    {
+      "issue_ac": "49-AC5",
+      "spec_ac": "SAC-5",
+      "task": "T1",
+      "test": "tests/test_migration_guide.py::test_migration_guide_no_retroactive_policy",
+      "status": "in-scope"
+    },
+    {
+      "issue_ac": "49-AC6",
+      "spec_ac": "SAC-6",
+      "task": "T1",
+      "test": "tests/test_migration_guide.py::test_migration_guide_no_partial_migration",
+      "status": "in-scope"
+    }
+  ]
+}
