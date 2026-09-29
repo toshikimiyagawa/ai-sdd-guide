@@ -7,9 +7,9 @@ If the spec needs changes, stop and escalate to a human.
 
 ## Done when
 
-- [ ] All tasks in `specs/negative-tests/tasks.md` are complete
-- [ ] Every acceptance criterion in `specs/negative-tests/spec.md` has a passing test
-- [ ] Test suite passes (`pytest tests/ -v` — all green including existing tests)
+- [x] All tasks in `specs/negative-tests/tasks.md` are complete
+- [x] Every acceptance criterion in `specs/negative-tests/spec.md` has a passing test
+- [x] Test suite passes (`pytest tests/ -v` — all green including existing tests)
 
 ## Reference files
 
@@ -25,7 +25,7 @@ If the spec needs changes, stop and escalate to a human.
 - Test file to create: `tests/test_negative_fixtures.py` — do NOT modify `test_sdd_validate.py`
 - Valid fixtures with `evidence.json`: include placeholder SHA `"0000000000000000000000000000000000000000"`; the `_prepare_valid_fixture` helper injects the real HEAD SHA at test time
 - Shared fixture feature slug: `my-feature`; shared issue number: `99`
-- body_hash for base issue-snapshot (raw_body = 2 AC items): `0e9cc93e6d0e5c2c0d87a643b36e8cd22fcad4f1a9b78d01b0dbb8dc37c7b4a4`
+- body_hash for base issue-snapshot (raw_body = 2 AC items): `49f9de3f0073cf45c66066aae898543b31bb5b7b32c20e33531b4e90a3ba7541`
 
 ## If the spec is ambiguous or insufficient
 

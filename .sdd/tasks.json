@@ -29,8 +29,8 @@
   },
   {
     "id": "negative-tests",
-    "phase": "implement",
-    "status": "pending",
+    "phase": "verify",
+    "status": "in_progress",
     "handoff": "specs/negative-tests/handoff.md",
     "blocked_reason": null
   }

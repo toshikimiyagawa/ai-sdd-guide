@@ -146,9 +146,9 @@ raw = '## 受入条件\n\n- [ ] first criterion works\n- [ ] second criterion wo
 print(hashlib.sha256(raw.encode('utf-8')).hexdigest())
 "
 ```
-Result: `0e9cc93e6d0e5c2c0d87a643b36e8cd22fcad4f1a9b78d01b0dbb8dc37c7b4a4`
+Result: `49f9de3f0073cf45c66066aae898543b31bb5b7b32c20e33531b4e90a3ba7541`
 
-So the body_hash value to use: `"0e9cc93e6d0e5c2c0d87a643b36e8cd22fcad4f1a9b78d01b0dbb8dc37c7b4a4"`
+So the body_hash value to use: `"49f9de3f0073cf45c66066aae898543b31bb5b7b32c20e33531b4e90a3ba7541"`
 
 ### Base `evidence.json` (valid — SHA injected at test time)
 ```json
