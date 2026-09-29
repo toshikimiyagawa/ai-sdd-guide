@@ -1,0 +1,11 @@
+## fixture-missing-test-count
+
+**再現パターン:** `test` コマンドの `test_count` が `null`（スキーマ違反: test は整数を必須とする）。
+
+**対応チェック:** Check 9 — `check_evidence` (schema validation)
+
+**RED確認コマンド:**
+```bash
+bash integration/ci/sdd-validate.sh --root tests/fixtures/fixture-missing-test-count
+# → exit 1, stderr に "test_count" が含まれる
+```

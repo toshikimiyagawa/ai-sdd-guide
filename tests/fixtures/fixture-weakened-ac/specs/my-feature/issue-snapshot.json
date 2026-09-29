@@ -1,0 +1,21 @@
+{
+  "issue": 99,
+  "url": "https://github.com/owner/repo/issues/99",
+  "fetched_at": "2026-09-29T00:00:00Z",
+  "raw_body": "## 受入条件\n\n- [ ] first criterion works\n- [ ] second criterion works\n- [ ] third criterion works (dropped)\n",
+  "body_hash": "fcc27758c4e82f3deeb5bb4b41717a681d41e3ce9933c3cdbaa28d0b4e9af20f",
+  "stable_acs": [
+    {
+      "id": "99-AC1",
+      "text": "first criterion works"
+    },
+    {
+      "id": "99-AC2",
+      "text": "second criterion works"
+    },
+    {
+      "id": "99-AC3",
+      "text": "third criterion works (dropped)"
+    }
+  ]
+}

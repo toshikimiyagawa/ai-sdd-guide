@@ -51,7 +51,14 @@ NEGATIVE_CASES = [
     ("fixture-phase-mismatch",      "does not match tasks.json entry"),
     ("fixture-no-test-mapping",     "test file not found"),
     ("fixture-orphan-spec-ac",      "not found in spec.md"),
-    ("fixture-duplicate-spec-ac",   "duplicate spec_ac"),
+    ("fixture-duplicate-spec-ac",         "duplicate spec_ac"),
+    ("fixture-scope-out-no-followup",     "missing HTTP(S) followup_issue"),
+    ("fixture-weakened-ac",               "snapshot AC not tracked in traceability"),
+    ("fixture-stale-snapshot-hash",       "body_hash does not match"),
+    ("fixture-untracked-issue-ac",        "traceability AC not in snapshot"),
+    ("fixture-invalid-evidence-commit",   "commit_sha not found in git repository"),
+    ("fixture-non-test-count",            "is not of type 'null'"),
+    ("fixture-missing-test-count",        "is not of type 'integer'"),
 ]
 
 
@@ -80,6 +87,13 @@ VALID_CASES = [
     "fixture-no-test-mapping-valid",
     "fixture-orphan-spec-ac-valid",
     "fixture-duplicate-spec-ac-valid",
+    "fixture-scope-out-no-followup-valid",
+    "fixture-weakened-ac-valid",
+    "fixture-stale-snapshot-hash-valid",
+    "fixture-untracked-issue-ac-valid",
+    "fixture-invalid-evidence-commit-valid",
+    "fixture-non-test-count-valid",
+    "fixture-missing-test-count-valid",
 ]
 
 
