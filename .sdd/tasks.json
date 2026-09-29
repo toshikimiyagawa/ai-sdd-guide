@@ -26,5 +26,12 @@
     "status": "completed",
     "handoff": "specs/evidence-validation/handoff.md",
     "blocked_reason": null
+  },
+  {
+    "id": "negative-tests",
+    "phase": "implement",
+    "status": "pending",
+    "handoff": "specs/negative-tests/handoff.md",
+    "blocked_reason": null
   }
 ]
