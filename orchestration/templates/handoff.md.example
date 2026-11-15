@@ -8,7 +8,7 @@ If the spec needs changes, stop and report to the orchestrating agent.
 ## Done when
 
 - [ ] All tasks in `specs/<feature>/tasks.md` are complete
-- [ ] Every acceptance criterion in `specs/<feature>/spec.md` has a passing test
+- [ ] Every acceptance criterion in `specs/<feature>/spec.md` verified by a test has a passing test; no tests are written for criteria verified by the diff
 - [ ] Test suite passes
 
 ## Reference files

@@ -37,7 +37,7 @@ case "$phase" in
     msg="SDD reminder: ${phase} phase. Use the superpowers 'writing-plans' skill; for parallel work consider dispatching parallel agents."
     ;;
   implement)
-    msg="SDD reminder: implement phase. Implement only the frozen specs/<feature>/tasks.md; every acceptance criterion must map to a passing test. Do not modify specs/ to fit implementation."
+    msg="SDD reminder: implement phase. Implement only the frozen specs/<feature>/tasks.md; verify each acceptance criterion as the spec says (test for behavior, diff for written content); never write tests that only re-check written content. Do not modify specs/ to fit implementation."
     ;;
   verify)
     msg="SDD reminder: verify phase. Run the sdd-reviewer prompt/subagent against the diff. Review feedback that expands scope must escalate to a new spec, not be silently absorbed."

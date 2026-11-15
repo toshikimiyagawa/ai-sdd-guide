@@ -23,7 +23,7 @@ APPROVE (Claude Code: `spec-reviewer` subagent; other agents:
 
 ## Implementation phase (any agent, no superpowers needed)
 Implement exactly the frozen `specs/<feature>/tasks.md`. No more, no less.
-Every acceptance criterion must map to a passing test.
+Verify each acceptance criterion as the spec says: a passing test for behavior, the diff for written content (`vendor/ai-sdd-guide/rules/core.md`).
 Implement in a fresh agent context, not the one that froze the spec.
 If the spec is wrong or insufficient: stop and report to the orchestrating agent. Do not redesign.
 
