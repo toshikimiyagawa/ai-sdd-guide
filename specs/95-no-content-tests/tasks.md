@@ -10,15 +10,15 @@
 - [x] T3: reviewer を書き換える。`integration/agents/spec-reviewer.md`・`integration/prompts/spec-reviewer-prompt.md`・`integration/agents/sdd-reviewer.md`・`integration/prompts/sdd-reviewer-prompt.md`（plan.md）。対応AC: SAC-2
 - [x] T4: テンプレート・docs・hook を合わせる。`templates/spec.md`・`templates/tasks.md`・`orchestration/templates/handoff.md.example`・`integration/AGENTS.md.example`・`integration/hooks/codex-skill-reminder.sh` の implement のメッセージ・`docs/01-workflow.md`・`docs/02-roles.md`・`docs/03-faq.md`・`docs/traceability.md`・`README.md`（plan.md）。hook のメッセージを変えたあと、既存の `tests/test_skill_reminder.py` が通ること。対応AC: SAC-4
 - [x] T5: `docs/migration.md` の末尾に spec D2 の節を足す（SAC-6 の 5 項目）。対応AC: SAC-6
-- [ ] T6: spec.md の「消すテスト・残すテスト」のとおりに `tests/` を整理する。`test_spec_phase_reminder_mentions_spec_reviewer` を `tests/test_skill_reminder.py` に移してから `tests/test_ai_autonomy.py` を消す。最後に全体を流して通ることを確かめる。対応AC: SAC-5
+- [x] T6: spec.md の「消すテスト・残すテスト」のとおりに `tests/` を整理する。`test_spec_phase_reminder_mentions_spec_reviewer` を `tests/test_skill_reminder.py` に移してから `tests/test_ai_autonomy.py` を消す。最後に全体を流して通ることを確かめる。対応AC: SAC-5
 
 ## 確かめ方（受入条件との対応・必須）
-- [ ] SAC-1 → 差分: `rules/core.md`, `rules/workflow.md`, `orchestration/rules/orchestration.md`
-- [ ] SAC-2 → 差分: `integration/agents/spec-reviewer.md`, `integration/prompts/spec-reviewer-prompt.md`, `integration/agents/sdd-reviewer.md`, `integration/prompts/sdd-reviewer-prompt.md`
-- [ ] SAC-3 → test: `tests/test_traceability_schema.py::test_in_scope_test_accepts_diff`, `::test_in_scope_test_rejects_other_strings`, `tests/test_sdd_validate.py::test_traceability_diff_entry_passes`
-- [ ] SAC-4 → 差分: T4 のファイルと `templates/traceability.json.example`（`tests/test_traceability_schema.py::test_example_is_schema_valid` と `tests/test_skill_reminder.py` が通る）
-- [ ] SAC-5 → 差分: `tests/`（spec の一覧と突き合わせる）と、テストの全件実行が通ること
-- [ ] SAC-6 → 差分: `docs/migration.md`
+- [x] SAC-1 → 差分: `rules/core.md`, `rules/workflow.md`, `orchestration/rules/orchestration.md`
+- [x] SAC-2 → 差分: `integration/agents/spec-reviewer.md`, `integration/prompts/spec-reviewer-prompt.md`, `integration/agents/sdd-reviewer.md`, `integration/prompts/sdd-reviewer-prompt.md`
+- [x] SAC-3 → test: `tests/test_traceability_schema.py::test_in_scope_test_accepts_diff`, `::test_in_scope_test_rejects_other_strings`, `tests/test_sdd_validate.py::test_traceability_diff_entry_passes`
+- [x] SAC-4 → 差分: T4 のファイルと `templates/traceability.json.example`（`tests/test_traceability_schema.py::test_example_is_schema_valid` と `tests/test_skill_reminder.py` が通る）
+- [x] SAC-5 → 差分: `tests/`（spec の一覧と突き合わせる）と、テストの全件実行が通ること
+- [x] SAC-6 → 差分: `docs/migration.md`
 
 ## 完了の定義
 - 全テスト green（`uv run --no-project --with pytest --with jsonschema python -m pytest tests -q`）

@@ -347,30 +347,9 @@ def test_in_scope_test_rejects_other_strings(schema, value):
 
 # --- structural / artifact existence tests ---
 
-def test_schema_file_exists():
-    assert SCHEMA_PATH.exists(), f"Schema not found: {SCHEMA_PATH}"
-
 
 def test_example_is_schema_valid(schema):
     example_path = ROOT / "templates" / "traceability.json.example"
     assert example_path.exists(), f"Example not found: {example_path}"
     example = json.loads(example_path.read_text())
     validate(example, schema)
-
-
-def test_docs_naming_convention():
-    docs_path = ROOT / "docs" / "traceability.md"
-    assert docs_path.exists(), f"Docs not found: {docs_path}"
-    content = docs_path.read_text()
-    assert "<issue番号>-AC" in content, "docs must document Issue AC ID format: <issue番号>-AC<連番>"
-    assert "SAC-" in content, "docs must document spec AC ID format: SAC-<連番>"
-
-
-def test_spec_template_uses_sac_format():
-    import re
-    spec_path = ROOT / "templates" / "spec.md"
-    assert spec_path.exists(), f"spec template not found: {spec_path}"
-    content = spec_path.read_text()
-    assert "SAC-" in content, "templates/spec.md must use SAC-N format"
-    old_format = re.search(r"-\s*\[ \]\s*AC[0-9]+:", content)
-    assert old_format is None, f"templates/spec.md must not use AC<N>: format, found: {old_format}"

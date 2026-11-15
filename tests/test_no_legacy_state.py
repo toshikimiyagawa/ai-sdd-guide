@@ -3,23 +3,9 @@ import re
 
 ROOT = Path(__file__).parents[1]
 
-LEGACY_FILES = [
-    "orchestration/schema/state.schema.json",
-    "orchestration/schema/tasks.schema.json",
-    "templates/sdd-state.example.json",
-    "templates/sdd-state.schema.json",
-    "orchestration/tools/kanban.sh",
-    "orchestration/tools/kanban-html.sh",
-    "integration/ci/kanban-pages.yml",
-]
 
 SCAN = ["rules", "orchestration", "integration", "templates", "docs", "README.md"]
 PATTERN = re.compile(r"state\.json|tasks\.json|kanban", re.IGNORECASE)
-
-
-def test_legacy_files_removed():
-    for path in LEGACY_FILES:
-        assert not (ROOT / path).exists(), path
 
 
 def test_no_legacy_instructions():
