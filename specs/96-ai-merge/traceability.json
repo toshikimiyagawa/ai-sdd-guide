@@ -1,0 +1,49 @@
+{
+  "issue": 96,
+  "issue_url": "https://github.com/toshikimiyagawa/ai-sdd-guide/issues/96",
+  "feature": "96-ai-merge",
+  "entries": [
+    {
+      "issue_ac": "96-AC1",
+      "spec_ac": "SAC-1",
+      "task": "T2",
+      "test": "diff",
+      "status": "in-scope"
+    },
+    {
+      "issue_ac": "96-AC2",
+      "spec_ac": "SAC-2",
+      "task": "T1",
+      "test": "diff",
+      "status": "in-scope"
+    },
+    {
+      "issue_ac": "96-AC3",
+      "spec_ac": "SAC-3",
+      "task": "T1",
+      "test": "diff",
+      "status": "in-scope"
+    },
+    {
+      "issue_ac": "96-AC4",
+      "spec_ac": "SAC-4",
+      "task": "T1",
+      "test": "diff",
+      "status": "in-scope"
+    },
+    {
+      "issue_ac": "96-AC5",
+      "spec_ac": "SAC-5",
+      "task": "T3",
+      "test": "diff",
+      "status": "in-scope"
+    },
+    {
+      "issue_ac": "96-AC6",
+      "spec_ac": "SAC-6",
+      "task": "T4",
+      "test": "diff",
+      "status": "in-scope"
+    }
+  ]
+}
