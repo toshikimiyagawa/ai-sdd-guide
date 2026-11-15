@@ -45,7 +45,7 @@
           },
           "test": {
             "type": ["string", "null"],
-            "description": "テスト参照（<ファイル>::<テスト名> 形式）"
+            "description": "テスト参照（<ファイル>::<テスト名> 形式）。差分で確かめる受入基準は \"diff\""
           },
           "status": {
             "type": "string",
@@ -74,7 +74,7 @@
           "properties": {
             "spec_ac": {"type": "string"},
             "task": {"type": "string", "pattern": "^T[0-9]+$"},
-            "test": {"type": "string", "pattern": "^.+::.+$"}
+            "test": {"type": "string", "pattern": "^(.+::.+|diff)$"}
           }
         },
         "else": {

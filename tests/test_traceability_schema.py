@@ -317,6 +317,34 @@ def test_in_scope_invalid_test_format_fails(schema):
         validate(instance, schema)
 
 
+def test_in_scope_test_accepts_diff(schema):
+    instance = {
+        **VALID_IN_SCOPE,
+        "entries": [
+            {
+                **VALID_IN_SCOPE["entries"][0],
+                "test": "diff",
+            }
+        ],
+    }
+    validate(instance, schema)
+
+
+@pytest.mark.parametrize("value", ["diff2", "tests/test_x.py", ""])
+def test_in_scope_test_rejects_other_strings(schema, value):
+    instance = {
+        **VALID_IN_SCOPE,
+        "entries": [
+            {
+                **VALID_IN_SCOPE["entries"][0],
+                "test": value,
+            }
+        ],
+    }
+    with pytest.raises(jsonschema.ValidationError):
+        validate(instance, schema)
+
+
 # --- structural / artifact existence tests ---
 
 def test_schema_file_exists():
