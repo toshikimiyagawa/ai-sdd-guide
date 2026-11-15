@@ -61,9 +61,9 @@ Where no independent agent can be started, escalate spec review and verify to th
 **Checks**:
 - Every AC in the Issue body (Tier 2: `issue-snapshot.json`) maps to a spec AC and is not dropped or weakened.
 - The answers to the initial question are reflected.
-- Every spec AC is a checkable statement that maps to a test.
+- Every spec AC is a checkable statement, and its verification (test or diff) follows `rules/core.md`. No test that only re-checks written content is planned.
 - The scope does not exceed the Issue.
-- Tier 2: `plan.md`, `tasks.md` and `traceability.json` do not contradict the spec, and every AC has a task and a test.
+- Tier 2: `plan.md`, `tasks.md` and `traceability.json` do not contradict the spec, and every AC has a task and a verification (test or diff).
 
 **Verdicts**:
 

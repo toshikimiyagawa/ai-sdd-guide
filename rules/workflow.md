@@ -2,7 +2,7 @@
 
 ## Step 0 — classify Tier (always first)
 - Tier 0 — trivial (typo, comment, docs-only, formatting): implement directly. No artifacts.
-- Tier 1 — small (localized bugfix, small change): lightweight spec (intent + acceptance criteria) + tests. Skip plan/tasks.
+- Tier 1 — small (localized bugfix, small change): lightweight spec (intent + acceptance criteria) + tests for behavior changes. Skip plan/tasks.
 - Tier 2 — medium/large (new feature, multi-file, design change, public API): full flow below.
 - When unsure, pick the higher Tier.
 - Propose the Tier, with reasons, in the initial question (`## Human touchpoints` in `orchestration/rules/orchestration.md`); the human decides. After the answer, run the flow autonomously to the PR (`## Autonomous flow`). Never merge.
@@ -16,7 +16,7 @@ Capture each skill's output into the portable `specs/<feature>/` artifacts.
 1. Brainstorm — skill `brainstorming`, without human dialogue, from the Issue and the answer to the initial question. Explore alternatives. Output: a design.
 2. Spec — write `specs/<feature>/spec.md` from the design. Acceptance criteria as checkable statements. Record each decision you made without asking the human; it goes into the PR decision log.
    - If `.sdd/catalog.json` exists: register new catalog entries as `planned` in `docs/design/` (see `catalog/rules/catalog.md`). Update to `confirmed` in the verify phase.
-3. Plan & Tasks — skill `writing-plans` (bite-sized ordered steps). Capture into `plan.md` (approach, affected files, tradeoffs, alternatives) and `tasks.md` (concrete steps + the test proving each acceptance criterion). (Tier 2)
+3. Plan & Tasks — skill `writing-plans` (bite-sized ordered steps). Capture into `plan.md` (approach, affected files, tradeoffs, alternatives) and `tasks.md` (concrete steps + how each acceptance criterion is verified (test or diff; `rules/core.md`)). (Tier 2)
 3b. Traceability — Before freezing, complete `specs/<feature>/traceability.json`
    (schema: `orchestration/schema/traceability.schema.json`). Verify the following
    conditions (using `sdd-validate.sh` (see #46) when available, otherwise check
@@ -31,7 +31,7 @@ For exploration/parallelism use skills `dispatching-parallel-agents` / `subagent
 
 ## Implementation phase (any agent)
 - Read `specs/<feature>/`. Implement exactly the frozen tasks — no more, no less.
-- Map every acceptance criterion to a passing test.
+- Map every acceptance criterion that changes behavior to a passing test. Write no test for criteria verified by the diff (`rules/core.md`).
 - When Claude implements: use skills `executing-plans` + `test-driven-development` (RED-GREEN-REFACTOR) + `systematic-debugging`. Other agents follow `tasks.md` directly.
 - If the spec is wrong, ambiguous, or insufficient: stop and report to the orchestrating agent, which resolves it through spec review or escalates (`## Escalation conditions`). Do not redesign.
 - When implementation is complete: check every box in `tasks.md` (Tier 2); the phase becomes `verify` automatically. Commit, then run `vendor/ai-sdd-guide/orchestration/tools/sdd-board.sh sync` and continue to verify (see `orchestration/rules/orchestration.md`).
@@ -44,7 +44,7 @@ For exploration/parallelism use skills `dispatching-parallel-agents` / `subagent
   3. The branch name (`t<Tier>/<Issue番号>-<名前>`), the `specs/` directory name and the Issue number in `issue-snapshot.json` all agree.
   4. `freeze.json` is valid (`sdd_state.py phase` does not error) and traceability.json is schema-valid.
   5. All task checkboxes in tasks.md are complete (no unchecked items).
-  6. Each AC maps to a runnable test, not a manual/visual check.
+  6. Each AC verified by a test maps to a runnable test, not a manual/visual check. Each AC verified by the diff is confirmed by citing the diff lines. Flag any test in the diff that only re-checks written content.
 - When sdd-reviewer or any code review returns feedback: skill `receiving-code-review`. Evaluate each item against the frozen spec before acting. If feedback conflicts with the frozen spec, change the spec through spec review, or escalate when `## Escalation conditions` 4 applies — do not silently redesign. Scope-expanding suggestions become a new spec, not a quiet addition.
 - Push only just before creating the PR (not at each phase boundary). The board moves to `done` when the PR is merged.
 - Create the PR with the `## AI の判断` decision log (template: `templates/pr-body.md`; see `## PR decision log`). If CI is configured, wait for completion and confirm all checks pass and the PR is mergeable before declaring completion. Never declare completion without verifying CI results. Report the result to the human, who reviews and merges; never merge.
