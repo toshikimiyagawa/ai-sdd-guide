@@ -1,0 +1,33 @@
+{
+  "issue": 95,
+  "url": "https://github.com/toshikimiyagawa/ai-sdd-guide/issues/95",
+  "fetched_at": "2026-11-15T12:44:27Z",
+  "raw_body": "## 背景\n\n`rules/core.md` は「受入基準はすべてテストに対応させる」と定めている。そのため、文書・設定・データに特定の語句や値を書いたという受入基準まで、テストにしている（例: `tests/test_ai_autonomy.py` の `assert \"never merge\" in content`）。\n\nこの種類のテストは、書いた内容をもう一度確かめるだけで守るものが無い。変えたのなら理由があり、あとで正しく変えるたびに落ちて直す手間だけが増える。利用側（plansys-data #1722・#1723）でも同じ問題が出て、規約で禁じてテストを消した。guide の既定として取り込む。\n\n## 目指す形\n\n- **作らないテスト**: 文書・設定・データ・テンプレートに特定の行・値・語句・見出しがある（ない）こと（並び・件数を含む）、固定のコミットから変わったのがその行だけであること、スクリプトのソースに特定の式・語句が書いてあること\n- **作るテスト**: コードの動き（入力を与えて出力・終了コード・作ったファイルを見る）、スキーマの検証、リポジトリ全体にかかる規約の機械検査、2 つの成果物の整合\n- **データ・設定・文言を書いたという受入基準は、テストにせず差分で確かめる。** spec の受入基準に確かめ方を書き、レビュアーは差分の該当行を挙げて確かめる\n\n## 受入条件\n\n- [ ] AC1: rules（`rules/core.md`・`rules/workflow.md`・`orchestration/rules/orchestration.md`）が上の「作らないテスト」「作るテスト」「差分で確かめる」を定めている\n- [ ] AC2: `spec-reviewer` と `sdd-reviewer`（Claude 用の定義と他エージェント用のプロンプト）が、差分で確かめる受入基準の扱いと、書いた内容を確かめるだけのテストを指摘することを含む\n- [ ] AC3: `traceability.json` のスキーマが、テストではなく差分で確かめる受入基準を表せる\n- [ ] AC4: テンプレート（spec・tasks・handoff・AGENTS の例・hook のメッセージ）と docs（`docs/`・README）が新しい規約と矛盾しない\n- [ ] AC5: guide 自身の `tests/` から、書いた内容を確かめるだけのテストを関数単位で消す（関数が残らないファイルはファイルごと消す）。動きを確かめるテストは残し、全体が通る\n- [ ] AC6: `docs/migration.md` に、既存の consumer 向けの変更点が書かれている\n",
+  "body_hash": "2781c15f8610acae279dd90e37e9bdfd3095a64661f7979cfdc5bf8a55c9c886",
+  "stable_acs": [
+    {
+      "id": "95-AC1",
+      "text": "AC1: rules（`rules/core.md`・`rules/workflow.md`・`orchestration/rules/orchestration.md`）が上の「作らないテスト」「作るテスト」「差分で確かめる」を定めている"
+    },
+    {
+      "id": "95-AC2",
+      "text": "AC2: `spec-reviewer` と `sdd-reviewer`（Claude 用の定義と他エージェント用のプロンプト）が、差分で確かめる受入基準の扱いと、書いた内容を確かめるだけのテストを指摘することを含む"
+    },
+    {
+      "id": "95-AC3",
+      "text": "AC3: `traceability.json` のスキーマが、テストではなく差分で確かめる受入基準を表せる"
+    },
+    {
+      "id": "95-AC4",
+      "text": "AC4: テンプレート（spec・tasks・handoff・AGENTS の例・hook のメッセージ）と docs（`docs/`・README）が新しい規約と矛盾しない"
+    },
+    {
+      "id": "95-AC5",
+      "text": "AC5: guide 自身の `tests/` から、書いた内容を確かめるだけのテストを関数単位で消す（関数が残らないファイルはファイルごと消す）。動きを確かめるテストは残し、全体が通る"
+    },
+    {
+      "id": "95-AC6",
+      "text": "AC6: `docs/migration.md` に、既存の consumer 向けの変更点が書かれている"
+    }
+  ]
+}
