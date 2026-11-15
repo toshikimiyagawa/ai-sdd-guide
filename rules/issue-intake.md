@@ -33,7 +33,7 @@ Bitbucket is out of scope (its Issues are being sunset).
 - Link the PR back to the issue so merging closes it: `closes #N` (GitHub / GitLab /
   Bitbucket) or `AB#N` (Azure DevOps).
 - Carry the matching `sdd:tier-{0,1,2}` label onto the PR (`rules/conventions.md`).
-- The human reviews and merges the PR; never merge.
+- Merge the PR once `## Merge conditions` hold, then clean up and report (`orchestration/rules/orchestration.md`).
 
 ## Tier 2 freeze gate (check before running `sdd-freeze.sh`)
 
