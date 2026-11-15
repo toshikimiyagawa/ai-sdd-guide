@@ -21,7 +21,7 @@
 
 ### `rules/core.md`（`## Always`）
 
-次の 2 行を置き換える。
+次の 1 行（2 文）を置き換える。
 
 - `Every acceptance criterion must map to a test. Tests are mandatory for Tier 1+.`
 
@@ -29,10 +29,13 @@
 
 - Every acceptance criterion names how it is verified: a passing test, or the diff. Changes to behavior (code, scripts, hooks, schemas) need tests for Tier 1+.
 - Verify by the diff, not by a test, any criterion that only states that docs, rules, config, data, templates or wording were written, changed or removed. The reviewer cites the diff lines.
+- `## The contract for other agents` の `tasks.md` の行: `+ the tests that prove each criterion (Tier 2)` → `+ how each criterion is verified (test or diff) (Tier 2)`。
 - Never write a test that only re-checks written content: that a doc, rule, config, data file, template or workflow contains (or lacks) a given line, value, phrase, heading or key (order and counts included); that only given lines changed since a fixed commit; or that source code contains a given expression. It guards nothing — the next intended change just breaks it.
 - Write tests for behavior: run code, scripts, hooks or CLIs with inputs and check output, exit codes and files; validate data against schemas; mechanical checks that apply to every file of a kind; consistency between artifacts that must agree.
 
 ### `rules/workflow.md`
+
+- Step 0 の Tier 1 の行: `lightweight spec (intent + acceptance criteria) + tests` → `+ tests for behavior changes`。
 
 - Design phases 3（Plan & Tasks）: `tasks.md` は「the test proving each acceptance criterion」→「how each acceptance criterion is verified (test or diff; `rules/core.md`)」。
 - Implementation phase: `Map every acceptance criterion to a passing test.` → 動きを変える受入基準は通るテストに対応させ、差分で確かめる受入基準にはテストを書かない（`rules/core.md`）。
@@ -62,6 +65,7 @@
 - `integration/AGENTS.md.example`: `Every acceptance criterion must map to a passing test.` → 同じ趣旨（`vendor/ai-sdd-guide/rules/core.md` を参照）。
 - `integration/hooks/codex-skill-reminder.sh` の implement のメッセージ: `every acceptance criterion must map to a passing test` → `verify each acceptance criterion as the spec says (test for behavior, diff for written content); never write tests that only re-check written content`。
 - `docs/01-workflow.md`: tasks の説明・実装の「受入条件は必ずテストに対応させる」・検証の節を合わせる。`docs/03-faq.md` に Q を 1 つ足す（なぜ書いた内容を確かめるテストを作らないか、差分でどう確かめるか）。`docs/02-roles.md` の sdd-reviewer の行（「読み取り＋テスト実行」）は変えなくてよいが、受入条件をテストに限る記述があれば合わせる。`README.md` の Tier 1 の行「軽量spec＋テスト」は「軽量spec＋テスト（動きを変えるとき）」にする。
+- `docs/traceability.md`: 対応の説明（`spec AC → task → test`）と in-scope の `test` の説明（非 null）を、`test` は `<ファイル>::<テスト名>` か、差分で確かめる受入基準なら `"diff"`、に合わせる。
 - `docs/migration.md`: 末尾に spec D2 の節を足す（SAC-6 の 5 項目）。
 
 ### テストの削除と追加
