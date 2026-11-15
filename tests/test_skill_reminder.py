@@ -101,3 +101,12 @@ def test_reminder_unclassified_is_silent(tmp_path):
     repo = _repo(tmp_path, "feature/foo")
     assert _run(CLAUDE, repo) == ""
     assert _run(CODEX, repo) == ""
+
+
+def test_spec_phase_reminder_mentions_spec_reviewer(tmp_path):
+    repo = _repo(tmp_path, "t2/1-feature")
+    _spec(repo, "1-feature", ["spec.md"])
+    for hook in [CLAUDE, CODEX]:
+        out = _run(hook, repo)
+        assert "spec-reviewer" in out, hook
+        assert "human approval" not in out.lower(), hook

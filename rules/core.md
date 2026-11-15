@@ -9,7 +9,10 @@ Canonical, always-loaded rules. Terse + imperative. Rationale lives in `docs/` (
 ## Always
 - Classify every task into a Tier before touching code. See `workflow.md`.
 - Tier 1/2: no source edits until the spec is frozen (`specs/<feature>/freeze.json`; Tier 2 also needs `plan.md` and `tasks.md`).
-- Every acceptance criterion must map to a test. Tests are mandatory for Tier 1+.
+- Every acceptance criterion names how it is verified: a passing test, or the diff. Changes to behavior (code, scripts, hooks, schemas) need tests for Tier 1+.
+- Verify by the diff, not by a test, any criterion that only states that docs, rules, config, data, templates or wording were written, changed or removed. The reviewer cites the diff lines.
+- Never write a test that only re-checks written content: that a doc, rule, config, data file, template or workflow contains (or lacks) a given line, value, phrase, heading or key (order and counts included); that only given lines changed since a fixed commit; or that source code contains a given expression. It guards nothing — the next intended change just breaks it.
+- Write tests for behavior: run code, scripts, hooks or CLIs with inputs and check output, exit codes and files; validate data against schemas; mechanical checks that apply to every file of a kind; consistency between artifacts that must agree.
 - Every piece of work (Tier 0 included) has an Issue. Name the branch `t<Tier>/<Issue番号>-<名前>`; the Tier, feature (`<Issue番号>-<名前>`) and phase are derived from the branch name and the files under `specs/<feature>/` — there is no state file to maintain. Hooks and CI use the same derivation.
 - Human touchpoints are limited to the initial question, escalation, and PR review/merge; run every other step autonomously (`orchestration/rules/orchestration.md`). Never merge.
 - When stuck (spec wrong or insufficient, blocked), resolve it through spec review or escalate only under `## Escalation conditions` (`orchestration/rules/orchestration.md`). Never silently redesign during implementation.
@@ -32,4 +35,4 @@ Canonical, always-loaded rules. Terse + imperative. Rationale lives in `docs/` (
 enough to implement with zero design-conversation context.
 - `spec.md`  — intent + acceptance criteria
 - `plan.md`  — approach + affected files + tradeoffs (Tier 2)
-- `tasks.md` — ordered, concrete, tool-agnostic steps + the tests that prove each criterion (Tier 2)
+- `tasks.md` — ordered, concrete, tool-agnostic steps + how each criterion is verified (test or diff) (Tier 2)

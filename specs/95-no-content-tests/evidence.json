@@ -1,0 +1,24 @@
+{
+  "feature": "95-no-content-tests",
+  "commit_sha": "e57c62accc9e87c8ce3f23750eb040c25e6ecb50",
+  "entries": [
+    {
+      "command_type": "test",
+      "command": "uv run --no-project --with pytest --with jsonschema python -m pytest tests -q",
+      "result": "269 passed",
+      "test_count": 269
+    },
+    {
+      "command_type": "other",
+      "command": "python3 integration/ci/sdd_state.py phase",
+      "result": "verify (freeze.json valid)",
+      "test_count": null
+    },
+    {
+      "command_type": "other",
+      "command": "sdd-reviewer (Claude Code subagent)",
+      "result": "PASS: SAC-1..6 met (SAC-3 by tests, others by cited diff lines); delete/keep list matches function by function; RED check of SAC-3 tests on old schema fails as expected; 3 minor non-blocking observations not adopted",
+      "test_count": null
+    }
+  ]
+}

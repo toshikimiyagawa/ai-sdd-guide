@@ -151,6 +151,22 @@ def test_check_traceability_internal_missing_test_file(tmp_path):
     assert any("test_nonexistent.py" in e for e in errors)
 
 
+def test_traceability_diff_entry_passes(tmp_path):
+    (tmp_path / "tests").mkdir()
+    (tmp_path / "tests" / "test_foo.py").write_text("def test_a(): pass")
+    _make_traceability_fixture(tmp_path, [
+        {"issue_ac": "99-AC1", "spec_ac": "SAC-1",
+         "task": "T1", "test": "tests/test_foo.py::test_a", "status": "in-scope"},
+        {"issue_ac": "99-AC2", "spec_ac": "SAC-2",
+         "task": "T1", "test": "diff", "status": "in-scope"},
+    ])
+    (tmp_path / "specs" / "foo" / "spec.md").write_text(
+        "# Spec\n## 受入条件\n- [ ] SAC-1: criterion one\n- [ ] SAC-2: criterion two\n"
+    )
+    assert _v.check_schema_traceability(tmp_path, "foo") == []
+    assert _v.check_traceability_internal(tmp_path, "foo") == []
+
+
 def test_check_traceability_internal_missing_task(tmp_path):
     (tmp_path / "tests").mkdir()
     (tmp_path / "tests" / "test_foo.py").write_text("def test_a(): pass")

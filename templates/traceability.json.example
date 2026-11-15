@@ -14,7 +14,7 @@
       "issue_ac": "50-AC2",
       "spec_ac": "SAC-2",
       "task": "T2",
-      "test": "tests/test_yourfeature.py::test_acceptance_criterion_2",
+      "test": "diff",
       "status": "in-scope"
     },
     {

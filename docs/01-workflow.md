@@ -13,7 +13,7 @@
 | Tier | 対象 | 作るもの |
 |---|---|---|
 | 0 | typo・コメント・docのみ・整形 | 何も作らず実施 |
-| 1 | 局所的なbugfix・小さな変更 | 軽量spec（意図＋受入条件）＋テスト。plan/tasks は省略 |
+| 1 | 局所的なbugfix・小さな変更 | 軽量spec（意図＋受入条件）＋テスト（動きを変えるとき）。plan/tasks は省略 |
 | 2 | 新機能・複数ファイル・設計変更・公開API | spec → plan → tasks → 実装 → 検証 をフル |
 
 すべての作業に Issue を作る（Tier 0 も）。判定した Tier は**ブランチ名** `t<Tier>/<Issue番号>-<名前>`
@@ -27,19 +27,19 @@
 1. **brainstorm** — Issue と最初の回答をもとに、人間との対話なしで設計する（superpowers）。
 2. **spec** — `specs/<feature>/spec.md`。受入条件を「チェック可能な文」で書く。AI が決めた不明点は PR の「AI の判断」に載せる。
 3. **plan** — `plan.md`。アプローチ・影響ファイル・トレードオフ・代替案。(Tier 2)
-4. **tasks** — `tasks.md`。順序付きの具体タスク＋各受入条件に対応するテスト。(Tier 2)
-5. **spec レビュー** — spec を書いていない独立したエージェント `spec-reviewer`（Claude 以外は `integration/prompts/spec-reviewer-prompt.md`）が、Issue の AC・最初の回答・テストへの対応・スコープを照合する。Tier 1 は `spec.md`、Tier 2 は `spec.md`・`plan.md`・`tasks.md`・`traceability.json` を見る。判定は `APPROVE`（凍結してよい）/ `CHANGES`（直してもう一度）/ `ESCALATE`（人間に問い合わせる）。3 回で `APPROVE` にならなければ人間に問い合わせる。
+4. **tasks** — `tasks.md`。順序付きの具体タスク＋各受入条件の確かめ方（テスト / 差分）。(Tier 2)
+5. **spec レビュー** — spec を書いていない独立したエージェント `spec-reviewer`（Claude 以外は `integration/prompts/spec-reviewer-prompt.md`）が、Issue の AC・最初の回答・受入条件の確かめ方（テスト / 差分）・スコープを照合する。Tier 1 は `spec.md`、Tier 2 は `spec.md`・`plan.md`・`tasks.md`・`traceability.json` を見る。判定は `APPROVE`（凍結してよい）/ `CHANGES`（直してもう一度）/ `ESCALATE`（人間に問い合わせる）。3 回で `APPROVE` にならなければ人間に問い合わせる。
 6. **freeze** — `APPROVE` の後 `orchestration/tools/sdd-freeze.sh` で `specs/<feature>/freeze.json` を作る。ここが他agentへの引き渡しゲート。判定と回数は凍結のコミットのメッセージに書く（例: `Spec review: APPROVE (2 rounds)`）。凍結のやり直しも spec レビューの `APPROVE` を得て作り直す（AC を削る・弱める変更なら人間に問い合わせる）。
    凍結の後の実装は、凍結した成果物と `handoff.md` だけを渡した**新しいエージェントのコンテキスト**で行う。凍結したエージェントのコンテキストで実装しない。
 
 ### 実装（任意のagent）
 - `specs/<feature>/` を読み、凍結された tasks を**そのまま**実装する（過不足なく）。
-- 受入条件は必ずテストに対応させる。
+- 動きを変える受入条件は通るテストに対応させる。データ・設定・文書・文言を書いたという受入条件は差分で確かめ、テストを書かない（書いた内容を確かめるだけのテストは作らない。`rules/core.md`）。
 - spec が間違っていたら**止めて、依頼した（オーケストレーションする）エージェントに報告**する。勝手に再設計しない。依頼した側が spec レビューで直すか、人間に問い合わせる。
 - 実装が完了したら `tasks.md` のチェック欄をすべて `[x]` にする（Tier 2。フェーズは自動で verify になる）。commit → `orchestration/tools/sdd-board.sh sync` → 検証へ進む。
 
 ### 検証（superpowers必須）
-- テスト実行。`sdd-reviewer` subagent で凍結specへの適合を独立監査。指摘は `receiving-code-review` の規律で扱う。
+- テスト実行。`sdd-reviewer` subagent で凍結specへの適合を独立監査（テストで確かめる受入条件はテストが通ること、差分で確かめる受入条件は満たしている差分の行を挙げて確かめる）。指摘は `receiving-code-review` の規律で扱う。
 - push は PR を作る直前だけ行う。PR がマージされるとボードは done になる。
 - PR を作成し、CI が全てパスしてマージ可能な状態であることを確認してから人間に報告する。マージは人間が行う。
 - PR 本文には「AI の判断」の節を設ける（雛形 `templates/pr-body.md`）: spec レビューの判定と回数、仕様の不明点について AI が決めたこととその理由、指摘の採否とその理由、スコープ外にしたものとそのフォローアップの Issue。

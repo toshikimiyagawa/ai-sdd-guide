@@ -2,6 +2,7 @@
 
 Tier 2 の spec では、元 Issue の各 AC が spec AC → task → test へ
 どう対応するかを `specs/<feature>/traceability.json` に記録する。
+差分で確かめる受入基準（データ・設定・文書・文言を書いたというもの）は、test の代わりに `"diff"` と書く。
 validator (#46) がこのファイルを機械検査する。
 
 ## 命名規則
@@ -48,7 +49,7 @@ spec.md の受入条件に付ける ID。spec 固有の連番。
 
 | status | 必須フィールド |
 |---|---|
-| `in-scope` | `spec_ac`, `task`, `test`（すべて非 null） |
+| `in-scope` | `spec_ac`, `task`, `test`（すべて非 null。`test` は `<ファイル>::<テスト名>` か、差分で確かめる受入基準なら `"diff"`） |
 | `out-of-scope` | `reason`, `followup_issue` |
 | `deferred` | `reason`, `followup_issue` |
 

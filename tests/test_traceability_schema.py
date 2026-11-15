@@ -317,10 +317,35 @@ def test_in_scope_invalid_test_format_fails(schema):
         validate(instance, schema)
 
 
-# --- structural / artifact existence tests ---
+def test_in_scope_test_accepts_diff(schema):
+    instance = {
+        **VALID_IN_SCOPE,
+        "entries": [
+            {
+                **VALID_IN_SCOPE["entries"][0],
+                "test": "diff",
+            }
+        ],
+    }
+    validate(instance, schema)
 
-def test_schema_file_exists():
-    assert SCHEMA_PATH.exists(), f"Schema not found: {SCHEMA_PATH}"
+
+@pytest.mark.parametrize("value", ["diff2", "tests/test_x.py", ""])
+def test_in_scope_test_rejects_other_strings(schema, value):
+    instance = {
+        **VALID_IN_SCOPE,
+        "entries": [
+            {
+                **VALID_IN_SCOPE["entries"][0],
+                "test": value,
+            }
+        ],
+    }
+    with pytest.raises(jsonschema.ValidationError):
+        validate(instance, schema)
+
+
+# --- structural / artifact existence tests ---
 
 
 def test_example_is_schema_valid(schema):
@@ -328,21 +353,3 @@ def test_example_is_schema_valid(schema):
     assert example_path.exists(), f"Example not found: {example_path}"
     example = json.loads(example_path.read_text())
     validate(example, schema)
-
-
-def test_docs_naming_convention():
-    docs_path = ROOT / "docs" / "traceability.md"
-    assert docs_path.exists(), f"Docs not found: {docs_path}"
-    content = docs_path.read_text()
-    assert "<issue番号>-AC" in content, "docs must document Issue AC ID format: <issue番号>-AC<連番>"
-    assert "SAC-" in content, "docs must document spec AC ID format: SAC-<連番>"
-
-
-def test_spec_template_uses_sac_format():
-    import re
-    spec_path = ROOT / "templates" / "spec.md"
-    assert spec_path.exists(), f"spec template not found: {spec_path}"
-    content = spec_path.read_text()
-    assert "SAC-" in content, "templates/spec.md must use SAC-N format"
-    old_format = re.search(r"-\s*\[ \]\s*AC[0-9]+:", content)
-    assert old_format is None, f"templates/spec.md must not use AC<N>: format, found: {old_format}"

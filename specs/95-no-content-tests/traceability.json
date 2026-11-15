@@ -1,0 +1,49 @@
+{
+  "issue": 95,
+  "issue_url": "https://github.com/toshikimiyagawa/ai-sdd-guide/issues/95",
+  "feature": "95-no-content-tests",
+  "entries": [
+    {
+      "issue_ac": "95-AC1",
+      "spec_ac": "SAC-1",
+      "task": "T2",
+      "test": "diff",
+      "status": "in-scope"
+    },
+    {
+      "issue_ac": "95-AC2",
+      "spec_ac": "SAC-2",
+      "task": "T3",
+      "test": "diff",
+      "status": "in-scope"
+    },
+    {
+      "issue_ac": "95-AC3",
+      "spec_ac": "SAC-3",
+      "task": "T1",
+      "test": "tests/test_traceability_schema.py::test_in_scope_test_accepts_diff",
+      "status": "in-scope"
+    },
+    {
+      "issue_ac": "95-AC4",
+      "spec_ac": "SAC-4",
+      "task": "T4",
+      "test": "diff",
+      "status": "in-scope"
+    },
+    {
+      "issue_ac": "95-AC5",
+      "spec_ac": "SAC-5",
+      "task": "T6",
+      "test": "diff",
+      "status": "in-scope"
+    },
+    {
+      "issue_ac": "95-AC6",
+      "spec_ac": "SAC-6",
+      "task": "T5",
+      "test": "diff",
+      "status": "in-scope"
+    }
+  ]
+}
