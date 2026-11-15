@@ -44,7 +44,7 @@
 
 - **D1 `traceability.json` の表し方**: 新しい欄を足さず、`test` に `"diff"` を許す。in-scope の `test` は `<ファイル>::<テスト名>` か `"diff"` のどちらか。`sdd-validate.py` のテストファイルの存在の検査は `::` を含むときだけ動くので、変えなくてよい。欄を足すとスキーマ・validator・既存の `traceability.json` のすべてに手が入るため
 - **D2 版の名前**: `docs/migration.md` の節は `## v4.2: 書いた内容を確かめるだけのテストを作らない（#95）`
-- **D3 過去の `specs/`**: 消すテストを指している過去の `specs/*/traceability.json`・`tasks.md` は書き換えない（凍結した成果物のため）。`sdd-validate.py` は今のブランチの feature だけを見るので、過去の参照が切れても CI は落ちない
+- **D3 過去の `specs/`**: 消すテストを指している過去の `specs/*/traceability.json`・`tasks.md` は書き換えない（凍結した成果物のため）。`sdd-validate.py` は今のブランチの feature だけを見るので、過去の参照が切れても CI は落ちない。過去の feature を名指しで検査する `tests/test_self_migration.py` は消す
 - **D4 混ざったテスト**: 動きを確かめつつ書いた内容も確かめているテストは、関数を残し、書いた内容を確かめる assert だけを消す
 - **D5 この feature 自身**: この spec の受入基準のうち rules・文書・テンプレートを変えるものは差分で確かめる（`traceability.json` の `test` は `"diff"`）。凍結の時点では今のスキーマが `"diff"` を受け付けないが、T1 でスキーマを変えたあとの `sdd-validate.py` で通ればよい
 
@@ -66,6 +66,7 @@
 - `tests/test_board_docs.py`（2 本すべて）
 - `tests/test_docs_github_app.py`（4 本すべて）
 - `tests/test_rules_freeze_verify.py`（18 本すべて。`test_issue_48_traceability_references_defined_artifacts` は過去の 1 feature だけを突き合わせるもので、同じ検査は `sdd-validate.py` の動きとして `tests/test_sdd_validate.py` が確かめている）
+- `tests/test_self_migration.py`（6 本すべて。`test_legacy_state_files_absent`・`test_board_json_present`・`test_board_json_has_app_id`・`test_board_workflow_present` は書いた内容の確認。`test_feature_freeze_valid`・`test_validator_passes_for_this_feature` は過去の feature `73-github-projects-board` を名指しで固定して確かめるもので、凍結したファイルのハッシュが変わっていないことの確認と、消すテストファイルを参照する過去の `traceability.json` の検査になり、D3 と両立しない。`sdd_state.py`・`sdd-validate.py` の動きは `tests/test_sdd_state.py`・`tests/test_sdd_validate.py`・`tests/test_negative_fixtures.py` が確かめている）
 - `tests/test_ai_autonomy.py`（下の 11 本を消し、残る `test_spec_phase_reminder_mentions_spec_reviewer` は`tests/test_skill_reminder.py` に移す（中身は変えない。ただし `from test_skill_reminder import ...` の行は移した先では不要なので消す）。移したあと、このファイルは消す）
   - 消す: `test_orchestration_defines_human_touchpoints_and_autonomous_flow`, `test_escalation_conditions_listed_and_referenced`, `test_rules_have_no_old_stop_phrases`, `test_handoff_is_written_after_spec_review_and_freeze`, `test_rules_require_spec_review_before_freeze`, `test_weakening_acs_still_needs_human_approval`, `test_spec_reviewer_files_define_verdicts_and_limit`, `test_pr_body_template_has_ai_decision_log`, `test_surrounding_docs_have_no_old_stop_phrases`, `test_docs_describe_human_touchpoints`, `test_migration_has_v4_section`
 
@@ -76,15 +77,13 @@
 - `tests/test_readme_install.py`: `test_install_steps_include_optional_board_setup`, `test_install_steps_explain_no_board_and_tier_label`
 - `tests/test_sdd_board_workflow.py`: `test_triggers`, `test_uses_project_token_secret`, `test_app_token_step`, `test_auth_mode_step`, `test_board_steps_use_app_or_pat_token`, `test_none_mode_warns_and_skips`, `test_label_step_uses_github_token`, `test_header_documents_auth_and_pat_scopes`, `test_pr_job_adds_tier_label`, `test_calls_board_subcommands`, `test_checkout_pr_head_with_submodules`, `test_forbidden_strings_absent`。モジュールの docstring の「(checked as text)」も合わせて直す
 - `tests/test_sdd_check_submodule.py`: `test_sdd_job_checkout_fetches_submodules`, `test_no_state_reset_gate`, `test_no_orchestration_job`, `test_validate_step_passes_pr_context`, `test_migration_guide_uses_submodule_validator_path`, `test_readme_states_fixed_submodule_path`, `test_sdd_job_checkout_uses_guide_token_secret`, `test_ci_docs_explain_guide_token_secret`, `test_sdd_job_checkout_does_not_persist_credentials`, `test_pull_request_trigger_includes_label_events`, `test_board_workflows_document_token_scope_and_trust`, `test_update_sh_checks_python3`, `test_update_sh_preserves_submodule_fix`, `test_update_sh_preserves_guide_token_fallback`（最後の 2 本は書いた内容の確認を除くと `update.sh` の終了コードしか残らず、`tests/test_update_sh.py` と重なるため関数ごと消す）
-- `tests/test_self_migration.py`: `test_legacy_state_files_absent`, `test_board_json_present`, `test_board_json_has_app_id`, `test_board_workflow_present`
 - `tests/test_traceability_schema.py`: `test_schema_file_exists`, `test_docs_naming_convention`, `test_spec_template_uses_sac_format`
 
-消した関数だけが使っていた補助関数・定数・import も消す（例: `test_migration_guide.py` の `SNAPSHOT_PREFIX`・`GUIDE_PATH`、`test_no_legacy_state.py` の `LEGACY_FILES`、`test_sdd_board_workflow.py` の `CLI`・`_on_block`・`_steps`・`_step`・`BOARD_STEPS`・`TOKEN_EXPR`、`test_sdd_check_submodule.py` の `MIGRATION`・`README`・`SUBMODULE_VALIDATOR`・`GUIDE_TOKEN`・`UPDATE_SH`・`_job_block`・`_assert_submodule_fix`・`_sdd_checkout_block`・使われなくなった `import`、`test_self_migration.py` の `import json`）。まだ使われているものは残す。
+消した関数だけが使っていた補助関数・定数・import も消す（例: `test_migration_guide.py` の `SNAPSHOT_PREFIX`・`GUIDE_PATH`、`test_no_legacy_state.py` の `LEGACY_FILES`、`test_sdd_board_workflow.py` の `CLI`・`_on_block`・`_steps`・`_step`・`BOARD_STEPS`・`TOKEN_EXPR`、`test_sdd_check_submodule.py` の `MIGRATION`・`README`・`SUBMODULE_VALIDATOR`・`GUIDE_TOKEN`・`UPDATE_SH`・`_job_block`・`_assert_submodule_fix`・`_sdd_checkout_block`・使われなくなった `import`）。まだ使われているものは残す。
 
 ### 残すもの（境界の判断）
 
 - `tests/test_no_legacy_state.py::test_no_legacy_instructions`・`tests/test_sdd_board_workflow.py::test_no_expression_interpolation_in_run_scripts`: ある種類のファイルすべてにかかる機械検査として残す
-- `tests/test_self_migration.py::test_feature_freeze_valid`・`::test_validator_passes_for_this_feature`: このリポジトリで `sdd_state.py`・`sdd-validate.sh` を実際に動かすため残す
 - `tests/test_sdd_board_workflow.py::test_repo_copy_matches_template`・`tests/test_readme_install.py::test_install_workflows_match_update_sh`・`tests/test_migration_guide.py` の `test_cli_examples_match_cli_options`・`test_submodule_paths_exist_in_guide`・`test_partial_migration_checklist_lists_existing_schemas`: 成果物どうしの整合として残す
 - `tests/test_sdd_app_secret.py::test_script_is_executable`: 実行権限は動きの前提として残す
 
