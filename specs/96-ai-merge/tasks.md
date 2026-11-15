@@ -10,12 +10,12 @@
 - [x] T4: `docs/migration.md` の末尾に spec D5 の節を足す（SAC-6 の 4 項目）。対応AC: SAC-6
 
 ## 確かめ方（受入条件との対応・必須）
-- [ ] SAC-1 → 差分: `rules/core.md`, `rules/workflow.md`, `rules/issue-intake.md`, `rules/conventions.md`, `orchestration/rules/orchestration.md`
-- [ ] SAC-2 → 差分: `orchestration/rules/orchestration.md`（`## Merge conditions`）と、そこを参照する rules
-- [ ] SAC-3 → 差分: `orchestration/rules/orchestration.md`（`## Cleanup and report`）
-- [ ] SAC-4 → 差分: `orchestration/rules/orchestration.md`（`## Escalation conditions` 5）
-- [ ] SAC-5 → 差分: T3 のファイル
-- [ ] SAC-6 → 差分: `docs/migration.md`
+- [x] SAC-1 → 差分: `rules/core.md`, `rules/workflow.md`, `rules/issue-intake.md`, `rules/conventions.md`, `orchestration/rules/orchestration.md`
+- [x] SAC-2 → 差分: `orchestration/rules/orchestration.md`（`## Merge conditions`）と、そこを参照する rules
+- [x] SAC-3 → 差分: `orchestration/rules/orchestration.md`（`## Cleanup and report`）
+- [x] SAC-4 → 差分: `orchestration/rules/orchestration.md`（`## Escalation conditions` 5）
+- [x] SAC-5 → 差分: T3 のファイル
+- [x] SAC-6 → 差分: `docs/migration.md`
 
 ## 完了の定義
 - 既存のテストが green（`uv run --no-project --with pytest --with jsonschema python -m pytest tests -q`）
