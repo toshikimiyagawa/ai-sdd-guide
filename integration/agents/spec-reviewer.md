@@ -26,9 +26,9 @@ If any input is missing, return `ESCALATE` naming the missing input.
 
 1. **Issue ACs preserved**: every AC in the Issue body (Tier 2: `issue-snapshot.json`) maps to a spec AC and is not dropped or weakened.
 2. **Initial answer reflected**: the answers to the initial question are reflected in the spec.
-3. **Checkable ACs**: every spec AC is a checkable statement that maps to a test.
+3. **Checkable ACs**: every spec AC is a checkable statement and names its verification (test or diff) per `rules/core.md`. If a test that only re-checks written content is planned, return `CHANGES`.
 4. **Scope**: the scope does not exceed the Issue.
-5. **Tier 2 consistency**: `plan.md`, `tasks.md` and `traceability.json` do not contradict the spec, and every AC has a task and a test.
+5. **Tier 2 consistency**: `plan.md`, `tasks.md` and `traceability.json` do not contradict the spec, and every AC has a task and a verification (test or diff).
 
 ## Verdicts
 
