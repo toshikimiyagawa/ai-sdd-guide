@@ -41,7 +41,13 @@
 
 - 「The human reviews and merges the PR; never merge.」→「Merge the PR once `## Merge conditions` hold, then clean up and report (`orchestration/rules/orchestration.md`).」
 
+### `rules/conventions.md`
+
+- 「Run `sdd-reviewer` before human review.」→「Run `sdd-reviewer` before merging the PR.」
+
 ### テンプレート・例
+
+- `orchestration/templates/handoff.md.example`: マージに触れる記述が無く、新しい流れと矛盾しないので変えない（実装の担当はマージしない。マージはオーケストレーションするエージェントが行う）。
 
 - `templates/pr-body.md`: 「人間が PR レビューで確かめられるように」→「人間がマージの後に確かめられるように」。
 - `integration/AGENTS.md.example` の `## Human touchpoints`: 「Humans take part only in the initial question (Tier + spec unknowns), escalation, and PR review/merge. Run every other step autonomously through to the PR; never merge.」→ 最初の質問と問い合わせだけ、マージと後片付けまで自律で進め、人間はマージの後に結果を確かめる（参照する節に Merge conditions・Cleanup and report を足す）。
@@ -49,6 +55,7 @@
 
 ### docs・README
 
+- `README.md` の `orchestration/rules/orchestration.md` を説明する表の行: 新しい節（マージの条件・後片付けと報告）を足す。
 - `README.md:38`: 人間の関与を「最初の質問」「問い合わせ」と「マージの後の結果の確認」にし、「PR の作成まで進める。マージは人間が行う。」→「PR のマージと後片付けまで進める。」
 - `docs/00-overview.md`: 「PR のレビューとマージ」「PR の作成まで」を同じ趣旨に。
 - `docs/01-workflow.md`: 「人間が関わる場面」の 3 を「結果の確認」に、冒頭の「PR の作成まで」→「PR のマージと後片付けまで」。検証の節の「マージは人間が行う。」→ マージの条件・満たせないときの扱い・後片付け・報告（正本を参照）。

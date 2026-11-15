@@ -75,11 +75,11 @@
 
 ## 受入条件
 
-- [ ] SAC-1: `rules/core.md`・`rules/workflow.md`・`rules/issue-intake.md`・`orchestration/rules/orchestration.md` で、上の「人間が関わる場面」と「自律で進める範囲」が既定の流れになっている。「Never merge」「never merge」「The human reviews and merges」の記述が無い。`## PR decision log` は、人間がマージの後に確かめるためのものになっている。確かめ方: 差分（元 Issue: 96-AC1）
+- [ ] SAC-1: `rules/core.md`・`rules/workflow.md`・`rules/issue-intake.md`・`rules/conventions.md`・`orchestration/rules/orchestration.md` で、上の「人間が関わる場面」と「自律で進める範囲」が既定の流れになっている。「Never merge」「never merge」「The human reviews and merges」「before human review」の記述が無い。`## PR decision log` は、人間がマージの後に確かめるためのものになっている。確かめ方: 差分（元 Issue: 96-AC1）
 - [ ] SAC-2: `orchestration/rules/orchestration.md` に「マージの条件」と満たせないときの扱いがあり、ほかの rules はそこを参照する。確かめ方: 差分（元 Issue: 96-AC2）
 - [ ] SAC-3: `orchestration/rules/orchestration.md` に「後片付け」の 4 手順と「結果の報告」がある。確かめ方: 差分（元 Issue: 96-AC3）
 - [ ] SAC-4: `orchestration/rules/orchestration.md` の `## Escalation conditions` の 5 の例外が、上の「問い合わせの条件 5 の例外」になっている。確かめ方: 差分（元 Issue: 96-AC4）
-- [ ] SAC-5: `templates/pr-body.md`・`integration/AGENTS.md.example`・`orchestration/integration/AGENTS-patch.md.example`・`README.md`・`docs/00-overview.md`〜`docs/04-issue-tracker.md` に「AI はマージしない」「人間がマージする」の記述が無く、新しい流れと矛盾しない。`docs/migration.md` の過去の版の節（v4 など）は当時の記録なので変えない。確かめ方: 差分（元 Issue: 96-AC5）
+- [ ] SAC-5: `templates/pr-body.md`・`orchestration/templates/handoff.md.example`・`integration/AGENTS.md.example`・`orchestration/integration/AGENTS-patch.md.example`・`README.md`・`docs/00-overview.md`〜`docs/04-issue-tracker.md` に「AI はマージしない」「人間がマージする」の記述が無く、新しい流れと矛盾しない。`docs/migration.md` の過去の版の節（v4 など）は当時の記録なので変えない。確かめ方: 差分（元 Issue: 96-AC5）
 - [ ] SAC-6: `docs/migration.md` に D5 の節があり、AI がマージと後片付けまで行うようになったこと、マージの条件、人間がマージしたいリポジトリはブランチ保護の必須レビューで止められること（D3）、`AGENTS.md`（または `CLAUDE.md`）の「never merge」を見直すことが書かれている。確かめ方: 差分（元 Issue: 96-AC6）
 
 ## スコープ外
