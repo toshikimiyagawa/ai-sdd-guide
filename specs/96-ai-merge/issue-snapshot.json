@@ -1,0 +1,33 @@
+{
+  "issue": 96,
+  "url": "https://github.com/toshikimiyagawa/ai-sdd-guide/issues/96",
+  "fetched_at": "2026-11-15T13:10:35Z",
+  "raw_body": "## 背景\n\n#89 で人間の関与を「最初の質問・問い合わせ・PR のレビューとマージ」の 3 つに絞った。しかし実際は、PR ができたあとも人間がマージ・ブランチや worktree の削除・main の更新をするために戻ってくる必要がある。\n\n最初の質問に答えたら、あとは PR のマージと後片付けまで AI に任せたい。どうしても判断が要るものだけ、途中で問い合わせる。\n\n## 目指す流れ（guide の既定にする）\n\n1. 最初の質問（人間）: 今と同じ\n2. 以降は AI 内で解決: spec → … → verify → PR 作成 → CI の確認 → **マージ → 後片付け（作業ブランチ・worktree の削除、手元の main の更新）**\n3. 問い合わせ（人間）: 条件に当たるときだけ。今と同じ\n4. 人間はマージのあとで、PR 本文の「AI の判断」と結果の報告を見る\n\n## 受入条件\n\n- [ ] AC1: rules（`rules/core.md`・`rules/workflow.md`・`rules/issue-intake.md`・`orchestration/rules/orchestration.md`）で、AI が PR をマージし後片付けまで行うことが既定の流れになっている。「AI はマージしない」の記述がない\n- [ ] AC2: マージしてよい条件（CI がすべて通る・sdd-reviewer の合格・マージできる状態）と、満たせないときの扱い（直せなければ問い合わせ。保護の迂回はしない）が定められている\n- [ ] AC3: 後片付けの手順（作業ブランチの削除、worktree の削除、手元の main の更新）と、人間への結果の報告が定められている\n- [ ] AC4: 問い合わせの条件 5（取り消せない操作）の例外に、PR のマージと作業ブランチの削除が含まれている\n- [ ] AC5: テンプレート（PR 本文・handoff・AGENTS の例）と docs（`docs/`・README）が新しい流れと矛盾しない\n- [ ] AC6: `docs/migration.md` に、既存の consumer 向けの変更点が書かれている\n",
+  "body_hash": "3ee3047473f8fe00a79e9883d125b84db14b7a208a6da90c980e1078b168ed9f",
+  "stable_acs": [
+    {
+      "id": "96-AC1",
+      "text": "AC1: rules（`rules/core.md`・`rules/workflow.md`・`rules/issue-intake.md`・`orchestration/rules/orchestration.md`）で、AI が PR をマージし後片付けまで行うことが既定の流れになっている。「AI はマージしない」の記述がない"
+    },
+    {
+      "id": "96-AC2",
+      "text": "AC2: マージしてよい条件（CI がすべて通る・sdd-reviewer の合格・マージできる状態）と、満たせないときの扱い（直せなければ問い合わせ。保護の迂回はしない）が定められている"
+    },
+    {
+      "id": "96-AC3",
+      "text": "AC3: 後片付けの手順（作業ブランチの削除、worktree の削除、手元の main の更新）と、人間への結果の報告が定められている"
+    },
+    {
+      "id": "96-AC4",
+      "text": "AC4: 問い合わせの条件 5（取り消せない操作）の例外に、PR のマージと作業ブランチの削除が含まれている"
+    },
+    {
+      "id": "96-AC5",
+      "text": "AC5: テンプレート（PR 本文・handoff・AGENTS の例）と docs（`docs/`・README）が新しい流れと矛盾しない"
+    },
+    {
+      "id": "96-AC6",
+      "text": "AC6: `docs/migration.md` に、既存の consumer 向けの変更点が書かれている"
+    }
+  ]
+}

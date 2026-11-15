@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "tier": 2,
+  "frozen_at": "2026-11-15T13:13:38Z",
+  "files": {
+    "spec.md": "sha256:03f803aab12beb4039074a481ac9e2cdd563476163e11f36e2b88c2aee36b603",
+    "plan.md": "sha256:d8efbc101c3577e2be9cb752993f232afc097aebdeadfc7b7e6db8cffd7bcae2",
+    "tasks.md": "sha256:616209f10c97cd2ae1c353b91a8a2013ec8eb0b452946e4585fea9709cddb1d1",
+    "traceability.json": "sha256:7ec805515357e73ab2a388a099015c951bb8a8994d72362a52634363c4f874ac"
+  }
+}

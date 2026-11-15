@@ -350,3 +350,21 @@ consumer repo では次を行う。
 4. **既存のテストを消すかは各リポジトリで決める。** 書いた内容を確かめるだけの既存のテストを消すことは求めない。消すなら、上の「作らないテスト」を基準にする。
 
 CI・validator・guard・`freeze.json` の形は変わらない。進行中の feature はそのまま続けてよい。
+
+---
+
+## v4.3: AI が PR のマージと後片付けまで行う（#96）
+
+最初の質問に答えたあと、AI が PR のマージと後片付けまで行う。人間の関与は「最初の質問」「問い合わせ（条件に当たるときだけ）」「マージの後の結果の確認」の 3 つになる。人間は AI の報告と PR 本文の「AI の判断」を見て、直したいことがあれば新しい Issue にする（正本: `orchestration/rules/orchestration.md` の Human touchpoints・Autonomous flow・Merge conditions・Cleanup and report）。
+
+- **マージの条件**: CI のチェックがすべて通っている（CI が無いリポジトリでは手元でテストが通っている）、`sdd-reviewer` が PASS を返している（Tier 0 は除く）、PR がマージできる状態（競合が無い、必須のチェックが通っている）。マージの方法は squash（許されていなければ許されている方法）。
+- **満たせないとき**: CI が落ちたら凍結した spec の範囲で直す。main と競合したら main を作業ブランチにマージして解く（force push はしない）。権限が足りなければ問い合わせる（`--admin` などで保護を迂回しない）。
+- **後片付け**: リモートと手元の作業ブランチ、worktree を消し、手元の main を最新にする。そのあと人間に報告する（その場にいなければ Issue にコメントする）。
+
+consumer repo では次を行う。
+
+1. **submodule を上げて `update.sh` を実行する。** `bash vendor/ai-sdd-guide/integration/update.sh`。
+2. **`AGENTS.md`（または `CLAUDE.md`）を見直す。** これらは `update.sh` で上書きされない。「never merge」「PR review/merge」などの記述を、`vendor/ai-sdd-guide/integration/AGENTS.md.example` に合わせて「マージと後片付けまで自律で進める」書き方に直す。
+3. **人間がマージしたいリポジトリは、ブランチ保護で必須レビューを設定する。** リポジトリごとの切り替えの設定は無い。必須レビューがあると AI はマージできず、権限が足りないとして人間に問い合わせる（問い合わせの条件 6）。
+
+CI・validator・guard・`freeze.json` の形は変わらない。進行中の feature はそのまま続けてよい。

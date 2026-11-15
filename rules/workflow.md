@@ -5,7 +5,7 @@
 - Tier 1 — small (localized bugfix, small change): lightweight spec (intent + acceptance criteria) + tests for behavior changes. Skip plan/tasks.
 - Tier 2 — medium/large (new feature, multi-file, design change, public API): full flow below.
 - When unsure, pick the higher Tier.
-- Propose the Tier, with reasons, in the initial question (`## Human touchpoints` in `orchestration/rules/orchestration.md`); the human decides. After the answer, run the flow autonomously to the PR (`## Autonomous flow`). Never merge.
+- Propose the Tier, with reasons, in the initial question (`## Human touchpoints` in `orchestration/rules/orchestration.md`); the human decides. After the answer, run the flow autonomously through merge and cleanup (`## Autonomous flow`).
 - Every piece of work has an Issue, Tier 0 included. The Tier is encoded in the branch name `t<Tier>/<Issue番号>-<名前>` (e.g. `t2/73-github-projects-board`); the PR label `sdd:tier-{0,1,2}` must match it.
 - State is derived, never recorded: Tier, feature (`<Issue番号>-<名前>`) and phase come from the branch name plus the files under `specs/<feature>/`. Phases, in order: `backlog`, `brainstorm`, `spec`, `plan`, `tasks`, `implement`, `verify`, `done`. Show the derived phase with `python3 vendor/ai-sdd-guide/integration/ci/sdd_state.py phase`.
 
@@ -47,7 +47,7 @@ For exploration/parallelism use skills `dispatching-parallel-agents` / `subagent
   6. Each AC verified by a test maps to a runnable test, not a manual/visual check. Each AC verified by the diff is confirmed by citing the diff lines. Flag any test in the diff that only re-checks written content.
 - When sdd-reviewer or any code review returns feedback: skill `receiving-code-review`. Evaluate each item against the frozen spec before acting. If feedback conflicts with the frozen spec, change the spec through spec review, or escalate when `## Escalation conditions` 4 applies — do not silently redesign. Scope-expanding suggestions become a new spec, not a quiet addition.
 - Push only just before creating the PR (not at each phase boundary). The board moves to `done` when the PR is merged.
-- Create the PR with the `## AI の判断` decision log (template: `templates/pr-body.md`; see `## PR decision log`). If CI is configured, wait for completion and confirm all checks pass and the PR is mergeable before declaring completion. Never declare completion without verifying CI results. Report the result to the human, who reviews and merges; never merge.
+- Create the PR with the `## AI の判断` decision log (template: `templates/pr-body.md`; see `## PR decision log`). If CI is configured, wait for completion and confirm all checks pass and the PR is mergeable before declaring completion. Never declare completion without verifying CI results. Merge once `## Merge conditions` hold, clean up, and report to the human (`## Cleanup and report`).
 - Optionally `requesting-code-review` / `finishing-a-development-branch`.
 - CI is authoritative: it independently re-checks spec presence + tests.
 

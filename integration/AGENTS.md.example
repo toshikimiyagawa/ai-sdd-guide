@@ -10,10 +10,10 @@ Read the canonical rules before any work:
 - `vendor/ai-sdd-guide/catalog/rules/catalog.md`
 
 ## Human touchpoints
-Humans take part only in the initial question (Tier + spec unknowns), escalation, and PR
-review/merge. Run every other step autonomously through to the PR; never merge. See
-`vendor/ai-sdd-guide/orchestration/rules/orchestration.md` (Human touchpoints, Autonomous flow,
-Escalation conditions).
+Humans take part only in the initial question (Tier + spec unknowns) and escalation, then check
+the result after the merge. Run every other step autonomously, through merging the PR and cleaning
+up. See `vendor/ai-sdd-guide/orchestration/rules/orchestration.md` (Human touchpoints, Autonomous
+flow, Merge conditions, Cleanup and report, Escalation conditions).
 
 ## Design phases (superpowers required)
 Use superpowers skills (brainstorming → writing-plans) for spec/plan/tasks.

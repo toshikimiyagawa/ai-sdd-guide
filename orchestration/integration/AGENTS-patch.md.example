@@ -2,8 +2,9 @@
 
 This project uses multi-agent SDD. Any agent with superpowers can handle any phase.
 The orchestrating agent runs all phases and dispatches independent agents; a human may assign a
-specific agent. Humans take part only in the initial question, escalation, and PR review/merge
-(never merge). Escalate only under Escalation conditions in the full rules.
+specific agent. Humans take part only in the initial question and escalation, then check the result after the
+merge. Merge the PR and clean up autonomously (Merge conditions, Cleanup and report). Escalate only
+under Escalation conditions in the full rules.
 
 ### If you are a design agent (brainstorm/spec/plan/tasks)
 
@@ -28,5 +29,6 @@ specific agent. Humans take part only in the initial question, escalation, and P
 Pass the contents of `vendor/ai-sdd-guide/integration/prompts/sdd-reviewer-prompt.md`
 to your subagent mechanism, then report results, commit, run `orchestration/tools/sdd-board.sh sync`,
 push, and create the PR with the `## AI の判断` decision log (`vendor/ai-sdd-guide/templates/pr-body.md`).
+Then wait for CI, merge once Merge conditions hold, clean up and report (Cleanup and report).
 
 Full rules: `vendor/ai-sdd-guide/orchestration/rules/orchestration.md`

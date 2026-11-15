@@ -10,7 +10,7 @@ spec: `specs/<feature>/spec.md`
 - 独立 reviewer（`sdd-reviewer`）: PASS / FAIL
 
 ## AI の判断
-人間が PR レビューで確かめられるように、AI が人間に聞かずに決めたことを書く。
+人間がマージの後に確かめられるように、AI が人間に聞かずに決めたことを書く。
 
 - **spec レビュー**: 判定と回数（例: `Spec review: APPROVE (2 rounds)`）
 - **仕様の不明点**: AI が決めたことと、その理由

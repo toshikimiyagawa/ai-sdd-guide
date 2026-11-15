@@ -102,7 +102,8 @@ Issue 登録（バグ報告・機能要望）
      - Tier 2: spec → plan → tasks → spec レビュー → 凍結 → 実装 → verify → PR
      → フェーズの区切りで commit → sdd-board.sh sync → 止まらずに次へ
      → 問い合わせの条件に当たるときだけ人間に聞く（不在なら Issue にコメントして停止）
-  → 人間が PR をレビューしてマージ → ボードのカードが done → Issue クローズ
+  → CI とマージの条件を確かめて AI がマージ → ボードのカードが done → Issue クローズ
+  → 後片付け（作業ブランチ・worktree の削除、手元の main の更新）→ 人間に報告
 ```
 
 - Tier の定義は [01. ワークフロー](01-workflow.md) を参照。

@@ -1,0 +1,24 @@
+{
+  "feature": "96-ai-merge",
+  "commit_sha": "9fed7ff64fde04c4bfdbf02fd1d5a3c12c82cc59",
+  "entries": [
+    {
+      "command_type": "test",
+      "command": "uv run --no-project --with pytest --with jsonschema python -m pytest tests -q",
+      "result": "269 passed",
+      "test_count": 269
+    },
+    {
+      "command_type": "other",
+      "command": "python3 integration/ci/sdd_state.py phase",
+      "result": "verify (freeze.json valid)",
+      "test_count": null
+    },
+    {
+      "command_type": "other",
+      "command": "sdd-reviewer (Claude Code subagent)",
+      "result": "PASS: SAC-1..6 met by cited diff lines; no leftover never-merge wording in scope; no out-of-scope changes",
+      "test_count": null
+    }
+  ]
+}
