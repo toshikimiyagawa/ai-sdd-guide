@@ -6,7 +6,7 @@
 ## 実装タスク（順序付き）
 - [x] T1: `orchestration/rules/orchestration.md` を書き換える（plan.md: Human touchpoints・Autonomous flow・Merge conditions・Cleanup and report・Escalation conditions 5・PR decision log）。対応AC: SAC-1, SAC-2, SAC-3, SAC-4
 - [x] T2: `rules/core.md`・`rules/workflow.md`・`rules/issue-intake.md`・`rules/conventions.md` を書き換える（plan.md）。対応AC: SAC-1, SAC-2
-- [ ] T3: `templates/pr-body.md`・`integration/AGENTS.md.example`・`orchestration/integration/AGENTS-patch.md.example`・`README.md`・`docs/00-overview.md`〜`docs/04-issue-tracker.md` を合わせる（plan.md）。`orchestration/templates/handoff.md.example` は変えない（plan.md）。対応AC: SAC-5
+- [x] T3: `templates/pr-body.md`・`integration/AGENTS.md.example`・`orchestration/integration/AGENTS-patch.md.example`・`README.md`・`docs/00-overview.md`〜`docs/04-issue-tracker.md` を合わせる（plan.md）。`orchestration/templates/handoff.md.example` は変えない（plan.md）。対応AC: SAC-5
 - [ ] T4: `docs/migration.md` の末尾に spec D5 の節を足す（SAC-6 の 4 項目）。対応AC: SAC-6
 
 ## 確かめ方（受入条件との対応・必須）

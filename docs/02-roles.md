@@ -4,12 +4,12 @@
 人間の関与は次の 3 つに絞る。
 - **最初の質問**への回答: Tier の決定と、仕様の不明点（答えによって作るものが変わるもの）への回答。
 - **問い合わせ**への回答: Issue の AC を削る・弱めるとき、Issue や最初の回答と矛盾する判断が要るとき、spec レビューが `ESCALATE` を返したときなど（`orchestration/rules/orchestration.md` の Escalation conditions）。
-- **PR のレビューとマージ**: PR 本文の「AI の判断」を確かめ、承認してマージする。AI はマージしない。
+- **結果の確認**: AI がマージと後片付けを終えて報告したあと、報告と PR 本文の「AI の判断」を見る。直したいことがあれば新しい Issue にする。
 
 spec の承認は人間ではなく、独立したエージェント `spec-reviewer` が行う。
 
 ## 設計担当agent（superpowers必須）
-- 最初の質問の後、PR の作成まで止まらずに進める（オーケストレーション）。
+- 最初の質問の後、PR のマージと後片付けまで止まらずに進める（オーケストレーション）。
 - brainstorm → spec → plan → tasks の作成。spec レビュー（spec-reviewer）を受けて凍結する。
 - subagent と superpowers を使った深い検討。
 - 実装後の検証（sdd-reviewer）。

@@ -35,11 +35,11 @@ AIエージェントと人間が同じルールで開発するための土台を
 
 ## マルチエージェント・オーケストレーション
 
-superpowers がインストールされたエージェントであれば誰でも設計・実装・verify の全フェーズを担当できる。人間の関与は「最初の質問（Tier と仕様の不明点）」「問い合わせ（条件に当たるときだけ）」「PR のレビューとマージ」の 3 つに絞る。それ以外はエージェントが独立したエージェント（サブエージェント）を使って進め、フェーズの境目ごとに commit → `sdd-board.sh sync` を実行して、止まらずに PR の作成まで進める。マージは人間が行う。
+superpowers がインストールされたエージェントであれば誰でも設計・実装・verify の全フェーズを担当できる。人間の関与は「最初の質問（Tier と仕様の不明点）」「問い合わせ（条件に当たるときだけ）」「マージの後の結果の確認」の 3 つに絞る。それ以外はエージェントが独立したエージェント（サブエージェント）を使って進め、フェーズの境目ごとに commit → `sdd-board.sh sync` を実行して、止まらずに PR のマージと後片付けまで進める。
 
 | コンポーネント | パス | 役割 |
 |---|---|---|
-| エージェントルール | `orchestration/rules/orchestration.md` | 人間が関わる場面・自律で進める範囲・spec レビュー・問い合わせの条件・PR の「AI の判断」（全agent）|
+| エージェントルール | `orchestration/rules/orchestration.md` | 人間が関わる場面・自律で進める範囲・マージの条件・後片付けと報告・spec レビュー・問い合わせの条件・PR の「AI の判断」（全agent）|
 | テンプレート | `orchestration/templates/handoff.md.example` | handoff.md の雛形 |
 | Reviewer プロンプト | `integration/prompts/sdd-reviewer-prompt.md` | エージェント非依存の verify 指示文 |
 | spec Reviewer プロンプト | `integration/prompts/spec-reviewer-prompt.md` | エージェント非依存の spec レビュー（凍結の前の承認）指示文 |
