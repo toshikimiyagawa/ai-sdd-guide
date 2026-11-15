@@ -331,3 +331,22 @@ CI・validator・guard・`freeze.json` の形は変わらない。進行中の f
 4. **GitHub App の鍵の配り直しは要らない。** App は Organization の Projects 全体に権限があるので、新しい Project もそのまま更新できる。
 
 新しく導入するリポジトリは、`sdd-board.sh init` を実行するだけでよい。
+
+---
+
+## v4.2: 書いた内容を確かめるだけのテストを作らない（#95）
+
+「受入基準はすべてテストに対応させる」をやめ、受入基準ごとに確かめ方（テスト / 差分）を書く規約に変える（`rules/core.md`）。
+
+- **作らないテスト**: 文書・rules・設定・データ・テンプレート・ワークフローの YAML に特定の行・値・語句・見出し・キーがある（ない）こと、固定のコミットから特定の行だけが変わったこと、ソースに特定の式・語句が書いてあることだけを確かめるテスト。
+- **作るテスト**: コードの動き（入力を与えて出力・終了コード・作ったファイルを見る）、スキーマの検証、ある種類のファイルすべてにかかる機械検査、成果物どうしの整合。
+- **差分で確かめる**: データ・設定・文書・文言を書いた（変えた・消した）という受入基準は、テストにせず差分で確かめる。`sdd-reviewer` が満たしている差分の行を挙げる。動きを変える受入基準は今までどおりテストで確かめる。
+
+consumer repo では次を行う。
+
+1. **`traceability.json` の `test` に `"diff"` を書ける。** in-scope の項目の `test` は `<ファイル>::<テスト名>` か `"diff"`。スキーマが受け付けるようになったので、validator はそのまま通る。既存の `traceability.json` を書き換える必要はない。
+2. **submodule を上げて `update.sh` を実行する。** `bash vendor/ai-sdd-guide/integration/update.sh`。`integration/agents/` が `.claude/agents/` に写され、確かめ方（テスト / 差分）で照合する `spec-reviewer`・`sdd-reviewer` が配られる。Claude 以外のエージェントは `vendor/ai-sdd-guide/integration/prompts/` の新しいプロンプトを使う。
+3. **`AGENTS.md`（または `CLAUDE.md`）を見直す。** これらは `update.sh` で上書きされない。「Every acceptance criterion must map to a passing test」の行を、`vendor/ai-sdd-guide/integration/AGENTS.md.example` に合わせて確かめ方（テスト / 差分）の書き方に直す。
+4. **既存のテストを消すかは各リポジトリで決める。** 書いた内容を確かめるだけの既存のテストを消すことは求めない。消すなら、上の「作らないテスト」を基準にする。
+
+CI・validator・guard・`freeze.json` の形は変わらない。進行中の feature はそのまま続けてよい。

@@ -9,7 +9,7 @@
 - [x] T2: rules を書き換える。`rules/core.md`・`rules/workflow.md`・`orchestration/rules/orchestration.md`（plan.md「変更の要点」）。対応AC: SAC-1
 - [x] T3: reviewer を書き換える。`integration/agents/spec-reviewer.md`・`integration/prompts/spec-reviewer-prompt.md`・`integration/agents/sdd-reviewer.md`・`integration/prompts/sdd-reviewer-prompt.md`（plan.md）。対応AC: SAC-2
 - [x] T4: テンプレート・docs・hook を合わせる。`templates/spec.md`・`templates/tasks.md`・`orchestration/templates/handoff.md.example`・`integration/AGENTS.md.example`・`integration/hooks/codex-skill-reminder.sh` の implement のメッセージ・`docs/01-workflow.md`・`docs/02-roles.md`・`docs/03-faq.md`・`docs/traceability.md`・`README.md`（plan.md）。hook のメッセージを変えたあと、既存の `tests/test_skill_reminder.py` が通ること。対応AC: SAC-4
-- [ ] T5: `docs/migration.md` の末尾に spec D2 の節を足す（SAC-6 の 5 項目）。対応AC: SAC-6
+- [x] T5: `docs/migration.md` の末尾に spec D2 の節を足す（SAC-6 の 5 項目）。対応AC: SAC-6
 - [ ] T6: spec.md の「消すテスト・残すテスト」のとおりに `tests/` を整理する。`test_spec_phase_reminder_mentions_spec_reviewer` を `tests/test_skill_reminder.py` に移してから `tests/test_ai_autonomy.py` を消す。最後に全体を流して通ることを確かめる。対応AC: SAC-5
 
 ## 確かめ方（受入条件との対応・必須）
