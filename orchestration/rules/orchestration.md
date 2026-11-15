@@ -12,7 +12,7 @@ All phases are open to any agent with superpowers installed. The orchestrating a
 
 ## Human touchpoints
 
-Humans take part only at these three points. Resolve everything else with independent agents and carry the work through to the PR.
+Humans take part only at these three points. Resolve everything else with independent agents and carry the work through merge and cleanup.
 
 1. **Initial question**: Read the Issue and the relevant code, then ask the human in one message:
    - a Tier proposal with reasons;
@@ -21,7 +21,7 @@ Humans take part only at these three points. Resolve everything else with indepe
    Apply the `sdd:tier-N` label from the answer. The human owns the Tier decision.
    Skip the question when the Issue already carries an `sdd:tier-N` label and there are no spec unknowns.
 2. **Escalation**: only under `## Escalation conditions`.
-3. **PR review and merge**: Never merge. The human reviews, approves and merges the PR.
+3. **Result check**: after the AI merges, cleans up and reports, the human reads the report and the PR's `## AI の判断`. Anything to change becomes a new Issue.
 
 ## Autonomous flow
 
@@ -35,7 +35,10 @@ After the initial question is answered, run these steps in order without stoppin
 6. Implement in a fresh agent context that receives only the frozen artifacts and `handoff.md`. Never implement in the same agent context that froze the spec.
 7. Verify: `sdd-reviewer` checks the implementation. Handle findings with the `receiving-code-review` discipline.
 8. Push and create the PR, with the PR decision log in its body.
-9. Check the CI results and report to the human.
+9. Wait for the CI results.
+10. Merge the PR once `## Merge conditions` hold.
+11. Clean up (`## Cleanup and report`).
+12. Report the result to the human (`## Cleanup and report`).
 
 At every phase boundary, commit and run:
 ```bash
@@ -49,6 +52,36 @@ field of the Issue's card on the GitHub Projects board (`.sdd/board.json`). It o
 creating the PR, not at each phase boundary.
 
 Where no independent agent can be started, escalate spec review and verify to the human (`## Escalation conditions` 6).
+
+## Merge conditions
+
+Merge the PR only when all of these hold:
+
+1. All CI checks pass. Where the repository has no CI, run the tests locally and they pass.
+2. `sdd-reviewer` returned PASS (not required for Tier 0).
+3. The PR is mergeable: no conflicts, and all required checks pass.
+
+When a condition does not hold:
+- CI fails: fix it within the frozen spec and push again. If the fix needs a spec change that hits `## Escalation conditions` 1 or 2, escalate.
+- The PR conflicts with an updated main: merge main into the work branch, resolve the conflicts, and rerun the tests and CI. Never force push.
+- Permissions block the merge (e.g. a required review under branch protection): escalate under `## Escalation conditions` 6. Never bypass protection (e.g. `--admin`).
+
+Merge method: squash. If the repository does not allow squash, use an allowed method.
+
+## Cleanup and report
+
+After the merge:
+
+1. Delete the remote work branch (e.g. `gh pr merge --squash --delete-branch`).
+2. If a worktree was used, remove it (`git worktree remove <path>`).
+3. Delete the local work branch (`git branch -D <branch>`).
+4. Update the local default branch by fast-forward (`git switch <default> && git pull --ff-only`).
+
+The board card moves to `done` through Actions when the PR is merged.
+
+Then report to the human: the PR URL, the merge commit, a summary of the PR's `## AI の判断`, and the cleanup result.
+- If the human is present in the conversation, report there.
+- Otherwise, comment the same on the Issue (the merge closes it).
 
 ## Spec review
 
@@ -87,7 +120,7 @@ Escalate to the human only when one of these applies:
 2. A decision would contradict the Issue body or the answer to the initial question.
 3. Spec review returned `ESCALATE`, or did not reach `APPROVE` within 3 rounds.
 4. Review feedback conflicts with the frozen spec and cannot be resolved by changing the spec without hitting condition 1 or 2.
-5. An irreversible operation, or one that affects anything outside the repository, is required. Pushing the work branch and creating the PR are excluded. Examples: force push, changes to another repository, secret or settings changes, data deletion.
+5. An irreversible operation, or one that affects anything outside the repository, is required. Excluded: pushing the work branch, creating the PR, merging it once `## Merge conditions` hold, and deleting the merged work branch and its worktree. Examples: force push, changes to another repository, secret or settings changes, data deletion.
 6. Missing permissions or credentials block progress.
 
 How to escalate:
@@ -96,7 +129,7 @@ How to escalate:
 
 ## PR decision log
 
-Give the PR body a `## AI の判断` section so the human can check the AI's decisions during PR review. List:
+Give the PR body a `## AI の判断` section so the human can check the AI's decisions after the merge. List:
 - the spec review verdict and round count;
 - decisions the AI made on spec unknowns, with reasons;
 - verify and review findings adopted or rejected, with reasons;
